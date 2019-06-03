@@ -1,0 +1,81 @@
+//- - var loginMessages = data["login-messages"];
+- iam = data.fragments.auth;
+if (user.role === "guest")
+    .sign(class="sign-in")
+        .sign__form(action="#")
+            label login:
+                input(rosa-auth="signin:login")  
+                div( rosa-auth="signin:login" rosa-auth:message=iam.signin.login )
+            label password:
+                input(type="password" rosa-auth="signin:pass")
+                div( rosa-auth="signin:pass" rosa-auth:message=iam.signin.pass )
+            button(rosa-auth="signin:request") sign in
+    .sign(class="sign-up")
+        div( rosa-auth="signin" rosa-auth:errors=iam.signup.errors )
+        .sign__form(action="#")
+            label login:
+                input(rosa-auth="signup:login")
+                div( rosa-auth="signup:login" rosa-auth:message=iam.signup.login )
+            label password:
+                input(type="password" rosa-auth="signup:pass")
+                div( rosa-auth="signup:pass" rosa-auth:message=iam.signup.pass )
+            button(rosa-auth="signup:request") sign up
+else
+    button(rosa-auth="action:signout") sign out
+    
+style.
+    .sign {
+        width: 100%;
+    }
+    .sign__form { 
+        background-color: #8EC5FC;
+        background-image: linear-gradient(62deg, #8EC5FC 0%, #E0C3FC 100%);
+        width: 100%;
+        display: flex;
+        padding: 15px;
+        box-sizing: border-box;
+        align-items: flex-end;
+        justify-content: flex-end; 
+        flex-wrap: wrap;
+    }
+    .sign__form input, .sign__form button { 
+        overflow: visible;
+        outline: none;
+        //- color: #333333;
+        line-height: 30px;
+        border: none;
+        border-bottom: 1px solid #ccc;
+        font-size: 15px;
+        height: 30px;
+        display: block;
+        background-color: rgba(0,0,0,0.1);
+        margin: 5px 7px 5px -2px;
+        padding: 0 10px;
+    }
+    .sign__form button {
+        border-bottom: 1px solid #000 !important;
+        background-color: rgba(0,0,0,0.2);
+        height: 32px;
+        font-size: 16px;
+        min-width: 188px;
+        border: none;
+        color: #fff;
+        cursor: pointer;
+    }
+    .label {
+        width: 300px;
+    }
+    .sign__form button:hover {
+
+        border: 1px solid #333333;
+        transition: background-color,color 0.4s;
+        color: #333333;
+        background-color: transparent;
+    }
+    .sign__form label {
+        color: #333333;
+    }
+    h2 {
+        width: 100%;
+        margin: 0 5px;
+    }

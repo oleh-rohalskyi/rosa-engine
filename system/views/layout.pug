@@ -1,0 +1,31 @@
+
+<!DOCTYPE html>
+html(lang=lang)
+    head
+        link(rel="shortcut(icon" href="/static/favicon.ico" type="image/x-icon")
+        link(rel="icon" href="/static/favicon.ico" type="image/x-icon")
+        meta(charset="UTF-8")
+        meta(name="viewport", content="width=device-width, initial-scale=1.0")
+        meta(name="title", title=meta.title)
+        meta(http-equiv="X-UA-Compatible", content="ie=edge")
+        meta(name="discription", discription=meta.discription)
+        meta(name="robots" content=meta.robots)
+        meta(name="location" content=sys.loco)
+        if sys.error
+            meta(name="noredirect" content="yes")
+        title= sys.code
+        block head
+        block css
+        script(type="text/javascript" src="/static/system/js/start.js")
+        style.
+            body {margin: 0;}
+    body(id=alias)
+        block header
+            include ../../views/fragments/header
+        block content
+        block footer
+            include ../../views/fragments/footer
+        scripts
+            each src in sys.scripts
+                script(type="text/javascript" src=src)
+        script(type="text/javascript" src="/static/system/js/end.js")
