@@ -8,25 +8,35 @@ rosa.loader = {
         this.scrips = document.querySelector("scripts");
         this.csss = document.querySelector("csss");
     },
-    async script(name) {
+    async script(name, unit) {
         return new Promise((res)=>{
             const script = document.createElement("script");
-            script.setAttribute("src", `/static/system/js/${name}.js`);
+            script.setAttribute("src", `/static/system/js/${unit || "."}/${name}.js`);
             script.setAttribute("type", "text/javascript");
             this.scrips.appendChild(script);
             script.onload = function() {
-                res();
+                res({name, unit});
             }    
         });  
     }
 }
 
 async function app() {
+
     rosa.loader.init();
-    await rosa.loader.script("validation");
-    await rosa.loader.script("auth");
+    
+    const res = await rosa.loader.script("validation");
+
+    const onload = await Promise.all([
+        await rosa.loader.script("auth", "fragments"),
+    ])
+
+    onload.push(res);
+
     rosa.auth.init();
-    return rosa;
+
+    return onload;
+
 };
 
 app().then(console.log);

@@ -20,7 +20,8 @@ rosa.auth = {
         
         if (nodes.length <= 0) return null;
         
-        [...nodes].forEach((node)=>{
+        [...nodes].forEach( (node) => {
+
             rosa.decorateNode(node);
             
             const value = node.getAttribute("rosa-auth");
@@ -41,6 +42,8 @@ rosa.auth = {
                 this.nodes[type] = {};
             }
 
+            console.log(node)
+
             switch (true) {
                 case !!errors:
                     this.errors = JSON.parse(errors);
@@ -58,65 +61,68 @@ rosa.auth = {
             }
         });
         
-        this.listener("signin","addEventListener");
-        this.listener("signup","addEventListener");
+        this.listener("signin", "addEventListener");
+        this.listener("signup", "addEventListener");
         this.listener("signout","addEventListener");
 
     },
-    listener(mission,fun) {
-        if (!this.nodes[mission]) return;
-        switch(mission) {
+    listener(type,fun) {
+        if (!this.nodes[type]) return;
+        switch(type) {
             case "signout":
-                this.nodes[mission].action[fun]("click",this.onClick(mission));
+                this.nodes[type].action[fun]("click",this.onClick(type));
             break;
             default:
-                this.nodes[mission].request[fun]("click",this.onClick(mission,111));
-                this.nodes[mission].login[fun]("input",this.onChange(mission,"login"));
-                this.nodes[mission].pass[fun]("input",this.onChange(mission,"pass"));
+                this.nodes[type].request[fun]("click",this.onClick(type));
+                this.nodes[type].login[fun]("input",this.onChange(type,"login"));
+                this.nodes[type].pass[fun]("input",this.onChange(type,"pass"));
             break;
         }
     },
-    onChange(mission,loginOrPass){
+    onChange(type,loginOrPass){
         
         return ({target:{value}}) => {
-            this[mission][loginOrPass] = value;
+            this[type][loginOrPass] = value;
         }
 
     },
-    onClick(mission){
+    onClick(type){
 
         return (e) => {
 
             let errors;
-            
+            console.log(
+                {...this[type]},
+                {...this.nodes[type].messages}
+            );
             errors = rosa.validation.validate(
-                {...this[mission]},
-                {...this.nodes[mission].messages}
+                {...this[type]},
+                {...this.nodes[type].messages}
             );
                
-            for (const key in this.nodes[mission].messages) {
-                this.nodes[mission].messages[key].innerHTML = "";
+            for (const key in this.nodes[type].messages) {
+                this.nodes[type].messages[key].innerHTML = "";
             }
 
             if (errors.length > 0) {
-                console.log(errors)
+
                 errors.forEach(({message,target})=>{
-                    // console.log( this.nodes[mission].messages);
-                    console.log( this.nodes[mission].messages[target]);
-                    this.nodes[mission].messages[target].innerHTML += message + "</br>";
+            
+                    this.nodes[type].messages[target].innerHTML += message + "</br>";
+
                 });
 
-                return
+                return;
 
             }
 
-            fetch(`/rosa-api/auth/${mission}`, {
-                body: this.encodeQueryString({ lang: rosa.helper.lang, password: this[mission].pass, login: this[mission].login}),
+            fetch(`/rosa-api/auth/${type}`, {
+                body: this.encodeQueryString({ lang: rosa.helper.lang, password: this[type].pass, login: this[type].login}),
                 method: "POST",
             }).then((result)=>{
                 return result.json();
             }).then((result)=>{
-                console.log(result)
+                // console.log(result)
                 if (!result.success)
                     this.nodes.errors.innerHTML += this.errors[result.error.code] + "</br>";
                 else {

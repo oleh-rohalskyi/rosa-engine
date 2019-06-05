@@ -1,7 +1,8 @@
 const pug = require('pug');
+const data = require("./data");
 
 const payLoad = (page,config) => {
-  console.log(2223,page)
+  
   return {
     sys: {
       env: process.env.NODE_ENV,
@@ -26,37 +27,23 @@ const payLoad = (page,config) => {
     }
 }};
 
-const compile = {
-  addLayOut(fileLink) {
-    let compiled = "";
-    const lineReader = require('readline').createInterface({
-      input: require('fs').createReadStream(fileLink)
-    });
-    return new Promise((res)=>{
-      lineReader.on('line', (line) => {
-        compiled = compiled+"  "+line+"\n"
-      });
-      lineReader.on('close', ()=>{
-        res("extends /../../system/views/layout.pug\nblock content\n"+compiled);
-      })
-    });
-  },
-  precompilePage(page) {
+const render = {
+  async prerenderPage(page) {
     return new Promise((res,rej)=>{
       const fileLink = `./views/pages/${page.template}.pug`;
-      compile.addLayOut(fileLink).then((compiled)=>{
-        res(pug.compile(compiled,{
+      template.addLayOut(fileLink).then((rendered)=>{
+        res(pug.render(rendered,{
           basedir: __dirname+"/rosa"
         }));
       });
     });
   },
-  compilePage(response,options) {
+  go(response,options) {
     
-    const fileLink = `./views/pages/${options.page.template}.pug`;
     
-    compile.addLayOut(fileLink).then((compiled)=>{
-      const compiledFunction = pug.compile(compiled,{
+    
+    render.addLayOut(fileLink).then((rendered)=>{
+      const renderedFunction = pug.render(rendered,{
         basedir: __dirname+"/rosa"
       });
     
@@ -64,14 +51,14 @@ const compile = {
         "Content-Type": "text/html; charset=utf-8;"
       });
       console.log(payLoad(options.page,options.config));
-      response.write(compiledFunction(payLoad(options.page,options.config)))
+      response.write(renderedFunction(payLoad(options.page,options.config)))
 
       response.end();
 
     })
   },
-  responseError(code, response, options) {
-      console.log(code)
+  goError(code, response, options) {
+    // console.log(response);
     const errorTemplate = process.env.NODE_ENV === 'dev' ? "system/server-error" : "views/pages/trouble";
 
     const map = {
@@ -110,21 +97,37 @@ const compile = {
         error: true,
         errorMessage: options.errorMessage,
       }
-      console.log(222,data);
+      
 
-      compile.addLayOut(`${page.template}.pug`).then((compiled)=>{
+      render.addLayOut(`${page.template}.pug`)
+        .then((rendered)=>{
 
-        const compiledFunction = pug.compile(compiled,{
-          basedir: __dirname+"/rosa"
-        });
+          return pug.render(rendered,{
+            basedir: __dirname+"/rosa"
+          });
+        
+        })
+        .then((renderedFunction)=>{
+          let html = ""
+          try  {
+            html = renderedFunction(data);
+          } catch (error) {
 
-        response.writeHead(code, {
-          "Content-Type": "text/html; charset=UTF-8"
-        });
-        // console.log(111,data);
-        response.write( compiledFunction(data) );
-        response.end();
-      })
+              response.writeHead(200, {
+                "Content-Type": "application/json"
+              });
+
+              response.write( JSON.stringify(error) );
+              response.end();
+
+              return;
+          }
+          response.writeHead(code, {
+                "Content-Type": "text/html; charset=UTF-8"  
+          });
+          response.write( data );
+          response.end();
+        })
   }
 } 
-module.exports = compile;
+module.exports = render;

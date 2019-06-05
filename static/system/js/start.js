@@ -1,9 +1,6 @@
 const rosa = {};
 const module = false;
 
-const log = function(funName) {
-    console.log(funName,{...arguments})
-}
 rosa.helper = {
     lang: document.documentElement.lang,
     setUrlLocation() {

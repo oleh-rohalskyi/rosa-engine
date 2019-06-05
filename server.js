@@ -2,11 +2,12 @@ console.clear();
 console.log("Start ========================================");
 
 const http = require("http");
-const data = require("./data");
+
 const cors = require("./system/cors")
 const pager = require("./system/pager");
+const rosaPug = require("./system/rosa-pug");
 const db = require("./system/db");
-const render = require("./system/compile");
+const render = require("./system/render");
 const apiRenderer = require("./system/api-renderer");
 const getStaticText = require("./system/get-static-text");
 const url = require('url');
@@ -24,7 +25,8 @@ const actions = [
   "signin",
   "logout"
 ]
-pager.fillCash(data.pages).then(
+
+rosaPug.start().then(
 
   pages=>{
 
@@ -84,7 +86,7 @@ pager.fillCash(data.pages).then(
 
           cors(response);
 
-          getStaticText(pathname,render).then((data,ext)=>{
+          getStaticText(pathname,response).then((data,ext)=>{
             response.setHeader('Content-type', ext || 'text/plain' );
             response.end(data);
           })
@@ -113,51 +115,13 @@ pager.fillCash(data.pages).then(
               role: "guest"
             }
 
-            options.page.data = {
-              fragments: {
-                "header": {
-
-                },
-                "auth": {
-                  signin: {
-                    login: {
-                      "label": "login",
-                      "less-then-4": "login mast be more than 6 simbols",
-                      "is-empty": "login can\'t be empty"
-                    },
-                    pass: {
-                      "less-then-4": "pass mast be more than 6 simbols",
-                      "is-empty": "pass can\'t be empty"
-                    },
-                    errors: {
-                      "ER_DUP_ENTRY": "user already exist",
-                      "ECONNREFUSED": "limit done"
-                    }
-                  },
-                  signup: {
-                    login: {
-                      "less-then-4": "login mast be more than 6 simbols",
-                      "is-empty": "login can\'t be empty"
-                    },
-                    pass: {
-                      "less-then-4": "pass mast be more than 6 simbols",
-                      "is-empty": "pass can\'t be empty"
-                    },
-                    errors: {
-                      "ER_DUP_ENTRY": "user already exist",
-                      "ECONNREFUSED": "limit done"
-                    }
-                  }
-                }
-              }
-            }
             //check what user role needed for a page or if it needed at all;
             if ( options.page.roles && options.page.roles.indexOf(options.page.user.role) >= 0 ) {
-              render.compilePage(response, options);
+              render.go(response, options);
             } else if (!options.page.user.roles) {
-              render.compilePage(response, options);
+              render.go(response, options);
             } else {
-              render.responseError(600,response,{
+              render.goError(600,response,{
                 errorMessage: "no access ",
                 ...options
               });
@@ -167,14 +131,14 @@ pager.fillCash(data.pages).then(
     
           } catch(e) {
     
-            render.responseError(600,response,{
+            render.goError(600,response,{
               errorMessage: e,
               ...options
             });
     
           }} else {
 
-          render.responseError(404,response,{
+          render.goError(404,response,{
             errorMessage: decodeURI(request.url) + " not found",
             ...options}
           );
@@ -183,7 +147,7 @@ pager.fillCash(data.pages).then(
     
       } else {
 
-        render.responseError(404,response,{
+        render.goError(404,response,{
           errorMessage: decodeURI(request.url) + " not found",
           ...options
         });

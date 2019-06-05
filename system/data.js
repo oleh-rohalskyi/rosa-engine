@@ -1,4 +1,42 @@
 module.exports = {
+  fragments: {
+    "header": {
+
+    },
+    "features/hero" : {
+
+    },
+    "auth": {
+      signin: {
+        login: {
+          "less-then-4": "login mast be more than 6 simbols",
+          "is-empty": "login can\'t be empty"
+        },
+        pass: {
+          "less-then-4": "pass mast be more than 6 simbols",
+          "is-empty": "pass can\'t be empty"
+        },
+        errors: {
+          "ER_DUP_ENTRY": "user already exist",
+          "ECONNREFUSED": "limit done"
+        }
+      },
+      signup: {
+        login: {
+          "less-then-4": "login mast be more than 6 simbols",
+          "is-empty": "login can\'t be empty"
+        },
+        pass: {
+          "less-then-4": "pass mast be more than 6 simbols",
+          "is-empty": "pass can\'t be empty"
+        },
+        errors: {
+          "ER_DUP_ENTRY": "user already exist",
+          "ECONNREFUSED": "limit done"
+        }
+      }
+    }
+  },
   pages: {
     "home-redirect": {
       "redirect": true,
@@ -23,13 +61,17 @@ module.exports = {
         eo: "cĥefpago"
       },
     },
-    "arhiv": {
-      template: "arhxivo/",
+    "headbands": {
+      "multilangual": false,
+      "pathnames": {
+        common: "shop"
+      },
+      template: "arhxivo",
       "redirect": false,
       "childrens": 
         {
           "uno-arhxivo": {
-            template: "arhxivo/uno-arhxivo",
+            template: "headbands/one",
             "redirect": false,
             "multilangual": false,
             "pathnames": {
@@ -45,14 +87,9 @@ module.exports = {
             }
           }
         }
-      ,
-      "multilangual": false,
-      "pathnames": {
-        common: "arĥivo"
-      }
     },
     "admin": {
-      template: "../../system/views/admin",
+      template: "admin",
       "redirect": false,
       "multilangual": false,
       "roles": [
@@ -66,7 +103,7 @@ module.exports = {
             "roles": [
               "admin"
             ],
-            template: "../../system/views/pages",
+            template: "admin/pages",
             "redirect": false,
             "multilangual": false,
             "pathnames": {

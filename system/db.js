@@ -37,8 +37,9 @@ module.exports = {
             const password = crypto.createHash('md5').update(pass).digest("hex");
             con.connect((err) => {
                 if (err) rej(err);
+                
                 const sql = `SELECT users.login, roles.name AS roleName FROM roles LEFT JOIN users ON users.role=roles.id WHERE password="${password}" AND login="${login}"`;
-                console.log("Connected!");
+                
                 con.query(sql,(err, result) => {
                     if (err) rej(err);
                     res(this.parseResult(result));
@@ -69,12 +70,11 @@ module.exports = {
 
                     if (err) rej(err);
 
-                    console.log("Connected!");
-
                     const uiquKey = "login";
                     const uniq = uiquKey+":"+login;
 
                     con.query(
+
                         `INSERT INTO users SET ?`,
                         { 
                             uniq,
@@ -85,8 +85,9 @@ module.exports = {
                             if (err) {
                                 rej(err);
                             }
-                            console.log(this.parseResult(result))
+                            
                             res(this.parseResult(result));
+
                     });
            
                 });

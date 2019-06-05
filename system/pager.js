@@ -1,27 +1,4 @@
-const { precompilePage } = require("./compile")
-
 module.exports = {
-  async check(obj,mission) {
-    switch(mission.key) {
-      case "cashed":
-        if(obj[mission.key] === mission.value) {
-          obj.compiledFunction = await precompilePage(obj);
-        }
-    }
-    
-    if (obj.childrens) 
-      for (var attr in obj.childrens)
-        obj.childrens[attr] = await this.check(obj.childrens[attr], mission);
-
-    return obj;
-  },
-  async fillCash(pages) {
-        let cashed = await this.check({childrens:pages},{
-          key: "cashed",
-          value: true
-        });
-        return cashed.childrens;
-  },
   findPageByPathname(pages,url,lang) {
     this.lang = lang;
     this.url = url;

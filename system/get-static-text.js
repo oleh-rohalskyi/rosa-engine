@@ -1,5 +1,6 @@
 const path = require("path");
 const fs = require("fs");
+const render = require("./render");
 
 module.exports = (pathname,response) => {
     return new Promise((res,rej)=>{
@@ -23,18 +24,24 @@ module.exports = (pathname,response) => {
 
         fs.exists(pathname, function (exist) {
             if(!exist) {
-                render.responseError(600, response, path.parse(pathname).base + " not found",parsedUrl.pathname);
+                render.responseError(404, response,{
+                    errorMessage: path.parse(pathname).base + " not found"
+                  });
                 return;
             }
 
             if (!map[ext]) {
-                render.responseError(415, response, null ,parsedUrl.pathname);
+                render.responseError(415, response, {
+                    errorMessage: path.parse(pathname).base + " not found"
+                });
                 return;
             }
 
             fs.readFile(pathname, function(err, data){
                 if(err){
-                render.responseError(600,response,err,parsedUrl.pathname);
+                render.responseError(600,response,{
+                    errorMessage: path.parse(pathname).base + " not found"
+                  });
                 } else {
                     res(data,map[ext]);
                 }

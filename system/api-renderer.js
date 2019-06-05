@@ -1,16 +1,20 @@
 module.exports = {
-    error(response,error) {
-        // console.log(JSON.stringify(error))
+    error( response, error ) {
+
         response.writeHead(200, {
             "Content-Type": "application/json; charset=utf-8;"
         });
+
         response.write(JSON.stringify({
             error,
             success: false,
         }));
+
         response.end();
+
     },
-    signup(response) {
+    signup( response ) {
+
         let result = {
             error: "",
             success: true,
@@ -19,10 +23,14 @@ module.exports = {
                 refresh_token: "2"
             }
         }
+
         response.writeHead(200, {
             "Content-Type": "application/json; charset=utf-8;"
         });
+
         response.write(JSON.stringify(result));
+
         response.end();
+        
     }
 }
