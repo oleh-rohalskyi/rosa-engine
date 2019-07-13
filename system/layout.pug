@@ -13,18 +13,14 @@ html(lang=lang)
         meta(name="location" content=sys.loco)
         if sys.error
             meta(name="noredirect" content="yes")
-        title= sys.code
+        title=title
         block head
         block css
         script(type="text/javascript" src="/static/system/js/start.js")
         style.
             body {margin: 0;}
     body(id=alias)
-        block header
-            include ../../views/fragments/header
         block content
-        block footer
-            include ../../views/fragments/footer
         scripts
             each src in sys.scripts
                 script(type="text/javascript" src=src)

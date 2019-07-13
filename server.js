@@ -29,9 +29,9 @@ const actions = [
 rosaPug.start().then(
 
   pages=>{
-
+    // console.log(pages);
     http.createServer(function(request, response){
-
+      
       const parsedUrl = url.parse(request.url);
       const pathname = `.${parsedUrl.pathname}`;
 
@@ -108,7 +108,7 @@ rosaPug.start().then(
             options.page.to[options.page.lang]
           );
         if (options.page) { try {
-
+            console.log(options.page);
             options.page.lang = options.lang;
 
             options.page.user = {

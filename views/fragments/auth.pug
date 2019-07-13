@@ -1,4 +1,5 @@
-- scope = fragments.auth;
+- var scope = 
+{%scripts("validation,auth")%}
 if (user.role === "guest")
     .sign(class="sign-in")
         .sign__form(action="#")

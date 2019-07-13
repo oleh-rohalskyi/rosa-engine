@@ -1,5 +1,5 @@
 Arguments: 
-  /usr/local/lib/node_modules/node/bin/node /usr/local/bin/yarn add gulp-yarn
+  /usr/local/lib/node_modules/node/bin/node /usr/local/bin/yarn add path-exists
 
 PATH: 
   /usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin:/Applications/VMware Fusion.app/Contents/Public:/usr/local/go/bin:/usr/local/share/dotnet:~/.dotnet/tools:/Library/Frameworks/Mono.framework/Versions/Current/Commands:/Applications/Xamarin Workbooks.app/Contents/SharedSupport/path-bin:/Users/oleh/Documents/goworkspace/bin:/Users/oleh/Documents/goworkspace/bin
@@ -35,9 +35,12 @@ npm manifest:
     "license": "MIT",
     "scripts": {
       "dev": "NODE_ENV=dev node server.js",
+      "fetch_db": "NODE_ENV=fetch_db node bootstrap.js",
+      "tmp": "node templates.js",
       "prod": "NODE_ENV=prod node server.js"
     },
     "dependencies": {
+      "gulp": "^4.0.2",
       "jsonwebtoken": "^8.5.1",
       "mysql": "^2.17.1",
       "node-static": "^0.7.11",

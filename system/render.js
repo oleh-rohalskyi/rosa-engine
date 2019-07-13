@@ -1,5 +1,5 @@
-const pug = require('pug');
-const data = require("./data");
+const rosaPug = require("./rosa-pug");
+const pug = require("pug");
 
 const payLoad = (page,config) => {
   
@@ -39,18 +39,20 @@ const render = {
     });
   },
   go(response,options) {
-    
-    
-    
-    render.addLayOut(fileLink).then((rendered)=>{
-      const renderedFunction = pug.render(rendered,{
+    console.log("GO");
+    // console.log(fileLink);
+    console.log(options);
+    const fileLink = `./views/pages/${options.page.template}.pug`;
+    rosaPug.addLayOut(fileLink).then((rendered)=>{
+      
+      const renderedFunction = pug.compile(rendered,{
         basedir: __dirname+"/rosa"
       });
     
       response.writeHead(200, {
         "Content-Type": "text/html; charset=utf-8;"
       });
-      console.log(payLoad(options.page,options.config));
+
       response.write(renderedFunction(payLoad(options.page,options.config)))
 
       response.end();
@@ -99,9 +101,9 @@ const render = {
       }
       
 
-      render.addLayOut(`${page.template}.pug`)
+      rosaPug.addLayOut(`${page.template}.pug`)
         .then((rendered)=>{
-
+          console.log(data,rendered)
           return pug.render(rendered,{
             basedir: __dirname+"/rosa"
           });
@@ -110,6 +112,7 @@ const render = {
         .then((renderedFunction)=>{
           let html = ""
           try  {
+            console.log(data);
             html = renderedFunction(data);
           } catch (error) {
 

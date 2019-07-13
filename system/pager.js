@@ -1,3 +1,5 @@
+const data = require('./data');
+
 module.exports = {
   findPageByPathname(pages,url,lang) {
     this.lang = lang;
@@ -20,6 +22,7 @@ module.exports = {
     for (const key in pages) {
       
       const childPage = pages[key];
+
       let nextRoute = this.getRoute(childPage,this.lang);
       let route = (this.lang === "common") ?  "/" :  "/" + this.lang + "/";
 
@@ -34,6 +37,7 @@ module.exports = {
     }
   },
   getRoute(page) {
+    console.log(page);
     return page.multilangual ? page.pathnames[this.lang] : page.pathnames.common;
   },
   checkRoutes(page,route) {

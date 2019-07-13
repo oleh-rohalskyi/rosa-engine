@@ -2,6 +2,7 @@ const jwt = require('jsonwebtoken');
 const mysql = require('mysql');
 const conf = require('./db.conf');
 const crypto = require('crypto');
+const data = require('./data');
 const validation = require("../static/system/js/validation");
 console.log( crypto.createHash('md5').update("AhojROSA12").digest("hex") );
 
@@ -20,6 +21,9 @@ const LOGIN_ALREADY_EXIST = "LOGIN_ALREADY_EXIST";
 const PASS_ALREADY_EXIST = "LOGIN_ALREADY_EXIST";
 
 module.exports = {
+    async getConfig() {
+        return Promise.resolve(data);
+    },
     parseResult(result) {
         if (!result) return;
         let parsedResult = [];
