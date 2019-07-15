@@ -64,6 +64,8 @@ module.exports = {
 
                 rej(errors);
 
+                
+
             } else {
 
                 const con = mysql.createConnection(conf);
