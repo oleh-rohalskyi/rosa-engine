@@ -42,7 +42,7 @@ rosa.auth = {
                 this.nodes[type] = {};
             }
 
-            console.log(node)
+            // console.log(node)
 
             switch (true) {
                 case !!errors:

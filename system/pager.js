@@ -1,7 +1,8 @@
-const data = require('./data');
+// const data = require('./data');
 
 module.exports = {
   findPageByPathname(pages,url,lang) {
+    console.log("go page");
     this.lang = lang;
     this.url = url;
     for (const key in pages) {
@@ -17,6 +18,7 @@ module.exports = {
     }
   },
   findRedirectPage(pages,newRoute) {
+    console.log("redirect");
     this.url = encodeURI( (  (this.lang === "common") ?  "./" :  "./" + this.lang + "/"  )  + newRoute ) ;
 
     for (const key in pages) {
@@ -37,11 +39,10 @@ module.exports = {
     }
   },
   getRoute(page) {
-    console.log(page);
     return page.multilangual ? page.pathnames[this.lang] : page.pathnames.common;
   },
   checkRoutes(page,route) {
-    console.log("=>",this.url,"." + encodeURI(route),"<=")
+    console.log(this.url, "." + encodeURI(route))
     if (this.url === "." + encodeURI(route)) {
       page.pathnames.current = route;
       return page;

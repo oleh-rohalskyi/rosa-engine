@@ -1,5 +1,4 @@
 
-
 const init = () => {
     rosa.validation = {
         ["is-empty"](value) {

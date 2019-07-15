@@ -1,24 +1,22 @@
-- var scope = 
-{%scripts("validation,auth")%}
 if (user.role === "guest")
     .sign(class="sign-in")
         .sign__form(action="#")
             label login:
                 input(rosa-auth="signin:login")  
-                div( rosa-auth="signin:login" rosa-auth:message=scope.signin.login )
+                div( rosa-auth="signin:login" rosa-auth:message=fr.auth.signin.login )
             label password:
                 input(type="password" rosa-auth="signin:pass")
-                div( rosa-auth="signin:pass" rosa-auth:message=scope.signin.pass )
+                div( rosa-auth="signin:pass" rosa-auth:message=fr.auth.signin.pass )
             button(rosa-auth="signin:request") sign in
     .sign(class="sign-up")
-        div( rosa-auth="signin" rosa-auth:errors=scope.signup.errors )
+        div( rosa-auth="signin" rosa-auth:errors=fr.auth.signup.errors )
         .sign__form(action="#")
             label login:
                 input(rosa-auth="signup:login")
-                div( rosa-auth="signup:login" rosa-auth:message=scope.signup.login )
+                div( rosa-auth="signup:login" rosa-auth:message=fr.auth.signup.login )
             label password:
                 input(type="password" rosa-auth="signup:pass")
-                div( rosa-auth="signup:pass" rosa-auth:message=scope.signup.pass )
+                div( rosa-auth="signup:pass" rosa-auth:message=fr.auth.signup.pass )
             button(rosa-auth="signup:request") sign up
 else
     button(rosa-auth="action:signout") sign out

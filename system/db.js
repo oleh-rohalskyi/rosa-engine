@@ -2,7 +2,8 @@ const jwt = require('jsonwebtoken');
 const mysql = require('mysql');
 const conf = require('./db.conf');
 const crypto = require('crypto');
-const data = require('./data');
+const data = require('./data.json');
+
 const validation = require("../static/system/js/validation");
 console.log( crypto.createHash('md5').update("AhojROSA12").digest("hex") );
 
@@ -16,9 +17,6 @@ function addslashes(string) {
         replace(/'/g, '\\\'').
         replace(/"/g, '\\"');
 }
-
-const LOGIN_ALREADY_EXIST = "LOGIN_ALREADY_EXIST";
-const PASS_ALREADY_EXIST = "LOGIN_ALREADY_EXIST";
 
 module.exports = {
     async getConfig() {

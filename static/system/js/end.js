@@ -6,7 +6,6 @@ rosa.decorateNode = (node) => {
 rosa.loader = {
     init() {
         this.scrips = document.querySelector("scripts");
-        this.csss = document.querySelector("csss");
     },
     async script(name, unit) {
         return new Promise((res)=>{
@@ -30,10 +29,10 @@ async function app() {
     const onload = await Promise.all([
         await rosa.loader.script("auth", "fragments"),
     ])
-
-    onload.push(res);
-
+    
     rosa.auth.init();
+    
+    onload.push(res);
 
     return onload;
 

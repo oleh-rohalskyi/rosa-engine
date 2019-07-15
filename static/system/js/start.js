@@ -1,6 +1,6 @@
 const rosa = {};
 const module = false;
-
+const scripts = ['auth'];
 rosa.helper = {
     lang: document.documentElement.lang,
     setUrlLocation() {

@@ -1,72 +1,64 @@
 const rosaPug = require("./rosa-pug");
 const pug = require("pug");
 
-const payLoad = (page,config) => {
-  
-  return {
-    sys: {
-      env: process.env.NODE_ENV,
-      scripts: [],
-      loco: page.pathnames.current,
-      code: 200,
-      error: "",
-      errorMessage: "",
-      template: page.template
-    },
-    user: page.user ? page.user : {role: "guest"},
-    alias: "page_"+page.template.replace("/","_"),
-    meta: {
-      title: "",
-      discription: "",
-      robots: "noindex"
-    },
-    lang: (page.lang === "common" ) ? config.langs.common : page.lang,
-    title: "",
-    data: {
-      ...page.data
-    }
-}};
-
 const render = {
-  async prerenderPage(page) {
-    return new Promise((res,rej)=>{
-      const fileLink = `./views/pages/${page.template}.pug`;
-      template.addLayOut(fileLink).then((rendered)=>{
-        res(pug.render(rendered,{
-          basedir: __dirname+"/rosa"
-        }));
-      });
-    });
-  },
-  go(response,options) {
-    console.log("GO");
-    // console.log(fileLink);
-    console.log(options);
-    const fileLink = `./views/pages/${options.page.template}.pug`;
+  go(response,{options,page,user,fragments}) {
+   
+    const fileLink = `./views/pages/${page.template}.pug`;
+    // console.log(page);
+    
     rosaPug.addLayOut(fileLink).then((rendered)=>{
       
-      const renderedFunction = pug.compile(rendered,{
-        basedir: __dirname+"/rosa"
-      });
-    
+      
       response.writeHead(200, {
         "Content-Type": "text/html; charset=utf-8;"
       });
+      const fragmentsForThisPage = page.rf.dependencies
+        .map(i=>i.split("/fragments/")[1])
+          .filter(i=>!!i);
+      const fr = {};
+      // console.log(fragments)
+      fragmentsForThisPage.forEach(element => {
 
-      response.write(renderedFunction(payLoad(options.page,options.config)))
+        const frName = element.split(".pug")[0];
+
+        const values = fragments[frName];
+
+        for (const key in values) {
+
+            const value = values[key];
+
+            if (!fr[frName])
+              fr[frName] = {}
+            
+            fr[frName][key] = value[options.lang];
+
+        }
+        
+      });
+      // console.log(page.data,options.lang)
+      if (page.data) {
+        const data  = page.data[options.lang];
+        page.values = data;
+        delete page.data;
+      }
+      // const scripts = ["auth.js"];
+      // console.log(data)
+      console.log(page);
+      response.write(page.rf({options,page,user,fr}))
 
       response.end();
 
     })
   },
-  goError(code, response, options) {
+  goError(code, response, params) {
     // console.log(response);
     const errorTemplate = process.env.NODE_ENV === 'dev' ? "system/server-error" : "views/pages/trouble";
-
+    console.log(params);
     const map = {
       404: {
         code: 404,
-        errorMessage: options.errorMessage,
+        errorMessage: JSON.stringify(params.errorMessage),
         template: "views/pages/404"
       },
       415: {
@@ -74,63 +66,23 @@ const render = {
         errorMessage: "Unsupported Media Type",
         template: errorTemplate,
       },
-      600: {
-        code: process.env.NODE_ENV === 'dev' ? 500 : 400,
-        errorMessage: options.errorMessage,
+      500: {
+        code: process.env.NODE_ENV === 'dev' ? 500 : 403,
+        errorMessage: JSON.stringify(params.errorMessage),
         template: errorTemplate
       }
     };
-    
-      const page = {};
 
-      page.template = map[code].template;
+      const payload = map[code];
       
-      page.pathnames = {
-        current: options.pathname
-      }
+      response.writeHead(500, {
+        "Content-Type": "text/html; charset=utf-8;"
+      });
+
+      response.write("<h1>"+payload.code+"</h1><span>"+JSON.stringify(payload)+"</span>");
+
+      response.end();
       
-      page.lang = options.lang;
-      
-      const data = payLoad(page,options.config);
-
-      data.sys = {
-        ...data.sys,
-        code,
-        error: true,
-        errorMessage: options.errorMessage,
-      }
-      
-
-      rosaPug.addLayOut(`${page.template}.pug`)
-        .then((rendered)=>{
-          console.log(data,rendered)
-          return pug.render(rendered,{
-            basedir: __dirname+"/rosa"
-          });
-        
-        })
-        .then((renderedFunction)=>{
-          let html = ""
-          try  {
-            console.log(data);
-            html = renderedFunction(data);
-          } catch (error) {
-
-              response.writeHead(200, {
-                "Content-Type": "application/json"
-              });
-
-              response.write( JSON.stringify(error) );
-              response.end();
-
-              return;
-          }
-          response.writeHead(code, {
-                "Content-Type": "text/html; charset=UTF-8"  
-          });
-          response.write( data );
-          response.end();
-        })
   }
 } 
 module.exports = render;

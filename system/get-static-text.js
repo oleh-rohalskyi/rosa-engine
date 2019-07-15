@@ -39,7 +39,7 @@ module.exports = (pathname,response) => {
 
             fs.readFile(pathname, function(err, data){
                 if(err){
-                render.responseError(600,response,{
+                render.responseError(500,response,{
                     errorMessage: path.parse(pathname).base + " not found"
                   });
                 } else {

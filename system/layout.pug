@@ -1,19 +1,18 @@
 
 <!DOCTYPE html>
-html(lang=lang)
+html(lang=options.lang)
     head
         link(rel="shortcut(icon" href="/static/favicon.ico" type="image/x-icon")
         link(rel="icon" href="/static/favicon.ico" type="image/x-icon")
         meta(charset="UTF-8")
         meta(name="viewport", content="width=device-width, initial-scale=1.0")
-        meta(name="title", title=meta.title)
+        meta(name="title", title=page.values.meta.title)
         meta(http-equiv="X-UA-Compatible", content="ie=edge")
-        meta(name="discription", discription=meta.discription)
-        meta(name="robots" content=meta.robots)
-        meta(name="location" content=sys.loco)
-        if sys.error
-            meta(name="noredirect" content="yes")
-        title=title
+        meta(name="discription", discription=page.values.meta.discription)
+        meta(name="robots" content=page.values.meta.robots)
+        meta(name="location" content=page.pathnames.current)
+        //- meta(name="noredirect" content="yes")
+        title=page.values.title
         block head
         block css
         script(type="text/javascript" src="/static/system/js/start.js")
@@ -22,6 +21,4 @@ html(lang=lang)
     body(id=alias)
         block content
         scripts
-            each src in sys.scripts
-                script(type="text/javascript" src=src)
         script(type="text/javascript" src="/static/system/js/end.js")

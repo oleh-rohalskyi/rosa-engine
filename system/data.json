@@ -1,0 +1,173 @@
+{
+   "langs": {
+      "common": "en",
+      "scope": [
+         "ru",
+         "en"
+      ]
+   },
+   "fragments": {
+      "footer": {},
+      "header": {},
+      "auth": {
+         "signin": {
+            "common": {
+               "login": {
+                  "less-then-4": "login mast be more than 6 simbols",
+                  "is-empty": "login can't be empty"
+               },
+               "pass": {
+                  "less-then-4": "pass mast be more than 6 simbols",
+                  "is-empty": "pass can't be empty"
+               },
+               "errors": {
+                  "ER_DUP_ENTRY": "user already exist",
+                  "ECONNREFUSED": "limit done"
+               }
+            }
+         },
+         "signup": {
+            "common": {
+               "login": {
+                  "less-then-4": "login mast be more than 6 simbols",
+                  "is-empty": "login can't be empty"
+               },
+               "pass": {
+                  "less-then-4": "pass mast be more than 6 simbols",
+                  "is-empty": "pass can't be empty"
+               },
+               "errors": {
+                  "ER_DUP_ENTRY": "user already exist",
+                  "ECONNREFUSED": "limit done"
+               }
+            }
+         }
+      }
+   },
+   "pages": {
+      "404": {
+         "error": true,
+         "template": "404",
+         "multilangual": false,
+         "pathnames": {
+            "common": "404"
+         },
+         "data": {
+            "common": {
+               "meta": {
+                  "title": "",
+                  "discription": "",
+                  "robots": ""
+               }
+            }
+         }
+      },
+      "tech-error": {
+         "error": true,
+         "template": "tech-error",
+         "pathnames": {
+            "common": "404"
+         },
+         "multilangual": false,
+         "data": {
+            "common": {
+               "meta": {
+                  "title": "",
+                  "discription": "",
+                  "robots": ""
+               }
+            }
+         }
+      },
+      "home-redirect": {
+         "redirect": true,
+         "to": {
+            "common": "домашняя",
+            "ru": "домашняя",
+            "en": "home"
+         },
+         "pathnames": {
+            "common": ""
+         }
+      },
+      "headbands": {
+         "data": {
+            "common": {
+               "meta": {
+                  "title": "",
+                  "discription": "",
+                  "robots": ""
+               }
+            }
+         },
+         "multilangual": false,
+         "pathnames": {
+            "common": "headbands"
+         },
+         "template": "headbands/one",
+         "redirect": false,
+         "childrens": {
+            "one": {
+               "data": {
+                  "common": {
+                     "meta": {
+                        "title": "",
+                        "discription": "",
+                        "robots": ""
+                     }
+                  }
+               },
+               "template": "headbands/one",
+               "redirect": false,
+               "multilangual": false,
+               "pathnames": {
+                  "common": "one"
+               }
+            }
+         }
+      },
+      "home": {
+         "data": {
+            "common": {
+               "meta": {
+                  "title": "",
+                  "discription": "",
+                  "robots": ""
+               }
+            }
+         },
+         "multilangual": true,
+         "pathnames": {
+            "common": "домашняя",
+            "ru": "домашняя",
+            "en": "home"
+         },
+         "template": "home",
+         "redirect": false
+      },
+      "admin": {
+         "template": "admin",
+         "redirect": false,
+         "multilangual": false,
+         "roles": [
+            "admin"
+         ],
+         "pathnames": {
+            "common": "admin"
+         },
+         "childrens": {
+            "fast-admin": {
+               "roles": [
+                  "admin"
+               ],
+               "template": "admin/fast-admin",
+               "redirect": false,
+               "multilangual": false,
+               "pathnames": {
+                  "common": "fast-admin"
+               }
+            }
+         }
+      }
+   }
+}
