@@ -13,12 +13,15 @@
          "signin": {
             "common": {
                "login": {
-                  "less-then-4": "login mast be more than 6 simbols",
-                  "is-empty": "login can't be empty"
+                  "is-empty": "login can't be empty",
+                  "label": "Введите вашу почту"
                },
                "pass": {
-                  "less-then-4": "pass mast be more than 6 simbols",
-                  "is-empty": "pass can't be empty"
+                  "is-empty": "pass can't be empty",
+                  "label": "Введите пароль"
+               },
+               "button": {
+                  "label": "Вход"
                },
                "errors": {
                   "ER_DUP_ENTRY": "user already exist",
@@ -158,7 +161,8 @@
          "childrens": {
             "fast-admin": {
                "roles": [
-                  "admin"
+                  "admin",
+                  "guest"
                ],
                "template": "admin/fast-admin",
                "redirect": false,

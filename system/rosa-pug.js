@@ -5,7 +5,6 @@ module.exports = {
   async start() {
 
     const { pages } = await db.getConfig();
-
     let cashed = await this.check({childrens:pages},[{
         key: "cashed",
         value: true
@@ -24,9 +23,16 @@ module.exports = {
       
     const fileLink = `./views/pages/${obj.template}.pug`;
     
-    if (obj.template) {
-      const rendered = await this.addLayOut(fileLink)
+    if (obj.template === "admin/fast-admin") {
+      obj.data = {common:JSON.stringify(await db.getConfig())};
+      obj.rf = pug.compileFile(fileLink,{
+        basedir: __dirname + "/../"
+      });
+    }
+    else if(obj.template) {
 
+      const rendered = await this.addLayOut(fileLink)
+    
       obj.rf = pug.compile(rendered,{
         basedir: __dirname + "/../"
       });

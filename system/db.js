@@ -64,8 +64,6 @@ module.exports = {
 
                 rej(errors);
 
-                
-
             } else {
 
                 const con = mysql.createConnection(conf);
@@ -74,14 +72,11 @@ module.exports = {
 
                     if (err) rej(err);
 
-                    const uiquKey = "login";
-                    const uniq = uiquKey+":"+login;
-
                     con.query(
 
                         `INSERT INTO users SET ?`,
                         { 
-                            uniq,
+                            login,
                             password: crypto.createHash('md5').update(password).digest("hex")
                         },
                         (err, result) => {
@@ -98,6 +93,25 @@ module.exports = {
             }
             
         });
+    },
+    signin({
+        login,
+        password
+    }) {
+        console.log(1111)
+        return new Promise((res,rej)=>{
+            getUser({
+                login,
+                pass:password
+            }).then((result)=>{
+                if (result.length < 1)
+                    rej({"ER_DUP_ENTRY":""});
+                console.log(result);
+                res(result)
+            });
+            
+
+        })
     }
 };
 
