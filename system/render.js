@@ -17,26 +17,30 @@ const render = {
         .map(i=>i.split("/fragments/")[1])
           .filter(i=>!!i);
       const fr = {};
-      // console.log(fragments)
+      console.log(fragmentsForThisPage)
       fragmentsForThisPage.forEach(element => {
 
         const frName = element.split(".pug")[0];
+        if (fragments[frName].translations) {
+          console.log("fragment",fragments[frName].translations,options.lang)
+          const values = fragments[frName].translations[options.lang];
+          console.log("values---?",values)
+          for (const key in values) {
 
-        const values = fragments[frName];
+              const value = values[key];
 
-        for (const key in values) {
+              if (!fr[frName])
+                fr[frName] = {}
+              
+              fr[frName][key] = value;
 
-            const value = values[key];
-
-            if (!fr[frName])
-              fr[frName] = {}
-            
-            fr[frName][key] = value[options.lang];
-
+          }
         }
+        
         
       });
       // console.log(page.data,options.lang)
+      console.log("fr",fr);
       if (page.data) {
         const data  = page.data[options.lang];
         page.values = data;
@@ -45,7 +49,7 @@ const render = {
       // const scripts = ["auth.js"];
       // console.log(data)
       console.log(page);
-      response.write(page.rf({options,page,user,fr}))
+      response.write(page.rf({options,page,user,fragments:fr}))
 
       response.end();
 

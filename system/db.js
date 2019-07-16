@@ -56,8 +56,8 @@ module.exports = {
         return new Promise((res,rej)=>{
             
             const errors = validation.validate({login,pass: password},{
-                login: { messages: {"is-empty":"","less-then-4":""} },
-                pass:  { messages: {"is-empty":"","less-then-4":""} },
+                login: { messages: {"login:is-empty":"","less-then-4":""} },
+                pass:  { messages: {"pass:is-empty":"","less-then-4":""} },
             })
 
             if (errors.length > 0) {

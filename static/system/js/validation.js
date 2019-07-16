@@ -11,15 +11,26 @@ const init = () => {
             return value.length < 4;
         },
         check({rules,value,target}) {
+            
             let result = [];
-            console.log(rules);
-            for (const rule in rules) {
-                result.push({
-                    result: this[rule](value),
-                    message: rules[rule],
-                    rule,
-                    target
-                })
+            for (let rule in rules) {
+                const key = rule;
+                rule = rule.split(":")[1] ? rule.split(":")[1] : rule;
+                console.log(key);
+                if (this[rule])
+                    result.push({
+                        result: this[rule](value),
+                        message: rules[key],
+                        rule,
+                        target
+                    })
+                else
+                    result.push({
+                        result: false,
+                        message: key,
+                        rule,
+                        target
+                    })
             }
             
             return result;

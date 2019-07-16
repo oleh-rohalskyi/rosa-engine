@@ -1,25 +1,26 @@
 const data = JSON.parse( document.querySelector(".json").getAttribute("data-json") );
-console.log(data);
+Vue.config.devtools = true
+
+
 Vue.component(
     "fragments",
     {
         template: "#fragments",
         data() {
             return {
-                formatedFragments: []
+                translations: []
             }
         },
-        mounted() {
+        created() {
             console.log("fragments-mounted");
-            const formatedFragments = [];
+            // const translations = [];
             for (const key in this.fragments) {
                 if (this.fragments.hasOwnProperty(key)) {
-                    const element = this.fragments[key];
-                    formatedFragments.push({key,langs:element})
+                    const fragment = this.fragments[key];
+                    this.translations.push({data:fragment.translations,key})
                 }
             }
-            this.formatedFragments = formatedFragments;
-            console.log(this)
+            // this.translations = translations;
         },
         props: {
             fragments: Object
@@ -35,16 +36,60 @@ Vue.component(
 Vue.component('fragment',
 {
     template: "#fragment",
+    data() {
+        return {
+            langs: []
+        }
+    },
     props: {
         fragment: Object
     },
     computed: {
-        fragmentString() {
-            return JSON.stringify( this.fragment )
+        fragmentName() {
+            return this.fragment.key
         }
     },
-    mounter() {
+    created() {
+        console.log("fragment-mounted")
+        if (this.fragment.data) {
+            const data = this.fragment.data;
+            for (const key in data) {
+                if (data.hasOwnProperty(key)) {
+                    const values = data[key];
+                    console.log(values)
+                    this.langs.push({values,key})
+                }
+            }
+        }
+    }
+})
+
+Vue.component('content-edit',
+{
+    template: "#content-edit",
+    data() {
+        return {
+            formated: []
+        }
+    },
+    props: {
+        content: Object
+    },
+    computed: {
         
+    },
+    created() {
+        console.log("fragment-mounted")
+        if (this.content) {
+            const data = this.content;
+            for (const key in data) {
+                if (data.hasOwnProperty(key)) {
+                    const values = data[key];
+                    console.log(values)
+                    this.formated.push({values,key})
+                }
+            }
+        }
     }
 })
 const app = new Vue({

@@ -10,27 +10,23 @@
       "footer": {},
       "header": {},
       "auth": {
-         "signin": {
-            "en": {
-               "errors": ""
-            },
+         "translations": {
             "ru": {
-               "login": {
-                  "is-empty": "login can't be empty",
-                  "label": "Введите вашу почту"
+               "messages": {
+                  "login:is-empty": "Введите почту",
+                  "pass:is-empty": "Введите пароль",
+                  "ER_DUP_ENTRY": "Пользователь уже существыет",
+                  "ECONNREFUSED": "Перевышен лимит"
                },
-               "pass": {
-                  "is-empty": "pass can't be empty",
-                  "label": "Введите пароль"
-               },
-               "button": {
-                  "label": "Вход"
-               },
-               "errors": {
-                  "ER_DUP_ENTRY": "user already exist",
-                  "ECONNREFUSED": "limit done"
+               "forms" : {
+                  "label-login": "Введите вашу почту",
+                  "label-pass": "Введите пароль",
+                  "label-button": "Вход"
                }
             }
+         },
+         "signin": {
+            
          },
          "signup": {
             "ru": {
