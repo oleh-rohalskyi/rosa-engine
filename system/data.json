@@ -1,6 +1,6 @@
 {
    "langs": {
-      "common": "en",
+      "common": "ru",
       "scope": [
          "ru",
          "en"
@@ -11,7 +11,10 @@
       "header": {},
       "auth": {
          "signin": {
-            "common": {
+            "en": {
+               "errors": ""
+            },
+            "ru": {
                "login": {
                   "is-empty": "login can't be empty",
                   "label": "Введите вашу почту"
@@ -30,7 +33,7 @@
             }
          },
          "signup": {
-            "common": {
+            "ru": {
                "login": {
                   "less-then-4": "login mast be more than 6 simbols",
                   "is-empty": "login can't be empty"
@@ -53,10 +56,10 @@
          "template": "404",
          "multilangual": false,
          "pathnames": {
-            "common": "404"
+            "ru": "404"
          },
          "data": {
-            "common": {
+            "ru": {
                "meta": {
                   "title": "",
                   "discription": "",
@@ -69,11 +72,11 @@
          "error": true,
          "template": "tech-error",
          "pathnames": {
-            "common": "404"
+            "ru": "404"
          },
          "multilangual": false,
          "data": {
-            "common": {
+            "ru": {
                "meta": {
                   "title": "",
                   "discription": "",
@@ -84,18 +87,14 @@
       },
       "home-redirect": {
          "redirect": true,
-         "to": {
-            "common": "домашняя",
-            "ru": "домашняя",
-            "en": "home"
-         },
+         "to": "home",
          "pathnames": {
-            "common": ""
+            "ru": ""
          }
       },
       "headbands": {
          "data": {
-            "common": {
+            "ru": {
                "meta": {
                   "title": "",
                   "discription": "",
@@ -105,14 +104,14 @@
          },
          "multilangual": false,
          "pathnames": {
-            "common": "headbands"
+            "ru": "headbands"
          },
          "template": "headbands/one",
          "redirect": false,
          "childrens": {
             "one": {
                "data": {
-                  "common": {
+                  "ru": {
                      "meta": {
                         "title": "",
                         "discription": "",
@@ -124,14 +123,14 @@
                "redirect": false,
                "multilangual": false,
                "pathnames": {
-                  "common": "one"
+                  "ru": "one"
                }
             }
          }
       },
       "home": {
          "data": {
-            "common": {
+            "ru": {
                "meta": {
                   "title": "",
                   "discription": "",
@@ -141,8 +140,7 @@
          },
          "multilangual": true,
          "pathnames": {
-            "common": "домашняя",
-            "ru": "домашняя",
+            "ru": "home",
             "en": "home"
          },
          "template": "home",
@@ -156,7 +154,7 @@
             "admin"
          ],
          "pathnames": {
-            "common": "admin"
+            "ru": "admin"
          },
          "childrens": {
             "fast-admin": {
@@ -168,7 +166,7 @@
                "redirect": false,
                "multilangual": false,
                "pathnames": {
-                  "common": "fast-admin"
+                  "ru": "fast-admin"
                }
             }
          }

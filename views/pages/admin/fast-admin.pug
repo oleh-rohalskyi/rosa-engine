@@ -1,14 +1,19 @@
-pages
-    h1 pages
-    button add
-    list
+admin#app
+    fragments(:fragments="fragments")
 
-fragments
-    h1 fragments
-    button add
-    list
+script(type="text/x-template" id="fragments")
+    .fragments fragments
+        button(@click="add") add +
+        fragment(v-for="(fragment,key) in formatedFragments" :fragment=fragment)
+
+script(type="text/x-template" id="fragment")
+    .fragment {{fragmentString}}
+        
 
 div.json(style="display:none" data-json=page.values)
+
+script(type="text/javascript" src="/static/system/js/lib/jquery.js")
+script(type="text/javascript" src="/static/system/js/lib/vue.js")
 script(type="text/javascript" src="/static/system/js/admin/fast-admin.js")
 style.
     list>div {

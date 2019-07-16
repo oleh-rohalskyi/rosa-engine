@@ -7,30 +7,28 @@ module.exports = {
     this.url = url;
     for (const key in pages) {
       const childPage = pages[key];
-      let nextRoute = this.getRoute(childPage,this.lang);
-      let route = (this.lang === "common") ?  "/" :  "/" + this.lang + "/";
+      let route =  "/" + this.lang + "/";
       const page = this.checkRoutes(
         childPage,
-        route + nextRoute,
+        route + childPage.pathnames[lang],
       );
       if (page)
         return page;
     }
   },
   findRedirectPage(pages,newRoute) {
-    console.log("redirect");
-    this.url = encodeURI( (  (this.lang === "common") ?  "./" :  "./" + this.lang + "/"  )  + newRoute ) ;
+
+    this.url ="/" + encodeURI( newRoute );
 
     for (const key in pages) {
       
       const childPage = pages[key];
 
-      let nextRoute = this.getRoute(childPage,this.lang);
-      let route = (this.lang === "common") ?  "/" :  "/" + this.lang + "/";
+      let route =  "/" + this.lang + "/";
 
       const page = this.checkRoutes(
         childPage,
-        route + nextRoute,
+        route + childPage.pathnames[this.lang],
       );
 
       if (page) 
@@ -38,12 +36,15 @@ module.exports = {
         
     }
   },
-  getRoute(page) {
-    return page.multilangual ? page.pathnames[this.lang] : page.pathnames.common;
-  },
   checkRoutes(page,route) {
-    console.log(this.url, "." + encodeURI(route))
-    if (this.url === "." + encodeURI(route)) {
+    console.log( 
+       this.lang, 
+       ( "/" + this.lang + this.url ), 
+      encodeURI(route), 
+      "/"+(this.lang+this.url) === encodeURI(route) 
+    )
+    if ( ( "/" + this.lang + this.url ) === encodeURI(route) ) {
+      console.log("page found")
       page.pathnames.current = route;
       return page;
     }
@@ -56,7 +57,7 @@ module.exports = {
 
         const childPage = childrens[key];
 
-        const nextRoute = this.getRoute(childPage);
+        const nextRoute = childPage.pathnames[this.lang];
         
         const page = this.checkRoutes(
           childPage,

@@ -25,7 +25,7 @@ rosaPug.start().then(
     http.createServer(async function(request, response){
       
       const parsedUrl = url.parse(request.url);
-      const pathname = `.${parsedUrl.pathname}`;
+      let pathname = `${parsedUrl.pathname}`;
 
       console.log("Request =================>"+pathname);
 
@@ -84,8 +84,8 @@ rosaPug.start().then(
           return;
       }
       const { langs,fragments } = await db.getConfig();
-      options.lang = langs.scope.filter(  str => path1level === str  )[0] || "common";
-      
+      options.lang = langs.scope.filter(  str => path1level === str  )[0] || langs.common;
+      pathname = pathname.replace(options.lang+"/", "");
       let page = pager.findPageByPathname(pages, pathname, options.lang);
 
       if (page) {
@@ -93,7 +93,8 @@ rosaPug.start().then(
         if (page.redirect) 
           page = pager.findRedirectPage(
             pages,
-            page.to[options.lang]
+            page.to,
+            options.lang
           );
         if (page) { try {
 

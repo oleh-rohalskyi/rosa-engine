@@ -24,7 +24,7 @@ module.exports = {
     const fileLink = `./views/pages/${obj.template}.pug`;
     
     if (obj.template === "admin/fast-admin") {
-      obj.data = {common:JSON.stringify(await db.getConfig())};
+      obj.values = JSON.stringify(await db.getConfig());
       obj.rf = pug.compileFile(fileLink,{
         basedir: __dirname + "/../"
       });

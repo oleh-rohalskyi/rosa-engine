@@ -4,7 +4,7 @@ const render = require("./render");
 
 module.exports = (pathname,response) => {
     return new Promise((res,rej)=>{
-
+        pathname = "."+pathname
         const ext = path.parse(pathname).ext;
 
         const map = {
@@ -24,14 +24,14 @@ module.exports = (pathname,response) => {
 
         fs.exists(pathname, function (exist) {
             if(!exist) {
-                render.responseError(404, response,{
+                render.goError(404, response,{
                     errorMessage: path.parse(pathname).base + " not found"
                   });
                 return;
             }
 
             if (!map[ext]) {
-                render.responseError(415, response, {
+                render.goError(415, response, {
                     errorMessage: path.parse(pathname).base + " not found"
                 });
                 return;

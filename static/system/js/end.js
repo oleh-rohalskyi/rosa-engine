@@ -28,7 +28,6 @@ async function app() {
 
     const onload = await Promise.all([
         await rosa.loader.script("auth", "fragments"),
-        await rosa.loader.script("fast-admin", "admin"),
     ])
     
     rosa.auth.init();
