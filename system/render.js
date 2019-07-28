@@ -4,7 +4,7 @@ const pug = require("pug");
 const render = {
   go(response,{options,page,user,fragments}) {
    
-    const fileLink = `./views/pages/${page.template}.pug`;
+    const fileLink = `./components/pages/${page.template}.pug`;
     // console.log(page);
     
     rosaPug.addLayOut(fileLink).then((rendered)=>{
@@ -57,23 +57,19 @@ const render = {
   },
   goError(code, response, params) {
     // console.log(response);
-    const errorTemplate = process.env.NODE_ENV === 'dev' ? "system/server-error" : "views/pages/trouble";
-    console.log(params);
+   
     const map = {
       404: {
         code: 404,
         errorMessage: JSON.stringify(params.errorMessage),
-        template: "views/pages/404"
       },
       415: {
         code: 415,
         errorMessage: "Unsupported Media Type",
-        template: errorTemplate,
       },
       500: {
         code: process.env.NODE_ENV === 'dev' ? 500 : 403,
         errorMessage: JSON.stringify(params.errorMessage),
-        template: errorTemplate
       }
     };
 

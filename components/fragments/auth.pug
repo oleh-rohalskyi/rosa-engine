@@ -1,6 +1,7 @@
 if (user.role === "guest")
     .fragments-auth
         .sign(class="sign-in")
+            | Sign in
             div( rosa-auth="signin" rosa-auth:errors=fragments.auth.messages )
             .sign__form(action="#")
                 div( rosa-auth="signin:login" rosa-auth:message=fragments.auth.messages )
@@ -16,6 +17,7 @@ if (user.role === "guest")
                         //- a(href="")=fragments.auth.signin.pass.forgot
                     button(rosa-auth="signin:request")=fragments.auth.forms['label-button']
         .sign(class="sign-up")
+            | Sign up
             div( rosa-auth="signup:login" rosa-auth:message=fragments.auth.messages )
                 input(id="signupinputlogin" rosa-auth="signup:login")  
                 label(for="signupinputlogin")=fragments.auth.forms['label-login']

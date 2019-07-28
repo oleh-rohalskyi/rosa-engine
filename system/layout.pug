@@ -2,6 +2,7 @@
 <!DOCTYPE html>
 html(lang=options.lang)
     head
+        v
         link(rel="shortcut(icon" href="/static/favicon.ico" type="image/x-icon")
         link(rel="icon" href="/static/favicon.ico" type="image/x-icon")
         meta(charset="UTF-8")
@@ -11,14 +12,37 @@ html(lang=options.lang)
         meta(name="discription", discription=page.values.meta.discription)
         meta(name="robots" content=page.values.meta.robots)
         meta(name="location" content=page.pathnames.current)
+
+        meta(name="fragments" content=fragments)
         //- meta(name="noredirect" content="yes")
         title=page.values.title
         block head
         block css
-        script(type="text/javascript" src="/static/system/js/start.js")
+        script(type="text/javascript" src="/cdn/system/front/start.js")
         style.
             body {margin: 0;}
     body(id=alias)
+        style. 
+            * {
+                box-sizing: border-box;
+                margin: 0;
+                padding: 0;
+            }
+            header {
+                padding: 5px;
+                border: 1px solid red;
+            }
+
+            .fragments-auth {
+                margin-left: auto;
+                display: flex;
+                flex-direction: row;
+            }
+
+            .fragments-auth input, .fragments-auth button {
+                border: 1px solid #ccc;
+                padding: 4px;
+            }
         block content
         scripts
-        script(type="text/javascript" src="/static/system/js/end.js")
+        script(type="text/javascript" src="/cdn/system/front/end.js")

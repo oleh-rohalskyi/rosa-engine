@@ -1,6 +1,6 @@
 const data = JSON.parse( document.querySelector(".json").getAttribute("data-json") );
-Vue.config.devtools = true
 
+Vue.config.devtools = true;
 
 Vue.component(
     "fragments",

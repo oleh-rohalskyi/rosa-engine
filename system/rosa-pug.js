@@ -21,7 +21,7 @@ module.exports = {
         obj.childrens[attr] = await this.check(obj.childrens[attr], mission);
       }
       
-    const fileLink = `./views/pages/${obj.template}.pug`;
+    const fileLink = `./components/pages/${obj.template}.pug`;
     
     if (obj.template === "admin/fast-admin") {
       obj.values = JSON.stringify(await db.getConfig());

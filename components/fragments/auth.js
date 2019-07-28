@@ -90,44 +90,15 @@ rosa.auth = {
 
         return (e) => {
 
-            let errors;
-            console.log(
-                {...this[type]},
-                {...this.nodes[type].messages}
-            );
-            errors = rosa.validation.validate(
-                {...this[type]},
-                {...this.nodes[type].messages}
-            );
-               
-            for (const key in this.nodes[type].messages) {
-                this.nodes[type].messages[key].innerHTML = "";
-            }
-
-            if (errors.length > 0) {
-
-                errors.forEach(({message,target})=>{
-            
-                    this.nodes[type].messages[target].innerHTML += message + "</br>";
-
-                });
-
-                return;
-
-            }
-
             fetch(`/rosa-api/auth/${type}`, {
                 body: this.encodeQueryString({ lang: rosa.helper.lang, password: this[type].pass, login: this[type].login}),
                 method: "POST",
             }).then((result)=>{
                 return result.json();
             }).then((result)=>{
-                // console.log(result)
-                if (!result.success)
-                    this.nodes.errors.innerHTML += this.errors[result.error.code] + "</br>";
-                else {
-                    this.nodes.errors.innerHTML = "";
-                }
+                console.log(result)
+                if (!result.success) {}
+                
             });
         }
 

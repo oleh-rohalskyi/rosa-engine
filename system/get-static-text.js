@@ -4,9 +4,9 @@ const render = require("./render");
 
 module.exports = (pathname,response) => {
     return new Promise((res,rej)=>{
-        pathname = "."+pathname
+        pathname = "."+pathname 
         const ext = path.parse(pathname).ext;
-
+          
         const map = {
         '.ico': 'image/x-icon',
         '.html': 'text/html',
@@ -21,7 +21,8 @@ module.exports = (pathname,response) => {
         '.pdf': 'application/pdf',
         '.doc': 'application/msword'
         };
-
+        
+        console.log(pathname)
         fs.exists(pathname, function (exist) {
             if(!exist) {
                 render.goError(404, response,{

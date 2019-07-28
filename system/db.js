@@ -4,8 +4,8 @@ const conf = require('./db.conf');
 const crypto = require('crypto');
 const data = require('./data.json');
 
-const validation = require("../static/system/js/validation");
-console.log( crypto.createHash('md5').update("AhojROSA12").digest("hex") );
+const validation = require("../shared_js/validation");
+// console.log( crypto.createHash('md5').update("AhojROSA12").digest("hex") );
 
 function addslashes(string) {
     return string.replace(/\\/g, '\\\\').
