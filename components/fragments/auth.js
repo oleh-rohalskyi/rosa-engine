@@ -1,4 +1,4 @@
-rosa.auth = {
+rosa.fragment.auth = {
     user: {
         registered: false,
         status: "none"
@@ -96,8 +96,8 @@ rosa.auth = {
             }).then((result)=>{
                 return result.json();
             }).then((result)=>{
-                console.log(result)
-                if (!result.success) {}
+               
+                if (!result.success) { console.error("error",result)}
                 
             });
         }

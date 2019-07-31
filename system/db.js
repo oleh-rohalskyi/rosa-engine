@@ -4,7 +4,7 @@ const conf = require('./db.conf');
 const crypto = require('crypto');
 const data = require('./data.json');
 
-const validation = require("../shared_js/validation");
+// const validation = require("../shared_js/validation");
 // console.log( crypto.createHash('md5').update("AhojROSA12").digest("hex") );
 
 function addslashes(string) {
@@ -35,16 +35,30 @@ module.exports = {
         pass
     }) {
         return new Promise((res,rej)=>{
+            try {
+            } catch (error) {
+                res(error);
+                return;
+            }
             const con = mysql.createConnection(conf);
+            
             const password = crypto.createHash('md5').update(pass).digest("hex");
             con.connect((err) => {
+
                 if (err) rej(err);
                 
                 const sql = `SELECT users.login, roles.name AS roleName FROM roles LEFT JOIN users ON users.role=roles.id WHERE password="${password}" AND login="${login}"`;
                 
                 con.query(sql,(err, result) => {
-                    if (err) rej(err);
+                    console.log(err,result)
+
+                    if (err) {
+                        rej(err);
+                        return;
+                    }
+
                     res(this.parseResult(result));
+
                 });
             });
         })
@@ -52,65 +66,47 @@ module.exports = {
     signup({
         login,
         password
-    }) {
-        return new Promise((res,rej)=>{
+    }) { return new Promise((res,rej)=> {
             
-            const errors = validation.validate({login,pass: password},{
-                login: { messages: {"login:is-empty":"","less-then-4":""} },
-                pass:  { messages: {"pass:is-empty":"","less-then-4":""} },
-            })
+            const con = mysql.createConnection(conf);
 
-            if (errors.length > 0) {
+            con.connect((err) => {
 
-                rej(errors);
+                if (err) rej(err);
 
-            } else {
+                con.query(
+                    `INSERT INTO users SET ?`,
+                    { 
+                        login,
+                        password: crypto.createHash('md5').update(password).digest("hex")
+                    },
+                    (err, result) => {
 
-                const con = mysql.createConnection(conf);
+                        if (err) {
+                            rej(err);
+                        }
+                        
+                        res(this.parseResult(result));
+                    }
+                );
 
-                con.connect((err) => {
+            });
 
-                    if (err) rej(err);
-
-                    con.query(
-
-                        `INSERT INTO users SET ?`,
-                        { 
-                            login,
-                            password: crypto.createHash('md5').update(password).digest("hex")
-                        },
-                        (err, result) => {
-
-                            if (err) {
-                                rej(err);
-                            }
-                            
-                            res(this.parseResult(result));
-
-                    });
-           
-                });
-            }
-            
         });
     },
     signin({
         login,
         password
     }) {
-        console.log(1111)
         return new Promise((res,rej)=>{
-            getUser({
+             
+            this.getUser({
                 login,
                 pass:password
             }).then((result)=>{
-                if (result.length < 1)
-                    rej({"ER_DUP_ENTRY":""});
-                console.log(result);
-                res(result)
-            });
+                res(result);
+            },err=>{rej(err)});
             
-
         })
     }
 };

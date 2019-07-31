@@ -16,6 +16,7 @@ module.exports = {
         return page;
     }
   },
+  
   findRedirectPage(pages,newRoute) {
 
     this.url ="/" + encodeURI( newRoute );
@@ -37,12 +38,6 @@ module.exports = {
     }
   },
   checkRoutes(page,route) {
-    console.log( 
-       this.lang, 
-       ( "/" + this.lang + this.url ), 
-      encodeURI(route), 
-      "/"+(this.lang+this.url) === encodeURI(route) 
-    )
     if ( ( "/" + this.lang + this.url ) === encodeURI(route) ) {
       console.log("page found")
       page.pathnames.current = route;

@@ -1,30 +1,27 @@
-const rosaPug = require("./rosa-pug");
-const pug = require("pug");
-
 const render = {
   go(response,{options,page,user,fragments}) {
    
-    const fileLink = `./components/pages/${page.template}.pug`;
     // console.log(page);
-    
-    rosaPug.addLayOut(fileLink).then((rendered)=>{
-      
-      
+   
       response.writeHead(200, {
         "Content-Type": "text/html; charset=utf-8;"
       });
       const fragmentsForThisPage = page.rf.dependencies
         .map(i=>i.split("/fragments/")[1])
           .filter(i=>!!i);
+
       const fr = {};
-      console.log(fragmentsForThisPage)
+
+      console.log(fragmentsForThisPage);
+
       fragmentsForThisPage.forEach(element => {
 
         const frName = element.split(".pug")[0];
+
         if (fragments[frName].translations) {
-          console.log("fragment",fragments[frName].translations,options.lang)
+
           const values = fragments[frName].translations[options.lang];
-          console.log("values---?",values)
+
           for (const key in values) {
 
               const value = values[key];
@@ -35,25 +32,29 @@ const render = {
               fr[frName][key] = value;
 
           }
+          
+        } else {
+          fr[frName] = {}
         }
         
         
       });
-      // console.log(page.data,options.lang)
-      console.log("fr",fr);
+
       if (page.data) {
         const data  = page.data[options.lang];
         page.values = data;
         delete page.data;
       }
-      // const scripts = ["auth.js"];
-      // console.log(data)
-      console.log(page);
-      response.write(page.rf({options,page,user,fragments:fr}))
+      
+      const pugDat = {options,page,user,fragments:fr};
+      
+      console.log("log data :", pugDat);
+      console.log("log fragments :", pugDat.fragments);
+
+      response.write(page.rf(pugDat))
 
       response.end();
 
-    })
   },
   goError(code, response, params) {
     // console.log(response);

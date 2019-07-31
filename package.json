@@ -11,10 +11,13 @@
     "prod": "NODE_ENV=prod node server.js"
   },
   "dependencies": {
+    "chalk": "^2.4.2",
     "jsonwebtoken": "^8.5.1",
     "mysql": "^2.17.1",
+    "node-sass": "^4.12.0",
     "node-watch": "^0.6.2",
     "path-exists": "^4.0.0",
-    "pug": "^2.0.3"
+    "pug": "^2.0.3",
+    "yargs": "^13.3.0"
   }
 }

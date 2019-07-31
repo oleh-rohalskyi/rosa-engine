@@ -1,44 +1,44 @@
 if (user.role === "guest")
-    .fragments-auth
-        .sign(class="sign-in")
-            | Sign in
-            div( rosa-auth="signin" rosa-auth:errors=fragments.auth.messages )
-            .sign__form(action="#")
-                div( rosa-auth="signin:login" rosa-auth:message=fragments.auth.messages )
-                input(id="signininputlogin" rosa-auth="signin:login")  
-                label(for="signininputlogin")=fragments.auth.forms['label-login']
-                div( rosa-auth="signin:pass" rosa-auth:message=fragments.auth.messages )
-                input(id="signininputpass" type="password" rosa-auth="signin:pass")
-                label(for="signininputpass")=fragments.auth.forms['label-pass']
-                div
-                    span
-                        //- a(href="")=fragments.auth.signin.reg.linkLabel
-                        span  | 
-                        //- a(href="")=fragments.auth.signin.pass.forgot
-                    button(rosa-auth="signin:request")=fragments.auth.forms['label-button']
-        .sign(class="sign-up")
-            | Sign up
-            div( rosa-auth="signup:login" rosa-auth:message=fragments.auth.messages )
-                input(id="signupinputlogin" rosa-auth="signup:login")  
-                label(for="signupinputlogin")=fragments.auth.forms['label-login']
-                div( rosa-auth="signup:pass" rosa-auth:message=fragments.auth.messages )
-                input(id="signupinputpass" type="password" rosa-auth="signup:pass")
-                label(for="signupinputpass")=fragments.auth.forms['label-pass']
-                div
-                    span
-                        //- a(href="")=fragments.auth.signup.reg.linkLabel
-                        span  | 
-                        //- a(href="")=fragments.auth.signup.pass.forgot
-                    button(rosa-auth="signup:request")=fragments.auth.forms['label-button']
+    .sign(class="sign-in")
+        | Sign in
+        div( rosa-auth="signin" rosa-auth:errors=fragments.auth.messages )
+        .sign__form(action="#")
+            div( rosa-auth="signin:login" rosa-auth:message=fragments.auth.messages )
+            input(id="signininputlogin" rosa-auth="signin:login")  
+            label(for="signininputlogin")=fragments.auth.forms['label-login']
+            div( rosa-auth="signin:pass" rosa-auth:message=fragments.auth.messages )
+            input(id="signininputpass" type="password" rosa-auth="signin:pass")
+            label(for="signininputpass")=fragments.auth.forms['label-pass']
+            div
+                span
+                    //- a(href="")=fragments.auth.signin.reg.linkLabel
+                    span  | 
+                    //- a(href="")=fragments.auth.signin.pass.forgot
+                button(rosa-auth="signin:request")=fragments.auth.forms['label-button']
+    .sign(class="sign-up")
+        | Sign up 
+        div( rosa-auth="signup:login" rosa-auth:message=fragments.auth.messages )
+            input(id="signupinputlogin" rosa-auth="signup:login")  
+            label(for="signupinputlogin")=fragments.auth.forms['label-login']
+            div( rosa-auth="signup:pass" rosa-auth:message=fragments.auth.messages )
+            input(id="signupinputpass" type="password" rosa-auth="signup:pass")
+            label(for="signupinputpass")=fragments.auth.forms['label-pass']
+            div
+                span регистрация
+                    //- a(href="")=fragments.auth.signup.reg.linkLabel 
+                    
+                span  | забыли пароль
+                    //- a(href="")=fragments.auth.signup.pass.forgot
+                button(rosa-auth="signup:request")=fragments.auth.forms['label-button']
 else
     button(rosa-auth="action:signout") sign out
     
 style.
-    .fragments-auth {
-        height: 104px; 
-        width: 255px;
+    .sign {
+        height: 114px;
+        padding: 10px; 
     }
 
-    .fragments-auth label {
-        display: block;
+    .sign label, .sign input {
+        margin: 3px;
     }

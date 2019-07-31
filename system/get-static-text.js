@@ -22,7 +22,7 @@ module.exports = (pathname,response) => {
         '.doc': 'application/msword'
         };
         
-        console.log(pathname)
+        console.log("get static: ",pathname)
         fs.exists(pathname, function (exist) {
             if(!exist) {
                 render.goError(404, response,{
