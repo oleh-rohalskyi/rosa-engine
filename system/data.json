@@ -13,6 +13,8 @@
          "translations": {
             "ru": {
                "messages": {
+                  "less-then-4": null,
+                  "is-empty": null,
                   "login:is-empty": "Введите почту",
                   "pass:is-empty": "Введите пароль",
                   "ER_DUP_ENTRY": "Пользователь уже существыет",
@@ -23,24 +25,20 @@
                   "label-pass": "Введите пароль",
                   "label-button": "Вход"
                }
-            }
-         },
-         "signin": {
-            
-         },
-         "signup": {
-            "ru": {
-               "login": {
-                  "less-then-4": "login mast be more than 6 simbols",
-                  "is-empty": "login can't be empty"
-               },
-               "pass": {
+            },
+            "en": {
+               "messages": {
                   "less-then-4": "pass mast be more than 6 simbols",
-                  "is-empty": "pass can't be empty"
-               },
-               "errors": {
+                  "is-empty": "pass can't be empty",
+                  "login:is-empty": null,
+                  "pass:is-empty": null,
                   "ER_DUP_ENTRY": "user already exist",
                   "ECONNREFUSED": "limit done"
+               },
+               "forms" : {
+                  "label-login": null,
+                  "label-pass": null,
+                  "label-button": null
                }
             }
          }
@@ -92,9 +90,16 @@
          "data": {
             "ru": {
                "meta": {
-                  "title": "",
-                  "discription": "",
-                  "robots": ""
+                  "title": null,
+                  "discription": null,
+                  "robots": null
+               }
+            },
+            "en": {
+               "meta": {
+                  "title": null,
+                  "discription": null,
+                  "robots": null
                }
             }
          },
@@ -128,9 +133,16 @@
          "data": {
             "ru": {
                "meta": {
-                  "title": "",
-                  "discription": "",
-                  "robots": ""
+                  "title": null,
+                  "discription": null,
+                  "robots": null
+               }
+            },
+            "en": {
+               "meta": {
+                  "title": null,
+                  "discription": null,
+                  "robots": null
                }
             }
          },

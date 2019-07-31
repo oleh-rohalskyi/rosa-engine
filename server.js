@@ -51,14 +51,14 @@ module.exports = function start(pages,port) {
             body = querystring.parse(body);
     
             const action = path3level;
+            
             if (actions.indexOf(action) >= 0) {
               db[action](body).then(
                 function(result){
                   apiRenderer[action](response,result);
                 },
-                function(err) {
-                  console.log(111)
-                  apiRenderer.error(response,err);
+                function(result) {
+                  apiRenderer[action](response,result);
                 }
               )
     

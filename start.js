@@ -22,6 +22,7 @@ function procces(message) {
 }
 
 const update = (evt,filename) =>{
+
   if (server !== null) {
     server.close(procces.bind(null,`${chalk.green('server')}  restarted`));
   } else {
@@ -57,7 +58,7 @@ function watchSass() {
 
 process.env.NODE_ENV = args.env;
 
-if (args.env === "dev") {
+if (process.env.NODE_ENV === "dev") {
   port = 3001;
   update();
   watchPug();

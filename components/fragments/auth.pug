@@ -24,10 +24,10 @@ if (user.role === "guest")
             input(id="signupinputpass" type="password" rosa-auth="signup:pass")
             label(for="signupinputpass")=fragments.auth.forms['label-pass']
             div
-                span регистрация
+                span 
                     //- a(href="")=fragments.auth.signup.reg.linkLabel 
                     
-                span  | забыли пароль
+                span  | 
                     //- a(href="")=fragments.auth.signup.pass.forgot
                 button(rosa-auth="signup:request")=fragments.auth.forms['label-button']
 else

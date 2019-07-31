@@ -30,7 +30,7 @@ module.exports = {
         });
         return parsedResult.length > 0 ? parsedResult[0] : false
     },
-    getUser({
+    getuser({
         login,
         pass
     }) {
@@ -43,6 +43,7 @@ module.exports = {
             const con = mysql.createConnection(conf);
             
             const password = crypto.createHash('md5').update(pass).digest("hex");
+            
             con.connect((err) => {
 
                 if (err) rej(err);
@@ -83,10 +84,12 @@ module.exports = {
                     (err, result) => {
 
                         if (err) {
-                            rej(err);
+                            rej({success: false, error: err});
                         }
+
+                        const {affectedRows,insertId,changedRows,message} = result;
+                        res({success: true, data: {affectedRows,insertId,changedRows,message}});
                         
-                        res(this.parseResult(result));
                     }
                 );
 
@@ -100,7 +103,7 @@ module.exports = {
     }) {
         return new Promise((res,rej)=>{
              
-            this.getUser({
+            this.getuser({
                 login,
                 pass:password
             }).then((result)=>{

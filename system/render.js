@@ -1,11 +1,12 @@
 const render = {
   go(response,{options,page,user,fragments}) {
    
-    // console.log(page);
+    console.log(111);
    
       response.writeHead(200, {
         "Content-Type": "text/html; charset=utf-8;"
       });
+
       const fragmentsForThisPage = page.rf.dependencies
         .map(i=>i.split("/fragments/")[1])
           .filter(i=>!!i);
@@ -41,7 +42,7 @@ const render = {
       });
 
       if (page.data) {
-        const data  = page.data[options.lang];
+        const data  = page.data[options.lang] || {};
         page.values = data;
         delete page.data;
       }
@@ -51,7 +52,13 @@ const render = {
       console.log("log data :", pugDat);
       console.log("log fragments :", pugDat.fragments);
 
-      response.write(page.rf(pugDat))
+      const html = page.rf(pugDat);
+      try {
+      } catch (error) {
+        console.log(error);
+      }
+      
+      response.write(html);
 
       response.end();
 
