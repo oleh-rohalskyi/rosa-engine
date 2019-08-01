@@ -30,16 +30,41 @@ module.exports = {
         });
         return parsedResult.length > 0 ? parsedResult[0] : false
     },
+    finduser(
+        login
+    ) {
+        return new Promise((res,rej)=>{
+
+            const con = mysql.createConnection(conf);
+
+            con.connect((err) => {
+
+                if (err) rej(err);
+                
+                const sql = `SELECT * FROM users WHERE login="${login}"`;
+                
+                con.query(sql,(err, result) => {
+                    console.log(`SELECT * FROM users WHERE login="${login}"`,err,result)
+
+                    if (err) {
+                        rej(err);
+                        return;
+                    }
+
+                    res(result.length > 0);
+
+                });
+            });
+
+        })
+        
+    },
     getuser({
         login,
         pass
     }) {
         return new Promise((res,rej)=>{
-            try {
-            } catch (error) {
-                res(error);
-                return;
-            }
+        
             const con = mysql.createConnection(conf);
             
             const password = crypto.createHash('md5').update(pass).digest("hex");
@@ -64,13 +89,20 @@ module.exports = {
             });
         })
     },
-    signup({
+    async signup({
         login,
         password
-    }) { return new Promise((res,rej)=> {
+    }) { return new Promise(async(res,rej)=> {
             
             const con = mysql.createConnection(conf);
 
+            const isUserExist = await this.finduser(login);
+
+            if (isUserExist) {
+                rej({success: false, error: {message: "ER_DUP_ENTRY"}});
+                return;
+            }
+            
             con.connect((err) => {
 
                 if (err) rej(err);
@@ -89,7 +121,7 @@ module.exports = {
 
                         const {affectedRows,insertId,changedRows,message} = result;
                         res({success: true, data: {affectedRows,insertId,changedRows,message}});
-                        
+
                     }
                 );
 

@@ -17,7 +17,7 @@ rosa.fragment.auth = {
     init() {
 
         const nodes = document.querySelectorAll("[rosa-auth]");
-        
+        console.log(nodes);
         if (nodes.length <= 0) return null;
         
         [...nodes].forEach( (node) => {
@@ -37,6 +37,8 @@ rosa.fragment.auth = {
 
             const message = node.getAttribute("rosa-auth:message");
             const errors = node.getAttribute("rosa-auth:errors");
+
+            console.log(message);
 
             if (!this.nodes[type]) {
                 this.nodes[type] = {};
@@ -70,7 +72,7 @@ rosa.fragment.auth = {
         if (!this.nodes[type]) return;
         switch(type) {
             case "signout":
-                this.nodes[type].action[fun]("click",this.onClick(type));
+                this.nodes[type].action[fun]("click",this.signout(type));
             break;
             default:
                 this.nodes[type].request[fun]("click",this.onClick(type));
@@ -96,9 +98,12 @@ rosa.fragment.auth = {
             }).then((result)=>{
                 return result.json();
             }).then((result)=>{
-               
-                if (!result.success) { console.error("error",result)}
                 
+                if (!result.success) { console.error("error",result)}
+                else {
+                    console.log(this)
+                }
+
             });
         }
 
