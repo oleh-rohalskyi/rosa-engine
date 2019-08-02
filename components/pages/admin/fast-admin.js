@@ -92,7 +92,7 @@ Vue.component('content-edit',
         }
     }
 })
-const app = new Vue({
+const x = new Vue({
     el: '#app',
     created() {
         console.log(data.fragments);

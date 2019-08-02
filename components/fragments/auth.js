@@ -1,4 +1,5 @@
-rosa.fragment.auth = {
+rosa.fragment['auth'] = {
+    data: {},
     user: {
         registered: false,
         status: "none"

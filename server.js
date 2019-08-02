@@ -53,6 +53,7 @@ module.exports = function start(pages,port) {
             const action = path3level;
             
             if (actions.indexOf(action) >= 0) {
+
               db[action](body).then(
                 function(result){
                   apiRenderer[action](response,result);
@@ -74,7 +75,7 @@ module.exports = function start(pages,port) {
       if (path1level === "cdn") {
     
           cors(response);
-    
+          // if pathname.match("/cdn/system")
           getStaticText(pathname.replace("/cdn",""),response).then((data,ext)=>{
             response.setHeader('Content-type', ext || 'text/plain' );
             response.end(data);

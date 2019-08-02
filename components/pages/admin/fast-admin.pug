@@ -1,42 +1,43 @@
 admin#app
-    fragments(:fragments="fragments")
+  fragments(:fragments="fragments")
 
 script(type="text/x-template" id="fragments")
-    .fragments fragments
-        button(@click="add") add +
-        fragment(v-for="trans in translations" :fragment="trans" )
+  .fragments fragments
+    button(@click="add") add +
+    fragment(v-for="trans in translations" :fragment="trans" )
 
 script(type="text/x-template" id="fragment")
-    .fragment
-        p {{fragmentName}}
-        .lang(v-for="lang in langs" v-key="lang.key") {{lang.key}}
+  .fragment
+    p {{fragmentName}}
+    .lang(v-for="lang in langs" v-key="lang.key") {{lang.key}}
 
 script(type="text/x-template" id="content-edit")
-    .content-edit 
-        .content-edit__lang
-        .content-edit__list
-        
+  .content-edit 
+    .content-edit__lang
+    .content-edit__list
+    
 
-div.json(style="display:none" data-json=page.values)
+div.json(style="display:none" data-json=page)
 
-script(type="text/javascript" src="/static/system/js/lib/jquery.js")
-script(type="text/javascript" src="/static/system/js/lib/vue.js")
-script(type="text/javascript" src="/static/system/js/admin/fast-admin.js")
+script(type="text/javascript" src="/cdn/system/front/lib/jquery.js")
+script(type="text/javascript" src="/cdn/system/front/lib/vue.js")
+
+//- script(type="text/javascript" src="/cdn/components/pages/{page.template}.js")
 style.
-    p {
-        padding: 0 0 0 10px;
-        margin: 0;
-        border-bottom: 3px solid #ccc;
-    }
+  p {
+      padding: 0 0 0 10px;
+      margin: 0;
+      border-bottom: 3px solid #ccc;
+  }
 
-    p:hover {
-        background-color: #ccc;
-    }
+  p:hover {
+      background-color: #ccc;
+  }
 
-    .lang {
-        border-left: 3px solid #ccc;
-        margin-left: 15px;
-        padding-left: 15px;
-    }
-    
-    
+  .lang {
+      border-left: 3px solid #ccc;
+      margin-left: 15px;
+      padding-left: 15px;
+  }
+
+

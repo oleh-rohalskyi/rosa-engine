@@ -59,11 +59,13 @@ async function app() {
     await rosa.loader.script("validation","shared_js");
    
     const result = await Promise.all( 
-        rosa.data.fragmentsList.map( ({name}) => rosa.loader.script(name,"components/fragments") ) 
+        rosa.data.fragmentsList.map( ({name}) => rosa.loader.script(name,"components/fragments") )
     )
-    console.log(rosa.data);
-    rosa.fragment.auth.init();
-        
+    rosa.data.fragmentsList.forEach(({name})=>{
+        console.log(name);
+        rosa.fragment[name].init(rosa.data);
+    });
+
     return Promise.resolve(result);
 
 };

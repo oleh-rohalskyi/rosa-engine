@@ -23,13 +23,8 @@ module.exports = {
       
     const fileLink = `./components/pages/${obj.template}.pug`;
     
-    if (obj.template === "admin/fast-admin") {
-      obj.values = JSON.stringify(await db.getConfig());
-      obj.rf = pug.compileFile(fileLink,{
-        basedir: __dirname + "/../"
-      });
-    }
-    else if(obj.template) {
+    
+    if (obj.template) {
 
       const rendered = await this.addLayOut(fileLink)
     
@@ -41,17 +36,23 @@ module.exports = {
     return obj;
   },
   async addLayOut(fileLink) {
+
     let compiled = "";
     const lineReader = require('readline').createInterface({
       input: require('fs').createReadStream(fileLink)
     });
     return new Promise((res)=>{
       lineReader.on('line', (line) => {
-        compiled = compiled+"  "+line+"\n"
+        compiled = compiled+"      "+line+"\n";
       });
       lineReader.on('close', ()=>{
-        res(`extends /system/layout.pug \nblock content\n`
-        +compiled);
+        console.log(fileLink.replace(".pug",""))
+        // console.log(`extends /system/layout.pug \nblock content\n` +compiled+ `      script(type="text/javascript" src="/cdn/components/pages/${fileLink}.js")`)
+        res(`extends /system/layout.pug \nblock content\n  div.page\n${compiled}\n      script(type="text/javascript" src="/cdn/components/pages${
+          fileLink
+            .replace(".pug",".js")
+            .replace("./components/pages","")
+          }")\n`);
       })
     });
   }

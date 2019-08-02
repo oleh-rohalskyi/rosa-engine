@@ -1,4 +1,7 @@
 module.exports = {
+    data() {
+        return
+    },
     prepareResult (result) {
         if (result.success) {
             result.data = result.data

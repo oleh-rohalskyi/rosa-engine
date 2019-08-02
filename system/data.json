@@ -159,13 +159,29 @@
          "redirect": false,
          "multilangual": false,
          "roles": [
-            "admin"
+            "guest"
          ],
          "pathnames": {
             "ru": "admin"
          },
          "childrens": {
             "fast-admin": {
+               "data": {
+                  "ru": {
+                     "meta": {
+                        "title": null,
+                        "discription": null,
+                        "robots": null
+                     }
+                  },
+                  "en": {
+                     "meta": {
+                        "title": null,
+                        "discription": null,
+                        "robots": null
+                     }
+                  }
+               },
                "roles": [
                   "admin",
                   "guest"
