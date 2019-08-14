@@ -13,12 +13,13 @@
          "translations": {
             "ru": {
                "messages": {
-                  "less-then-4": null,
-                  "is-empty": null,
-                  "login:is-empty": "Введите почту",
-                  "pass:is-empty": "Введите пароль",
+                  "LESS_THAN_FOUR": "Пароль должен быть больше четырёх символов",
+                  "EMPTY": "Плое не должно быть пустым",
+                  "LOGIN_EMPTY": "Введите почту",
+                  "PASS_EMPTY": "Введите пароль",
                   "ER_DUP_ENTRY": "Пользователь уже существыет",
-                  "ECONNREFUSED": "Перевышен лимит"
+                  "ECONNREFUSED": "Перевышен лимит",
+                  "NO_COINCIDENCE": "Неверено введен логин или пароль"
                },
                "forms" : {
                   "label-login": "Введите вашу почту",

@@ -1,27 +1,46 @@
 console.clear();
 
 const http = require("http");
-
 const cors = require("./system/cors")
 const pager = require("./system/pager");
 const db = require("./system/db");
 const render = require("./system/render");
-const apiRenderer = require("./system/api-renderer");
 const getStaticText = require("./system/get-static-text");
 const url = require('url');
 const querystring = require('querystring');
+const config = require('./system/data.json');
+const session = require('./system/session');
 
+function parseCookies (request) {
+    var list = {},
+        rc = request.headers.cookie;
+
+    rc && rc.split(';').forEach(function( cookie ) {
+        var parts = cookie.split('=');
+        list[parts.shift().trim()] = decodeURI(parts.join('='));
+    });
+
+    return list;
+}
 const actions = [
   "signup",
   "signin",
   "logout"
 ];
 
-
-
 module.exports = function start(pages,port) {
   return new Promise((res,rej)=>{
     let server = http.createServer(async function(request, response){
+      const user = {
+        role: "guest"
+      }
+      const role = db.jwtget(
+        session.filter(i=>i===parseCookies(request).authentication)[0]
+      );
+      const jwtData = role.split("-=number=-");
+      user.role = jwtData[0];
+      user.id = jwtData[1] || NaN;
+      user.registered = user.role !== "guest";
       const parsedUrl = url.parse(request.url);
       let pathname = `${parsedUrl.pathname}`;
     
@@ -53,15 +72,28 @@ module.exports = function start(pages,port) {
             const action = path3level;
             
             if (actions.indexOf(action) >= 0) {
-
+              
               db[action](body).then(
                 function(result){
-                  apiRenderer[action](response,result);
+
+                  response.writeHead(200, {
+                      "Content-Type": "application/json; charset=utf-8;"
+                  });
+
+                  response.write(JSON.stringify(result));
+
+                  response.end();
+
                 },
                 function(result) {
-                  apiRenderer[action](response,result);
-                }
-              )
+                  response.writeHead(200, {
+                    "Content-Type": "application/json; charset=utf-8;"
+                });
+
+                response.write(JSON.stringify(result));
+
+                response.end();
+                });
     
             }
     
@@ -84,7 +116,7 @@ module.exports = function start(pages,port) {
           return;
       }
 
-      const { langs,fragments } = await db.getConfig();
+      const { langs,fragments } = config;
       options.lang = langs.scope.filter(  str => path1level === str  )[0] || langs.common;
       pathname = pathname.replace(options.lang+"/", "");
       let page = pager.findPageByPathname(pages, pathname, options.lang);
@@ -97,15 +129,10 @@ module.exports = function start(pages,port) {
             page.to,
             options.lang
           );
-        if (page) { try {
-    
-            const user = {
-              role: "guest"
-            }
-            
+        if (page) { try {          
             //check what user role needed for a page or if it needed at all;
             if ( page.roles && page.roles.indexOf(user.role) >= 0 ) {
-              render.go(response, {options,user,page,fragments});
+              render.go(response, {options,user,page});
             } else if (!page.roles) {
               render.go(response, {options,user,page,fragments});
             } else {

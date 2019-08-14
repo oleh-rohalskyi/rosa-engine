@@ -2,88 +2,56 @@ const jwt = require('jsonwebtoken');
 const mysql = require('mysql');
 const conf = require('./db.conf');
 const crypto = require('crypto');
-const data = require('./data.json');
+const secret = crypto.randomBytes(16).toString('hex');
+const session = require('./session.js');
 
-// const validation = require("../shared_js/validation");
-// console.log( crypto.createHash('md5').update("AhojROSA12").digest("hex") );
-
-function addslashes(string) {
-    return string.replace(/\\/g, '\\\\').
-        replace(/\u0008/g, '\\b').
-        replace(/\t/g, '\\t').
-        replace(/\n/g, '\\n').
-        replace(/\f/g, '\\f').
-        replace(/\r/g, '\\r').
-        replace(/'/g, '\\\'').
-        replace(/"/g, '\\"');
-}
+const expiredDays = 30;
 
 module.exports = {
-    async getConfig() {
-        return Promise.resolve(data);
-    },
-    parseResult(result) {
-        if (!result) return;
-        let parsedResult = [];
-        Object.keys(result).forEach(function(key) {
-            parsedResult[parsedResult.length] = result[key];
-        });
-        return parsedResult.length > 0 ? parsedResult[0] : false
-    },
-    finduser(
-        login
-    ) {
-        return new Promise((res,rej)=>{
-
-            const con = mysql.createConnection(conf);
-
-            con.connect((err) => {
-
-                if (err) rej(err);
-                
-                const sql = `SELECT * FROM users WHERE login="${login}"`;
-                
-                con.query(sql,(err, result) => {
-                    console.log(`SELECT * FROM users WHERE login="${login}"`,err,result)
-
-                    if (err) {
-                        rej(err);
-                        return;
-                    }
-
-                    res(result.length > 0);
-
-                });
-            });
-
-        })
-        
+    jwtget(token) {
+        if (token)
+            return jwt.verify(token, secret);
+        return "guest";
     },
     getuser({
         login,
-        pass
+        password
     }) {
         return new Promise((res,rej)=>{
         
             const con = mysql.createConnection(conf);
             
-            const password = crypto.createHash('md5').update(pass).digest("hex");
-            
+            password = crypto.createHash('md5').update(password+"").digest("hex");
+           
             con.connect((err) => {
 
-                if (err) rej(err);
+                const sql = `SELECT users.id, users.login, roles.name AS role FROM roles LEFT JOIN users ON users.role=roles.id WHERE password="${password}" AND login="${login}"`;
                 
-                const sql = `SELECT users.login, roles.name AS roleName FROM roles LEFT JOIN users ON users.role=roles.id WHERE password="${password}" AND login="${login}"`;
-                
+                try {
+                    
+                } catch (error) {
+                    
+                }
                 con.query(sql,(err, result) => {
                     console.log(err,result)
 
                     if (err) {
-                        rej(err);
+                        rej({success:false,error: err.message, data: null});
+                        return;
+                    }
+                    
+                    if (result.length <= 0) {
+                        rej({success:false,error: "NO_COINCIDENCE",data: null});
                         return;
                     }
 
-                    res(this.parseResult(result));
+                    let user = result[0];
+                    user.token = jwt.sign(user.role+`-=number=-${user.id}`, secret);
+                    user.expired = new Date().getTime() + 86400000 * expiredDays;
+                    user.role = null;
+                    session.push(user.token);
+                    user.id = null;
+                    res({success: true, error: null, data: user});
 
                 });
             });
@@ -95,14 +63,27 @@ module.exports = {
     }) { return new Promise(async(res,rej)=> {
             
             const con = mysql.createConnection(conf);
-
-            const isUserExist = await this.finduser(login);
-
-            if (isUserExist) {
-                rej({success: false, error: {message: "ER_DUP_ENTRY"}});
-                return;
+            let user = {
+                success:false,
+                data: {}
             }
             
+            try {
+                user = await this.getuser(login,password);
+            } catch (error) {
+                switch (error.error) {
+                    case "NO_COINCIDENCE":
+                        user = {
+                            success:true,
+                            data: {}
+                        }
+                        break;
+                
+                    default:
+                        rej(error);
+                }
+            }
+            //signup
             con.connect((err) => {
 
                 if (err) rej(err);
@@ -111,7 +92,7 @@ module.exports = {
                     `INSERT INTO users SET ?`,
                     { 
                         login,
-                        password: crypto.createHash('md5').update(password).digest("hex")
+                        password: crypto.createHash('md5').update(password+"").digest("hex")
                     },
                     (err, result) => {
 
@@ -119,8 +100,8 @@ module.exports = {
                             rej({success: false, error: err});
                         }
 
-                        const {affectedRows,insertId,changedRows,message} = result;
-                        res({success: true, data: {affectedRows,insertId,changedRows,message}});
+                        console.log(result);
+                        res({success: true, data: ""});
 
                     }
                 );
@@ -129,18 +110,22 @@ module.exports = {
 
         });
     },
-    signin({
+    async signin({
         login,
         password
     }) {
-        return new Promise((res,rej)=>{
-             
-            this.getuser({
-                login,
-                pass:password
-            }).then((result)=>{
-                res(result);
-            },err=>{rej(err)});
+        return new Promise(async(res,rej)=>{
+            let user = {
+                success:false,
+                data: {}
+            }
+            try {
+                user = await this.getuser({login,password});
+            } catch (error) {
+                rej(error)
+            }
+            res(user);
+
             
         })
     }

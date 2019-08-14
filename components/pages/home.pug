@@ -1,3 +1,21 @@
 include /components/fragments/header
-content= user.role
-include /components/fragments/footer
+div this is content
+div.role
+    table
+        tr
+            td Права пользователя
+            td #{user.role}
+style.
+    .role {
+        border: 1px solid #ccc;
+        padding: 10px;
+        margin: 10px;
+    }
+    td {
+        padding: 4px 8px 4px 10px;
+    }
+    td:not(:nth-child(1)) {
+        color: #888;
+        border-left: 1px solid #999;
+    }
+//- include /components/fragments/footer

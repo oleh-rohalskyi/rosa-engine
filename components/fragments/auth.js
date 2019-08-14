@@ -17,12 +17,16 @@ rosa.fragment['auth'] = {
     },
     init() {
 
+        const messages = document.querySelector("[rosa-auth-messages]").getAttribute("rosa-auth-messages");
+       
+        this.messages = JSON.parse(messages);
+       
         const nodes = document.querySelectorAll("[rosa-auth]");
         console.log(nodes);
         if (nodes.length <= 0) return null;
         
         [...nodes].forEach( (node) => {
-
+            
             rosa.decorateNode(node);
             
             const value = node.getAttribute("rosa-auth");
@@ -36,34 +40,25 @@ rosa.fragment['auth'] = {
                 }
             }
 
-            const message = node.getAttribute("rosa-auth:message");
             const errors = node.getAttribute("rosa-auth:errors");
-
-            console.log(message);
 
             if (!this.nodes[type]) {
                 this.nodes[type] = {};
             }
 
             // console.log(node)
-
+            // console.log(type,unit,message)
             switch (true) {
                 case !!errors:
                     this.errors = JSON.parse(errors);
                     this.nodes.errors = node;
-                    break;
-                case !!message:
-                node.messages = JSON.parse(message);
-                    if (!this.nodes[type].messages)
-                        this.nodes[type].messages = {};
-                    this.nodes[type].messages[unit] = node;
                     break;
                 default:
                     this.nodes[type][unit] = node;
                 break;
             }
         });
-        
+        console.log(this);
         this.listener("signin", "addEventListener");
         this.listener("signup", "addEventListener");
         this.listener("signout","addEventListener");
@@ -99,10 +94,20 @@ rosa.fragment['auth'] = {
             }).then((result)=>{
                 return result.json();
             }).then((result)=>{
-                
-                if (!result.success) { console.error("error",result)}
-                else {
-                    console.log(this)
+                const errorTextNode = this.nodes[type].errors;  
+                if (!result.success) {
+                    errorTextNode.innerHTML = `<div class="auth-alert">${this.messages[result.error]}</div>`;
+                } else {
+                    rosa.data.user = {
+                        login: result.data.login
+                    }
+
+                    let date = new Date(result.data.expired);
+                    date = date.toUTCString();
+                    
+                    document.cookie = `authentication=${result.data.token};path=/;expires=${result.data.expired}`;
+
+                    
                 }
 
             });

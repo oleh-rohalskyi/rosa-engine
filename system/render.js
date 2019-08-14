@@ -47,7 +47,7 @@ const render = {
         delete page.data;
       }
       
-      const pugDat = {options,page,user,fragments:fr};
+      const pugDat = {options,page,user,fragments:fr,reg: user.registered};
       
       console.log("log data :", pugDat);
       console.log("log fragments :", pugDat.fragments);

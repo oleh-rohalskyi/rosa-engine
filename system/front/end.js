@@ -5,22 +5,13 @@ rosa.decorateNode = (node) => {
 
 rosa.data = {
     init() {
-        this.getFragments();
+        this.getFragmentsFromDOM();
+        return Promise.resolve();
     },
-    fragmentsList: [],
-    fragments: {},
-    getFragments() {
-        if (Object.keys(this.fragments).length > 0 && this.fragmentsList.length > 0)
-            return this.fragments.length;
-        else {
-            const strFragments = document.querySelector("meta[name='fragments']").getAttribute("content");
-            this.fragments = JSON.parse(strFragments);
-            this.fragmentsList = Object.keys(this.fragments).map((key) => {
-                const item = this.fragments[key];
-                item.name = key;
-                return item;
-              });     
-        }
+    fragments: [],
+    getFragmentsFromDOM() {
+        const strFragments = document.querySelector("meta[name='fragments']").getAttribute("content");
+        this.fragments = JSON.parse(strFragments);
     }
 
 }
@@ -30,7 +21,6 @@ rosa.loader = {
     },
     async script(name, path) {
         return new Promise((res,rej)=>{
-
             const script = document.createElement("script");
             script.setAttribute("src", `/cdn/${path}/${name}.js`);
             script.setAttribute("type", "text/javascript");
@@ -54,20 +44,27 @@ rosa.loader = {
 async function app() {
     
     rosa.loader.init();
-    rosa.data.init();
-    
+    await rosa.data.init();
+
+
+    await rosa.loader.script("db","system/front");
     await rosa.loader.script("validation","shared_js");
-   
+
     const result = await Promise.all( 
-        rosa.data.fragmentsList.map( ({name}) => rosa.loader.script(name,"components/fragments") )
-    )
-    rosa.data.fragmentsList.forEach(({name})=>{
-        console.log(name);
-        rosa.fragment[name].init(rosa.data);
-    });
+        await rosa.data.fragments.map( async (name) => ({
+            node: await rosa.loader.script(name,"components/fragments"),
+            name
+        }) )
+    );
 
     return Promise.resolve(result);
-
+    
 };
 
-app().then(console.log);
+app().then((fragments)=>{
+    fragments.forEach(({name})=>{
+        if(rosa.fragment[name]) {
+            rosa.fragment[name].init();
+        }
+    } );
+});

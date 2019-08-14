@@ -1,28 +1,25 @@
 const db = require('./db');
 const pug = require('pug');
+const config = require('./data.json');
 
 module.exports = {
   async start() {
 
-    const { pages } = await db.getConfig();
-    let cashed = await this.check({childrens:pages},[{
-        key: "cashed",
-        value: true
-    }]);
+    const { pages } = config;
+    let cashed = await this.check({childrens:pages});
 
     return cashed.childrens;
 
   },
-  async check(obj,mission) {
+  async check(obj) {
     
     if (obj.childrens && Object.keys(obj.childrens).length > 0)
       for (let attr in obj.childrens) {
         obj.childrens[attr].alias = attr;
-        obj.childrens[attr] = await this.check(obj.childrens[attr], mission);
+        obj.childrens[attr] = await this.check(obj.childrens[attr]);
       }
       
     const fileLink = `./components/pages/${obj.template}.pug`;
-    
     
     if (obj.template) {
 
@@ -32,6 +29,10 @@ module.exports = {
         basedir: __dirname + "/../"
       });
 
+      obj.fragments = obj.rf.dependencies.map( (item)=>{
+        return item.split("components/fragments/")[1];
+      } ).filter(i=>!!i).map(i=>i.split(".pug")[0]);
+      console.log(obj.fragments);
     }
     return obj;
   },
