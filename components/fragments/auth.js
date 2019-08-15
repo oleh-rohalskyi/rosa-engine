@@ -15,17 +15,15 @@ rosa.fragment['auth'] = {
     nodes: {
 
     },
-    init() {
-
-        const messages = document.querySelector("[rosa-auth-messages]").getAttribute("rosa-auth-messages");
+    init(el) {
+        const messages = el.get("[rosa-auth-messages]").getAttribute("rosa-auth-messages");
        
         this.messages = JSON.parse(messages);
        
-        const nodes = document.querySelectorAll("[rosa-auth]");
-        console.log(nodes);
+        const nodes = el.getAll("[rosa-auth]");
         if (nodes.length <= 0) return null;
-        
-        [...nodes].forEach( (node) => {
+      
+        nodes.forEach( (node) => {
             
             rosa.decorateNode(node);
             
@@ -46,8 +44,6 @@ rosa.fragment['auth'] = {
                 this.nodes[type] = {};
             }
 
-            // console.log(node)
-            // console.log(type,unit,message)
             switch (true) {
                 case !!errors:
                     this.errors = JSON.parse(errors);
@@ -58,7 +54,6 @@ rosa.fragment['auth'] = {
                 break;
             }
         });
-        console.log(this);
         this.listener("signin", "addEventListener");
         this.listener("signup", "addEventListener");
         this.listener("signout","addEventListener");
@@ -106,7 +101,7 @@ rosa.fragment['auth'] = {
                     date = date.toUTCString();
                     
                     document.cookie = `authentication=${result.data.token};path=/;expires=${result.data.expired}`;
-
+                    location.reload();
                     
                 }
 

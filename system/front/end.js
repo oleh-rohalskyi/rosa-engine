@@ -49,22 +49,43 @@ async function app() {
 
     await rosa.loader.script("db","system/front");
     await rosa.loader.script("validation","shared_js");
+    const ready = [];
+    await Promise.all( 
+        await rosa.data.fragments.map( async (name) => {
+            
+            if (ready.indexOf(name)<0)
+                ready.push(name);
+            
+            return {
+                node: await rosa.loader.script(name,"components/fragments"),
+                name
+            };
 
-    const result = await Promise.all( 
-        await rosa.data.fragments.map( async (name) => ({
-            node: await rosa.loader.script(name,"components/fragments"),
-            name
-        }) )
+        } )
     );
 
-    return Promise.resolve(result);
+    return Promise.resolve({ready});
     
 };
 
-app().then((fragments)=>{
-    fragments.forEach(({name})=>{
-        if(rosa.fragment[name]) {
-            rosa.fragment[name].init();
+app().then((result)=>{
+    function decorate(obj) {
+        obj.get = obj.querySelector;
+        obj.getAll = function(selector) {
+            return [...obj.querySelectorAll(selector)]
         }
-    } );
+        return obj;
+    }
+    result.ready.forEach((uniqFr)=>{
+        let dublicated = document.querySelectorAll("component."+uniqFr);
+        let unique = document.querySelector("component."+uniqFr);
+        if (dublicated.length) {
+            [...dublicated].forEach((node)=>{
+                rosa.fragment[uniqFr].init(decorate(node));
+            });
+        } else {
+            rosa.fragment[uniqFr].init(decorate(unique));
+        }
+    })
+
 });

@@ -67,7 +67,7 @@
          "error": true,
          "template": "tech-error",
          "pathnames": {
-            "ru": "404"
+            "ru": "500"
          },
          "multilangual": false,
          "data": {

@@ -1,8 +1,6 @@
 const render = {
   go(response,{options,page,user,fragments}) {
    
-    console.log(111);
-   
       response.writeHead(200, {
         "Content-Type": "text/html; charset=utf-8;"
       });
@@ -47,7 +45,7 @@ const render = {
         delete page.data;
       }
       
-      const pugDat = {options,page,user,fragments:fr,reg: user.registered};
+      const pugDat = {redirect: "",options,page,user,fragments:fr,reg: user.registered};
       
       console.log("log data :", pugDat);
       console.log("log fragments :", pugDat.fragments);
@@ -63,31 +61,60 @@ const render = {
       response.end();
 
   },
-  goError(code, response, params) {
-    // console.log(response);
+  goError(code, response, information) {
+
+    
    
     const map = {
       404: {
         code: 404,
-        errorMessage: JSON.stringify(params.errorMessage),
+        errorMessage: information.errorMessage.toString(),
+        type: "none",
+        page: information.pages ? information.pages["404"] : {},
+        path: "404"
       },
       415: {
         code: 415,
         errorMessage: "Unsupported Media Type",
+        type: "media",
+        page: information.pages["tech-error"],
+        path: "404"
       },
       500: {
-        code: process.env.NODE_ENV === 'dev' ? 500 : 403,
-        errorMessage: JSON.stringify(params.errorMessage),
+        code: process.env.NODE_ENV === 'dev' ? 500 : 501,
+        errorMessage: information.errorMessage.toString(),
+        type: information.type || "none",
+        page: information.pages["tech-error"],
+        path: "500"
       }
     };
-
-      const payload = map[code];
+    const payload = map[code];
+    const mock = {
+      options: {
+        lang: "ru"
+      },
+      page: {
+        fragments: "[]",
+        pathnames: {
+          current: payload.path
+        },
+        values: {
+          title: payload.code,
+          meta: {
+            title: payload.code,
+            discription: payload.code,
+            robots: "none",
+          }
+        }
+      }
+    }
       
-      response.writeHead(500, {
+  
+      response.writeHead(payload.code, {
         "Content-Type": "text/html; charset=utf-8;"
       });
-
-      response.write("<h1>"+payload.code+"</h1><span>"+JSON.stringify(payload)+"</span>");
+      
+      response.write(payload.page.rf({redirect: "yes",...payload,...mock,code}));
 
       response.end();
       

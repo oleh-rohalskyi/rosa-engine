@@ -138,22 +138,25 @@ module.exports = function start(pages,port) {
             } else {
               render.goError(500,response,{
                 errorMessage: "no access ",
-                options
+                options,
+                pages
               });
             }
           
           } catch(e) {
-            
+            console.log("AHTUNG",pages['tech-error']);
             render.goError(500,response,{
               errorMessage: e,
-              options
+              options,
+              pages
             });
     
           }} else {
-    
+            console.log(pages);
           render.goError(404,response,{
             errorMessage: decodeURI(request.url) + " not found",
-            options
+            options,  
+            pages
           });
     
         }
@@ -162,7 +165,8 @@ module.exports = function start(pages,port) {
     
         render.goError(404,response,{
           errorMessage: decodeURI(request.url) + " not found",
-          options
+          options,
+          pages,
         });
     
       }
