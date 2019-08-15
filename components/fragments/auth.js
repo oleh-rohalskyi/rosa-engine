@@ -1,26 +1,23 @@
-rosa.fragment['auth'] = {
-    data: {},
-    user: {
-        registered: false,
-        status: "none"
-    },
-    signin: {
-        login: "",
-        pass: "",
-    },
-    signup: {
-        login: "",
-        pass: "",
-    },
-    nodes: {
-
-    },
-    init(el) {
-        const messages = el.get("[rosa-auth-messages]").getAttribute("rosa-auth-messages");
-       
+rosa.fragment['auth'] = class {
+    constructor(el) {
+        this.data = {};
+        this.user = {
+            registered: false,
+            status: "none"
+        };
+        this.signin = {
+            login: "",
+            pass: "",
+        };
+        this.signup = {
+            login: "",
+            pass: "",
+        };
+        this.nodes = {};
+        const messages = el.qS("[rosa-auth-messages]").getAttribute("rosa-auth-messages");
         this.messages = JSON.parse(messages);
-       
-        const nodes = el.getAll("[rosa-auth]");
+        const nodes = el.qSA("[rosa-auth]");
+
         if (nodes.length <= 0) return null;
       
         nodes.forEach( (node) => {
@@ -57,8 +54,7 @@ rosa.fragment['auth'] = {
         this.listener("signin", "addEventListener");
         this.listener("signup", "addEventListener");
         this.listener("signout","addEventListener");
-
-    },
+    }
     listener(type,fun) {
         if (!this.nodes[type]) return;
         switch(type) {
@@ -71,14 +67,14 @@ rosa.fragment['auth'] = {
                 this.nodes[type].pass[fun]("input",this.onChange(type,"pass"));
             break;
         }
-    },
+    }
     onChange(type,loginOrPass){
         
         return ({target:{value}}) => {
             this[type][loginOrPass] = value;
         }
 
-    },
+    }
     onClick(type){
 
         return (e) => {
@@ -108,7 +104,7 @@ rosa.fragment['auth'] = {
             });
         }
 
-    },
+    }
     encodeQueryString(params) {
         const keys = Object.keys(params)
         return keys.length

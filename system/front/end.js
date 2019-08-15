@@ -69,9 +69,10 @@ async function app() {
 };
 
 app().then((result)=>{
+    const entities = [];
     function decorate(obj) {
-        obj.get = obj.querySelector;
-        obj.getAll = function(selector) {
+        obj.qS = obj.querySelector;
+        obj.qSA = function(selector) {
             return [...obj.querySelectorAll(selector)]
         }
         return obj;
@@ -81,11 +82,13 @@ app().then((result)=>{
         let unique = document.querySelector("component."+uniqFr);
         if (dublicated.length) {
             [...dublicated].forEach((node)=>{
-                rosa.fragment[uniqFr].init(decorate(node));
+                entities.push( new rosa.fragment[uniqFr](decorate(node)) );
             });
         } else {
-            rosa.fragment[uniqFr].init(decorate(unique));
+            entities.push(new rosa.fragment[uniqFr].init(decorate(unique)) );
         }
     })
 
-});
+    return entities;
+
+}).then(console.log)

@@ -3,7 +3,7 @@ component.auth
     .sign(class="sign-in")
         | Sign in
         div( rosa-auth="signin:errors" rosa-auth:message )
-        form.sign__form(action="#")
+        form.sign__form(action="#") 
             div( rosa-auth="signin:login" rosa-auth:message)
             input( rosa-auth="signin:login")  
             label=fragments.auth.forms['label-login']
