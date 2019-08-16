@@ -79,7 +79,8 @@ app().then((result)=>{
         return obj;
     }
     result.ready.forEach((uniqFr)=>{
-        let dublicated = document.querySelectorAll("widget."+uniqFr);
+        let dublicated = document.querySelectorAll(".widget-"+uniqFr);
+        console.log(dublicated,uniqFr);
         if (dublicated.length > 1) {
             [...dublicated].forEach((node)=>{
                 entities.push( new rosa.widget[uniqFr](decorate(node)) );

@@ -7,7 +7,6 @@ module.exports = {
 
     const { pages } = config;
     let cashed = await this.check({childrens:pages});
-
     return cashed.childrens;
 
   },

@@ -21,7 +21,7 @@
                   "ECONNREFUSED": "Перевышен лимит",
                   "NO_COINCIDENCE": "Неверено введен логин или пароль"
                },
-               "forms" : {
+               "forms": {
                   "label-login": "Введите вашу почту",
                   "label-pass": "Введите пароль",
                   "label-button": "Вход"
@@ -36,7 +36,7 @@
                   "ER_DUP_ENTRY": "user already exist",
                   "ECONNREFUSED": "limit done"
                },
-               "forms" : {
+               "forms": {
                   "label-login": null,
                   "label-pass": null,
                   "label-button": null
@@ -47,7 +47,6 @@
    },
    "pages": {
       "404": {
-         "error": true,
          "template": "404",
          "multilangual": false,
          "pathnames": {
@@ -64,7 +63,6 @@
          }
       },
       "tech-error": {
-         "error": true,
          "template": "tech-error",
          "pathnames": {
             "ru": "500"
@@ -85,49 +83,6 @@
          "to": "home",
          "pathnames": {
             "ru": ""
-         }
-      },
-      "headbands": {
-         "data": {
-            "ru": {
-               "meta": {
-                  "title": null,
-                  "discription": null,
-                  "robots": null
-               }
-            },
-            "en": {
-               "meta": {
-                  "title": null,
-                  "discription": null,
-                  "robots": null
-               }
-            }
-         },
-         "multilangual": false,
-         "pathnames": {
-            "ru": "headbands"
-         },
-         "template": "headbands/one",
-         "redirect": false,
-         "childrens": {
-            "one": {
-               "data": {
-                  "ru": {
-                     "meta": {
-                        "title": "",
-                        "discription": "",
-                        "robots": ""
-                     }
-                  }
-               },
-               "template": "headbands/one",
-               "redirect": false,
-               "multilangual": false,
-               "pathnames": {
-                  "ru": "one"
-               }
-            }
          }
       },
       "home": {

@@ -1,11 +1,13 @@
-page,widget {
-    box-sizing: border-box;
-    display: block;
-}
+@import "sass/index";
 
 // pages
 @import "components/pages/home";
+@import "components/pages/404";
+@import "components/pages/tech-error";
+@import "components/pages/admin";
+@import "components/pages/admin/fast-admin";
 
 // widgets
 @import "components/widgets/auth";
 @import "components/widgets/header";
+@import "components/widgets/footer";
