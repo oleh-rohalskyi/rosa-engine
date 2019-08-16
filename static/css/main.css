@@ -1,0 +1,6 @@
+page, widget {
+  box-sizing: border-box;
+  display: block; }
+
+.widget-header {
+  padding: 10px; }

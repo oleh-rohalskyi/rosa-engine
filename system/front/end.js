@@ -5,13 +5,13 @@ rosa.decorateNode = (node) => {
 
 rosa.data = {
     init() {
-        this.getFragmentsFromDOM();
+        this.getwidgetsFromDOM();
         return Promise.resolve();
     },
-    fragments: [],
-    getFragmentsFromDOM() {
-        const strFragments = document.querySelector("meta[name='fragments']").getAttribute("content");
-        this.fragments = JSON.parse(strFragments);
+    widgets: [],
+    getwidgetsFromDOM() {
+        const strwidgets = document.querySelector("meta[name='widgets']").getAttribute("content");
+        this.widgets = JSON.parse(strwidgets);
     }
 
 }
@@ -51,13 +51,13 @@ async function app() {
     await rosa.loader.script("validation","shared_js");
     const ready = [];
     await Promise.all( 
-        await rosa.data.fragments.map( async (name) => {
+        await rosa.data.widgets.map( async (name) => {
             
             if (ready.indexOf(name)<0)
                 ready.push(name);
             
             return {
-                node: await rosa.loader.script(name,"components/fragments"),
+                node: await rosa.loader.script(name,"components/widgets"),
                 name
             };
 
@@ -71,6 +71,7 @@ async function app() {
 app().then((result)=>{
     const entities = [];
     function decorate(obj) {
+        console.log(obj);
         obj.qS = obj.querySelector;
         obj.qSA = function(selector) {
             return [...obj.querySelectorAll(selector)]
@@ -78,14 +79,13 @@ app().then((result)=>{
         return obj;
     }
     result.ready.forEach((uniqFr)=>{
-        let dublicated = document.querySelectorAll("component."+uniqFr);
-        let unique = document.querySelector("component."+uniqFr);
-        if (dublicated.length) {
+        let dublicated = document.querySelectorAll("widget."+uniqFr);
+        if (dublicated.length > 1) {
             [...dublicated].forEach((node)=>{
-                entities.push( new rosa.fragment[uniqFr](decorate(node)) );
+                entities.push( new rosa.widget[uniqFr](decorate(node)) );
             });
         } else {
-            entities.push(new rosa.fragment[uniqFr].init(decorate(unique)) );
+            entities.push(new rosa.widget[uniqFr]( decorate(dublicated[0]) ) );
         }
     })
 

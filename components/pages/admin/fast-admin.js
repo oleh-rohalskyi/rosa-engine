@@ -3,56 +3,56 @@ const data = JSON.parse( document.querySelector(".json").getAttribute("data-json
 Vue.config.devtools = true;
 
 Vue.component(
-    "fragments",
+    "widgets",
     {
-        template: "#fragments",
+        template: "#widgets",
         data() {
             return {
                 translations: []
             }
         },
         created() {
-            console.log("fragments-mounted");
+            console.log("widgets-mounted");
             // const translations = [];
-            for (const key in this.fragments) {
-                if (this.fragments.hasOwnProperty(key)) {
-                    const fragment = this.fragments[key];
-                    this.translations.push({data:fragment.translations,key})
+            for (const key in this.widgets) {
+                if (this.widgets.hasOwnProperty(key)) {
+                    const widget = this.widgets[key];
+                    this.translations.push({data:widget.translations,key})
                 }
             }
             // this.translations = translations;
         },
         props: {
-            fragments: Object
+            widgets: Object
         },
         methods: {
             add() {
-                this.fragments["new"] = 1;
+                this.widgets["new"] = 1;
             }
         },
     }
 )
 
-Vue.component('fragment',
+Vue.component('widget',
 {
-    template: "#fragment",
+    template: "#widget",
     data() {
         return {
             langs: []
         }
     },
     props: {
-        fragment: Object
+        widget: Object
     },
     computed: {
-        fragmentName() {
-            return this.fragment.key
+        widgetName() {
+            return this.widget.key
         }
     },
     created() {
-        console.log("fragment-mounted")
-        if (this.fragment.data) {
-            const data = this.fragment.data;
+        console.log("widget-mounted")
+        if (this.widget.data) {
+            const data = this.widget.data;
             for (const key in data) {
                 if (data.hasOwnProperty(key)) {
                     const values = data[key];
@@ -79,7 +79,7 @@ Vue.component('content-edit',
         
     },
     created() {
-        console.log("fragment-mounted")
+        console.log("widget-mounted")
         if (this.content) {
             const data = this.content;
             for (const key in data) {
@@ -95,8 +95,8 @@ Vue.component('content-edit',
 const x = new Vue({
     el: '#app',
     created() {
-        console.log(data.fragments);
-        this.fragments = data.fragments;
+        console.log(data.widgets);
+        this.widgets = data.widgets;
         this.pages = data.pages;
     }
   });

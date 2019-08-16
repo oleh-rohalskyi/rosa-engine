@@ -108,15 +108,15 @@ module.exports = function start(pages,port) {
     
           cors(response);
           // if pathname.match("/cdn/system")
-          getStaticText(pathname.replace("/cdn",""),response).then((data,ext)=>{
-            response.setHeader('Content-type', ext || 'text/plain' );
-            response.end(data);
-          })
+          getStaticText(pathname.replace("/cdn",""),response).then((result)=>{
+            response.setHeader( 'Content-type', result.ext || 'text/plain' );
+            response.end(result.data);
+          });
     
           return;
       }
 
-      const { langs,fragments } = config;
+      const { langs,widgets } = config;
       options.lang = langs.scope.filter(  str => path1level === str  )[0] || langs.common;
       pathname = pathname.replace(options.lang+"/", "");
       let page = pager.findPageByPathname(pages, pathname, options.lang);
@@ -134,7 +134,7 @@ module.exports = function start(pages,port) {
             if ( page.roles && page.roles.indexOf(user.role) >= 0 ) {
               render.go(response, {options,user,page});
             } else if (!page.roles) {
-              render.go(response, {options,user,page,fragments});
+              render.go(response, {options,user,page,widgets});
             } else {
               render.goError(500,response,{
                 errorMessage: "no access ",

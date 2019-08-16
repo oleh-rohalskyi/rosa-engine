@@ -44,7 +44,7 @@ module.exports = (pathname,response) => {
                     errorMessage: path.parse(pathname).base + " not found"
                   });
                 } else {
-                    res(data,map[ext]);
+                    res({data,ext:map[ext]});
                 }
             });
         });

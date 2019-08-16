@@ -1,0 +1,11 @@
+page,widget {
+    box-sizing: border-box;
+    display: block;
+}
+
+// pages
+@import "components/pages/home";
+
+// widgets
+@import "components/widgets/auth";
+@import "components/widgets/header";

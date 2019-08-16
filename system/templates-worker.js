@@ -29,10 +29,10 @@ module.exports = {
         basedir: __dirname + "/../"
       });
 
-      obj.fragments = obj.rf.dependencies.map( (item)=>{
-        return item.split("components/fragments/")[1];
+      obj.widgets = obj.rf.dependencies.map( (item)=>{
+        return item.split("components/widgets/")[1];
       } ).filter(i=>!!i).map(i=>i.split(".pug")[0]);
-      console.log(obj.fragments);
+     
     }
     return obj;
   },
@@ -47,13 +47,14 @@ module.exports = {
         compiled = compiled+"      "+line+"\n";
       });
       lineReader.on('close', ()=>{
-        console.log(fileLink.replace(".pug",""))
+        console.log("prepare", fileLink)
         // console.log(`extends /system/layout.pug \nblock content\n` +compiled+ `      script(type="text/javascript" src="/cdn/components/pages/${fileLink}.js")`)
-        res(`extends /system/layout.pug \nblock content\n  div.page\n${compiled}\n      script(type="text/javascript" src="/cdn/components/pages${
-          fileLink
-            .replace(".pug",".js")
-            .replace("./components/pages","")
-          }")\n`);
+        
+        res(`extends /system/layout.pug \nblock content\n  div.page-${
+          fileLink.replace("./components/pages/","").replace(".pug","")
+        }\n${compiled}\n      script(type="text/javascript" src="/cdn/components/pages${
+          fileLink.replace(".pug",".js").replace("./components/pages","")
+        }")\n`);
       })
     });
   }

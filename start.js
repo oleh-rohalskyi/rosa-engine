@@ -1,6 +1,8 @@
 var watch = require('node-watch');
 var servStart = require('./server.js');
 var chalk = require('chalk');
+var sass = require('node-sass');
+var fs = require('fs');
 
 const args = require('yargs').argv;
 const templateWorker = require("./system/templates-worker.js");
@@ -21,7 +23,7 @@ function procces(message) {
     })
 }
 
-const update = (evt,filename) =>{
+const update = function(evt,filename) {
 
   if (server !== null) {
     server.close(procces.bind(null,`${chalk.green('server')}  restarted`));
@@ -53,7 +55,21 @@ function watchSass() {
     filter: /\.scss$/,
     sourceMap: true,
     delay: 1000
-  }, update);
+  }, function(s,filename){
+    sass.render({
+      file: "./system/main.scss",
+    }, function(err, result) {
+      if(err)
+        console.log(chalk.red('error') + chalk.yellow("   scss\n") + err.formatted);
+      else
+        fs.writeFile('./static/css/main.css', result.css, function(err){
+          console.log(err);
+          if(!err){
+            update();
+          }
+        });
+     });
+  });
 }
 
 process.env.NODE_ENV = args.env;

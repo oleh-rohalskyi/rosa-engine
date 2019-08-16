@@ -1,25 +1,25 @@
 const render = {
-  go(response,{options,page,user,fragments}) {
+  go(response,{options,page,user,widgets}) {
    
       response.writeHead(200, {
         "Content-Type": "text/html; charset=utf-8;"
       });
 
-      const fragmentsForThisPage = page.rf.dependencies
-        .map(i=>i.split("/fragments/")[1])
+      const widgetsForThisPage = page.rf.dependencies
+        .map(i=>i.split("/widgets/")[1])
           .filter(i=>!!i);
 
       const fr = {};
 
-      console.log(fragmentsForThisPage);
+      console.log(widgetsForThisPage);
 
-      fragmentsForThisPage.forEach(element => {
+      widgetsForThisPage.forEach(element => {
 
         const frName = element.split(".pug")[0];
 
-        if (fragments[frName].translations) {
+        if (widgets[frName].translations) {
 
-          const values = fragments[frName].translations[options.lang];
+          const values = widgets[frName].translations[options.lang];
 
           for (const key in values) {
 
@@ -45,10 +45,10 @@ const render = {
         delete page.data;
       }
       
-      const pugDat = {redirect: "",options,page,user,fragments:fr,reg: user.registered};
+      const pugDat = {redirect: "",options,page,user,widgets:fr,reg: user.registered};
       
       console.log("log data :", pugDat);
-      console.log("log fragments :", pugDat.fragments);
+      console.log("log widgets :", pugDat.widgets);
 
       const html = page.rf(pugDat);
       try {
@@ -94,7 +94,7 @@ const render = {
         lang: "ru"
       },
       page: {
-        fragments: "[]",
+        widgets: "[]",
         pathnames: {
           current: payload.path
         },

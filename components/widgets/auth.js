@@ -1,5 +1,6 @@
-rosa.fragment['auth'] = class {
+rosa.widget['auth'] = class {
     constructor(el) {
+        this.el = el;
         this.data = {};
         this.user = {
             registered: false,
@@ -14,9 +15,9 @@ rosa.fragment['auth'] = class {
             pass: "",
         };
         this.nodes = {};
-        const messages = el.qS("[rosa-auth-messages]").getAttribute("rosa-auth-messages");
+        const messages = this.el.qS("[rosa-auth-messages]").getAttribute("rosa-auth-messages");
         this.messages = JSON.parse(messages);
-        const nodes = el.qSA("[rosa-auth]");
+        const nodes = this.el.qSA("[rosa-auth]");
 
         if (nodes.length <= 0) return null;
       

@@ -1,14 +1,14 @@
 admin#app
-  fragments(:fragments="fragments")
+  widgets(:widgets="widgets")
 
-script(type="text/x-template" id="fragments")
-  .fragments fragments
+script(type="text/x-template" id="widgets")
+  .widgets widgets
     button(@click="add") add +
-    fragment(v-for="trans in translations" :fragment="trans" )
+    widget(v-for="trans in translations" :widget="trans" )
 
-script(type="text/x-template" id="fragment")
-  .fragment
-    p {{fragmentName}}
+script(type="text/x-template" id="widget")
+  .widget
+    p {{widgetName}}
     .lang(v-for="lang in langs" v-key="lang.key") {{lang.key}}
 
 script(type="text/x-template" id="content-edit")
@@ -21,23 +21,5 @@ div.json(style="display:none" data-json=page)
 
 script(type="text/javascript" src="/cdn/system/front/lib/jquery.js")
 script(type="text/javascript" src="/cdn/system/front/lib/vue.js")
-
-//- script(type="text/javascript" src="/cdn/components/pages/{page.template}.js")
-style.
-  p {
-      padding: 0 0 0 10px;
-      margin: 0;
-      border-bottom: 3px solid #ccc;
-  }
-
-  p:hover {
-      background-color: #ccc;
-  }
-
-  .lang {
-      border-left: 3px solid #ccc;
-      margin-left: 15px;
-      padding-left: 15px;
-  }
 
 

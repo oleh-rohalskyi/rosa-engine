@@ -11,21 +11,15 @@ html(lang=options.lang)
         meta(name="robots" content=page.values.meta.robots)
         meta(name="location" content=page.pathnames.current)
 
-        meta(name="fragments" content=page.fragments)
+        meta(name="widgets" content=page.widgets)
         meta(name="noredirect" content=redirect)
         title=page.values.title
         block head
         block css
+        link(rel="stylesheet" type="text/css" href="/cdn/static/css/main.css")
         script(type="text/javascript" src="/cdn/system/front/start.js")
-        style.
-            body {margin: 0;}
     body(id=alias)
-        style. 
-            * {
-                box-sizing: border-box;
-                margin: 0;
-                padding: 0;
-            }
         block content
         scripts
         script(type="text/javascript" src="/cdn/system/front/end.js")
+        

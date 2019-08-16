@@ -1,7 +1,7 @@
 const rosa = {};
 const module = false;
 const scripts = ['auth'];
-rosa.fragment = {};
+rosa.widget = {};
 rosa.helper = {
     lang: document.documentElement.lang,
     setUrlLocation() {

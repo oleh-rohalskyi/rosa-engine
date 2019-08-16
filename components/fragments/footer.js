@@ -1,3 +1,0 @@
-rosa.fragment['footer'] = {
-    init() {},
-}
