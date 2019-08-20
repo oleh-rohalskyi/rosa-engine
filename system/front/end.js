@@ -83,9 +83,10 @@ app().then((result)=>{
         console.log(dublicated,uniqFr);
         if (dublicated.length > 1) {
             [...dublicated].forEach((node)=>{
+                console.log(node);
                 entities.push( new rosa.widget[uniqFr](decorate(node)) );
             });
-        } else {
+        } else if (dublicated.length > 0) {
             entities.push(new rosa.widget[uniqFr]( decorate(dublicated[0]) ) );
         }
     })

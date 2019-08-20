@@ -5,10 +5,15 @@ var sass = require('node-sass');
 var fs = require('fs');
 
 const args = require('yargs').argv;
+
+process.env.NODE_ENV = args.env;
+process.env.CON = process.env.CONNECTION = args.con || args.connection;
+process.env.PORT = args.port;
+
 const templateWorker = require("./system/templates-worker.js");
 
 let server = null;
-let port = 3000;
+let port = process.env.PORT*1 || 3001 ;
 
 function procces(message) {
     return new Promise((res,rej)=>{
@@ -72,10 +77,7 @@ function watchSass() {
   });
 }
 
-process.env.NODE_ENV = args.env;
-
 if (process.env.NODE_ENV === "dev") {
-  port = 3001;
   update();
   watchPug();
   watchSass();

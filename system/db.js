@@ -92,15 +92,15 @@ module.exports = {
                 const sql = `SELECT users.id, users.login, roles.name AS role FROM roles LEFT JOIN users ON users.role=roles.id WHERE password="${password}" AND login="${login}"`;
                 
                 con.query(sql,(err, result) => {
-                    console.log(err,result)
+                    console.log(222,err,result)
 
                     if (err) {
-                        rej({success:false,error: err.message, data: null});
+                        rej({success:false,error: err.message, data: null, code: err.code});
                         return;
                     }
                     
                     if (result.length <= 0) {
-                        rej({success:false,error: "NO_COINCIDENCE",data: null});
+                        rej({success:false, code: "NO_COINCIDENCE",data: null});
                         return;
                     }
 
@@ -130,14 +130,13 @@ module.exports = {
             try {
                 user = await this.getuser(login,password);
             } catch (error) {
-                switch (error.error) {
+                switch (error.code) {
                     case "NO_COINCIDENCE":
                         user = {
                             success:true,
                             data: {}
                         }
                         break;
-                
                     default:
                         rej(error);
                 }

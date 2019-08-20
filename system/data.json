@@ -19,7 +19,8 @@
                   "PASS_EMPTY": "Введите пароль",
                   "ER_DUP_ENTRY": "Пользователь уже существыет",
                   "ECONNREFUSED": "Перевышен лимит",
-                  "NO_COINCIDENCE": "Неверено введен логин или пароль"
+                  "NO_COINCIDENCE": "Неверено введен логин или пароль",
+                  "PROTOCOL_ENQUEUE_AFTER_FATAL_ERROR": "Ошибка баз данных"
                },
                "forms": {
                   "label-login": "Введите вашу почту",
@@ -34,7 +35,8 @@
                   "login:is-empty": null,
                   "pass:is-empty": null,
                   "ER_DUP_ENTRY": "user already exist",
-                  "ECONNREFUSED": "limit done"
+                  "ECONNREFUSED": "limit done",
+                  "PROTOCOL_ENQUEUE_AFTER_FATAL_ERROR": "DB Error"
                },
                "forms": {
                   "label-login": null,

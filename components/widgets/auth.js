@@ -88,7 +88,7 @@ rosa.widget['auth'] = class {
             }).then((result)=>{
                 const errorTextNode = this.nodes[type].errors;  
                 if (!result.success) {
-                    errorTextNode.innerHTML = `<div class="auth-alert">${this.messages[result.error]}</div>`;
+                    errorTextNode.innerHTML = this.messages[result.code];
                 } else {
                     rosa.data.user = {
                         login: result.data.login
