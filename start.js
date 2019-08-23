@@ -17,8 +17,8 @@ let port = process.env.PORT*1 || 3001 ;
 
 function procces(message) {
     return new Promise((res,rej)=>{
-      templateWorker.start().then((readyPages)=>{
-        servStart(readyPages,port).then((newServ)=>{
+      templateWorker.start().then(({pages,widgets})=>{
+        servStart(pages,widgets,port).then((newServ)=>{
           server = newServ;
           console.log(`${chalk.green('server')}  listen on port ${chalk.yellow(port)}`)
           console.log(message);

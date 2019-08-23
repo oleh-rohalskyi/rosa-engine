@@ -28,8 +28,8 @@ const actions = [
   "logout"
 ];
 
-module.exports = function start(pages,port) {
-  return new Promise((res,rej)=>{
+module.exports = function start(pages,widgets,port) {
+  return new Promise(res=>{
     let server = http.createServer(async function(request, response){
       const user = {
         role: "guest"
@@ -117,8 +117,6 @@ module.exports = function start(pages,port) {
       }
 
       const { langs } = config;
-      const widgets = await db.getWidgets();
-      console.log("widgets",widgets);
       options.lang = langs.scope.filter(  str => path1level === str  )[0] || langs.common;
       pathname = pathname.replace(options.lang+"/", "");
       let page = pager.findPageByPathname(pages, pathname, options.lang);

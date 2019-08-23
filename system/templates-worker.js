@@ -1,5 +1,4 @@
 const pug = require('pug');
-const config = require('./data.json');
 const db = require('./db');
 
 module.exports = {
@@ -9,7 +8,10 @@ module.exports = {
     const pages = await db.getPages();
     const widgets = await db.getWidgets();
     let cashed = await this.check({childrens:pages});
-    return cashed.childrens;
+    return {
+      pages: cashed.childrens,
+      widgets
+    };
 
   },
   async check(obj) {
