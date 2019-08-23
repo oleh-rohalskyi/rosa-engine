@@ -133,7 +133,7 @@ module.exports = function start(pages,widgets,port) {
             //check what user role needed for a page or if it needed at all;
             if ( page.roles && page.roles.indexOf(user.role) >= 0 ) {
               render.go(response, {options,user,page,widgets});
-            } else if (!page.roles) {
+            } else if (!page.roles || page.roles.indexOf("guest")>=0) {
               render.go(response, {options,user,page,widgets});
             } else {
               render.goError(500,response,{

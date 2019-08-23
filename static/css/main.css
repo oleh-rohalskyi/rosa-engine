@@ -1,6 +1,5 @@
-page, widget {
-  box-sizing: border-box;
-  display: block; }
+.sign-up.disabled, .sing-in.disabled {
+  display: none; }
 
 .widget-header {
   padding: 10px; }

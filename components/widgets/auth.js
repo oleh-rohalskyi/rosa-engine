@@ -55,6 +55,7 @@ rosa.widget['auth'] = class {
         this.listener("signin", "addEventListener");
         this.listener("signup", "addEventListener");
         this.listener("signout","addEventListener");
+
     }
     listener(type,fun) {
         if (!this.nodes[type]) return;
@@ -88,7 +89,7 @@ rosa.widget['auth'] = class {
             }).then((result)=>{
                 const errorTextNode = this.nodes[type].errors;  
                 if (!result.success) {
-                    errorTextNode.innerHTML = this.messages[result.code];
+                    errorTextNode.innerHTML = this.messages[result.code || result.error.code ];
                 } else {
                     rosa.data.user = {
                         login: result.data.login

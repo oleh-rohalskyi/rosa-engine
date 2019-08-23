@@ -1,31 +1,34 @@
 .widget-auth
     .messages(rosa-auth-messages=widgets.auth.messages)
-    .sign(class="sign-in")
-        | Sign in
-        div( rosa-auth="signin:errors" rosa-auth:message )
-        form.sign__form(action="#") 
-            div( rosa-auth="signin:login" rosa-auth:message)
-            input( rosa-auth="signin:login")  
-            label=widgets.auth.forms['label-login']
-            div( rosa-auth="signin:pass" rosa-auth:message)
-            input(type="password" rosa-auth="signin:pass")
-            label=widgets.auth.forms['label-pass']
-                button(rosa-auth="signin:request")=widgets.auth.forms['label-button']
-    .sign(class="sign-up" style="display: ;")
-        | Sign up 
-        div( rosa-auth="signup:errors" rosa-auth:message)
-        form.sign__form(action="#")
-            div( rosa-auth="signup:login" rosa-auth:message)
-            input(rosa-auth="signup:login")
-            label=widgets.auth.forms['label-login']
-            div( rosa-auth="signup:pass" rosa-auth:message)
-            input(type="password" rosa-auth="signup:pass")
-            label=widgets.auth.forms['label-pass']
-            div
-                span 
-                    //- a(href="")=widgets.auth.signup.reg.linkLabel
-                span  | 
-                    //- a(href="")=widgets.auth.signup.pass.forgot
-                button(rosa-auth="signup:request")=widgets.auth.forms['label-button']
+    if(user.role==="guest")
+        .sign-in
+            | Sign in
+            div( rosa-auth="signin:errors" rosa-auth:message )
+            form.sign__form(action="#") 
+                div( rosa-auth="signin:login" rosa-auth:message)
+                input( rosa-auth="signin:login")  
+                label=widgets.auth.forms['label-login']
+                div( rosa-auth="signin:pass" rosa-auth:message)
+                input(type="password" rosa-auth="signin:pass")
+                label=widgets.auth.forms['label-pass']
+                    button(rosa-auth="signin:request")=widgets.auth.forms['label-button']
+    if(user.role==="guest")
+        .sign-up
+            | Sign up 
+            div( rosa-auth="signup:errors" rosa-auth:message)
+            form.sign__form(action="#")
+                div( rosa-auth="signup:login" rosa-auth:message)
+                input(rosa-auth="signup:login")
+                label=widgets.auth.forms['label-login']
+                div( rosa-auth="signup:pass" rosa-auth:message)
+                input(type="password" rosa-auth="signup:pass")
+                label=widgets.auth.forms['label-pass']
+                div
+                    span 
+                        //- a(href="")=widgets.auth.forms['registration']
+                    span  | 
+                        //- a(href="")=widgets.auth.forms['']
+                    button(rosa-auth="signup:request")=widgets.auth.forms['label-button']
+if(user.role!=="guest")
     button(rosa-auth="action:signout") sign out
 

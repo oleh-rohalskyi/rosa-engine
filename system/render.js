@@ -74,26 +74,29 @@ const render = {
 
     
    console.log(information);
+   const tErrPage = information.pages.filter(page=>page.name==="tech-error")[0];
+   const e404 = information.pages.filter(page=>page.name==="404")[0];
+
     const map = {
       404: {
         code: 404,
         errorMessage: information.errorMessage.toString(),
         type: "none",
-        page: information.pages ? information.pages["404"] : {},
+        page: e404,
         path: "404"
       },
       415: {
         code: 415,
         errorMessage: "Unsupported Media Type",
         type: "media",
-        page: information.pages["tech-error"],
+        page: tErrPage,
         path: "404"
       },
       500: {
         code: process.env.NODE_ENV === 'dev' ? 500 : 501,
         errorMessage: information.errorMessage.toString(),
         type: information.type || "none",
-        page: information.pages["tech-error"],
+        page: tErrPage,
         path: "500"
       }
     };
