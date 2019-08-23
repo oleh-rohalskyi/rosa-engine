@@ -116,7 +116,9 @@ module.exports = function start(pages,port) {
           return;
       }
 
-      const { langs,widgets } = config;
+      const { langs } = config;
+      const widgets = await db.getWidgets();
+      console.log("widgets",widgets);
       options.lang = langs.scope.filter(  str => path1level === str  )[0] || langs.common;
       pathname = pathname.replace(options.lang+"/", "");
       let page = pager.findPageByPathname(pages, pathname, options.lang);
@@ -132,7 +134,7 @@ module.exports = function start(pages,port) {
         if (page) { try {          
             //check what user role needed for a page or if it needed at all;
             if ( page.roles && page.roles.indexOf(user.role) >= 0 ) {
-              render.go(response, {options,user,page});
+              render.go(response, {options,user,page,widgets});
             } else if (!page.roles) {
               render.go(response, {options,user,page,widgets});
             } else {
@@ -144,7 +146,7 @@ module.exports = function start(pages,port) {
             }
           
           } catch(e) {
-            console.log("AHTUNG",pages['tech-error']);
+            console.log("AHTUNG",e);
             render.goError(500,response,{
               errorMessage: e,
               options,
@@ -152,7 +154,6 @@ module.exports = function start(pages,port) {
             });
     
           }} else {
-            console.log(pages);
           render.goError(404,response,{
             errorMessage: decodeURI(request.url) + " not found",
             options,  

@@ -11,11 +11,20 @@ const render = {
 
       const fr = {};
 
-      console.log(widgetsForThisPage);
-
       widgetsForThisPage.forEach(element => {
 
         const frName = element.split(".pug")[0];
+       function format(w) {
+        x = {};
+        for (const key in w) {
+          if (w.hasOwnProperty(key)) {
+            const element = w[key];
+            x[element.name] = element;
+          }
+        }
+        return x;
+       }
+        widgets = format(widgets);
 
         if (widgets[frName].translations) {
 
@@ -64,7 +73,7 @@ const render = {
   goError(code, response, information) {
 
     
-   
+   console.log(information);
     const map = {
       404: {
         code: 404,
@@ -113,7 +122,7 @@ const render = {
       response.writeHead(payload.code, {
         "Content-Type": "text/html; charset=utf-8;"
       });
-      
+
       response.write(payload.page.rf({redirect: "yes",...payload,...mock,code}));
 
       response.end();

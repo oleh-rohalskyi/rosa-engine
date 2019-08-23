@@ -1,11 +1,13 @@
-const db = require('./db');
 const pug = require('pug');
 const config = require('./data.json');
+const db = require('./db');
 
 module.exports = {
+  
   async start() {
 
-    const { pages } = config;
+    const pages = await db.getPages();
+    const widgets = await db.getWidgets();
     let cashed = await this.check({childrens:pages});
     return cashed.childrens;
 
@@ -33,6 +35,14 @@ module.exports = {
       } ).filter(i=>!!i).map(i=>i.split(".pug")[0]);
      
     }
+
+    obj.pathnames = JSON.parse(obj.pathnames || "{}");
+    obj.roles = JSON.parse(obj.roles || "{}");
+    obj.data = JSON.parse(obj.data || "{}");
+    obj.redirect = !!obj.redirect;
+    obj.multilangual = !!obj.multilangual;
+    
+
     return obj;
   },
   async addLayOut(fileLink) {
@@ -47,8 +57,6 @@ module.exports = {
       });
       lineReader.on('close', ()=>{
         console.log("prepare", fileLink)
-        // console.log(`extends /system/layout.pug \nblock content\n` +compiled+ `      script(type="text/javascript" src="/cdn/components/pages/${fileLink}.js")`)
-        
         res(`extends /system/layout.pug \nblock content\n  div.page-${
           fileLink.replace("./components/pages/","").replace(".pug","")
         }\n${compiled}\n      script(type="text/javascript" src="/cdn/components/pages${

@@ -8,6 +8,38 @@ const session = require('./session.js');
 const expiredDays = 30;
 
 module.exports = {
+    getWidgets() {
+        return new Promise((res,rej)=>{
+        
+            const con = mysql.createConnection(conf);
+           
+            con.connect((err) => {
+
+                const sql = `SELECT * FROM widgets`;
+                
+                con.query(sql,(err, result) => {
+                    
+                    if (err) {
+                        rej({success:false,error: err.message, data: null});
+                        return;
+                    }
+                    
+                    if (result.length <= 0) {
+                        rej({success:false,error: "NO_COINCIDENCE",data: null});
+                        return;
+                    }
+
+                    res( 
+                        result.map((item)=>{
+                            item.translations = JSON.parse(item.translations);
+                            return item;
+                        })
+                    );
+
+                });
+            });
+        })
+    },
     jwtget(token) {
         if (token)
             return jwt.verify(token, secret);
@@ -23,7 +55,7 @@ module.exports = {
                 const sql = `SELECT * FROM pages`;
                 
                 con.query(sql,(err, result) => {
-
+                    
                     if (err) {
                         rej({success:false,error: err.message, data: null});
                         return;
@@ -92,7 +124,6 @@ module.exports = {
                 const sql = `SELECT users.id, users.login, roles.name AS role FROM roles LEFT JOIN users ON users.role=roles.id WHERE password="${password}" AND login="${login}"`;
                 
                 con.query(sql,(err, result) => {
-                    console.log(222,err,result)
 
                     if (err) {
                         rej({success:false,error: err.message, data: null, code: err.code});
@@ -158,7 +189,6 @@ module.exports = {
                             rej({success: false, error: err});
                         }
 
-                        console.log(result);
                         res({success: true, data: ""});
 
                     }
@@ -183,8 +213,6 @@ module.exports = {
                 rej(error)
             }
             res(user);
-
-            
         })
     }
 };

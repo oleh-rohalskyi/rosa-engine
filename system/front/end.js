@@ -71,7 +71,6 @@ async function app() {
 app().then((result)=>{
     const entities = [];
     function decorate(obj) {
-        console.log(obj);
         obj.qS = obj.querySelector;
         obj.qSA = function(selector) {
             return [...obj.querySelectorAll(selector)]
@@ -80,10 +79,8 @@ app().then((result)=>{
     }
     result.ready.forEach((uniqFr)=>{
         let dublicated = document.querySelectorAll(".widget-"+uniqFr);
-        console.log(dublicated,uniqFr);
         if (dublicated.length > 1) {
             [...dublicated].forEach((node)=>{
-                console.log(node);
                 entities.push( new rosa.widget[uniqFr](decorate(node)) );
             });
         } else if (dublicated.length > 0) {
@@ -93,4 +90,4 @@ app().then((result)=>{
 
     return entities;
 
-}).then(console.log)
+}).then(console.log);
