@@ -1,13 +1,26 @@
 @import "sass/index";
 
 // pages
-@import "components/pages/home";
-@import "components/pages/404";
-@import "components/pages/tech-error";
-@import "components/pages/admin";
-@import "components/pages/admin/fast-admin";
+@import "pages/home";
+@import "pages/404";
+@import "pages/tech-error";
+@import "pages/admin";
+@import "pages/admin/fast-admin";
 
 // widgets
-@import "components/widgets/auth";
-@import "components/widgets/header";
-@import "components/widgets/footer";
+@import "widgets/auth";
+@import "widgets/header";
+@import "widgets/footer";
+
+
+
+//reset
+.card {
+    border-radius: 5px;
+}
+
+.content {
+    padding: 10px;
+}
+
+

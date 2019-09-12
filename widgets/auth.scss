@@ -1,0 +1,68 @@
+.widget-auth {
+    & .modal-card-foot {
+        align-items: flex-start;
+        text-align: center;
+            &>div {
+                text-align: right;
+            }
+            & .icon {
+                max-width: 40px;
+                margin-right: 10px;
+                font-size: 1.5rem;
+                &:nth-child(1) {
+                    margin-right: 5px;
+                }
+                & svg {
+                    color: #2B9EEB;
+                }
+                & svg:hover {
+                    color: #31CF65;
+                    cursor: pointer;
+                    
+                }
+            }
+    }
+    & .modal-card-head {
+        display: block;
+        text-align: center;
+        font-weight: bold;
+        font-size: 1.4rem;
+    }
+    & .modal-card-body {
+        margin-bottom: 0 !important;
+        & .column {
+            max-width: 300px;
+            margin: 10px auto;
+        }
+    }
+    &__sign {
+        padding: 10px 10px 5px 10px;
+    }
+    &__actions {
+        align-items: baseline;
+        & .divider {
+            width: 1px;
+            max-width: 1px;
+            min-width: 1px !important;
+            margin: 0 7px;
+            border-left: 1px solid rgb(131, 131, 131);
+            height: 10px;
+        }
+        align-items: baseline;
+        margin-bottom: 15px !important;
+        & .label:nth-child(3) {
+            min-width: 100px;
+        }
+        & .label {
+            font-size: 0.65rem;
+        }
+    }
+    & .info {
+        font-size: 0.7rem;
+        margin-bottom: 9px;
+        color: #b93737;
+    }
+    & button {
+        margin-left: auto;
+    }
+}

@@ -1,61 +1,107 @@
 var watch = require('node-watch');
-var servStart = require('./server.js');
+var startServer = require('./server.js');
 var chalk = require('chalk');
 var sass = require('node-sass');
 var fs = require('fs');
+var config = require("./system/config")
 
-const args = require('yargs').argv;
+Array.prototype.equals = function (array) {
+    if (!array)
+        return false;
 
-process.env.NODE_ENV = args.env;
-process.env.CON = process.env.CONNECTION = args.con || args.connection;
-process.env.PORT = args.port;
+    if (this.length != array.length)
+        return false;
 
+    for (var i = 0, l=this.length; i < l; i++) {
+        if (this[i] instanceof Array && array[i] instanceof Array) {
+            if (!this[i].equals(array[i]))
+                return false;       
+        }           
+        else if (this[i] != array[i]) {
+            return false;   
+        }           
+    }       
+    return true;
+}
+
+Object.defineProperty(Array.prototype, "equals", {enumerable: false});
+
+function throttle(func, ms) {
+
+  let isThrottled = false,
+    savedArgs,
+    savedThis;
+
+  function wrapper() {
+
+    if (isThrottled) { // (2)
+      savedArgs = arguments;
+      savedThis = this;
+      return;
+    }
+
+    func.apply(this, arguments); // (1)
+
+    isThrottled = true;
+
+    setTimeout(function() {
+      isThrottled = false; // (3)
+      if (savedArgs) {
+        wrapper.apply(savedThis, savedArgs);
+        savedArgs = savedThis = null;
+      }
+    }, ms);
+  }
+
+  return wrapper;
+}
 const templateWorker = require("./system/templates-worker.js");
 
 let server = null;
-let port = process.env.PORT*1 || 3001 ;
 
-function procces(message) {
+function procces(files) {
     return new Promise((res,rej)=>{
-      templateWorker.start().then(({pages,widgets})=>{
-        servStart(pages,widgets,port).then((newServ)=>{
+      templateWorker.start(files).then(({pages,widgets})=>{
+        startServer(pages,widgets,config.port).then((newServ)=>{
           server = newServ;
-          console.log(`${chalk.green('server')}  listen on port ${chalk.yellow(port)}`)
-          console.log(message);
           res();
-        });
+        }).catch(e=>{rej(e)});
       })
     })
 }
 
-const update = function(evt,filename) {
-
+const update = function(files,evt,filename) {
   if (server !== null) {
-    server.close(procces.bind(null,`${chalk.green('server')}  restarted`));
+    server.close( procces.bind(null,files) );
   } else {
-    procces(`${chalk.green('server')}  started from strach`);
+    procces(files).catch(e=>console.log(e));
   }
 
   if (filename) {
     let ext = filename.split(".")[1];
     let left = filename.split(".")[0];
-    console.log(`${chalk.blue('updated')} ${left+"."+chalk.yellow(ext)}`);
   }
     
 }
 
 function watchPug() {
-  console.log(chalk.blue('watch') + "   pug");
-  watch('./components', { 
+  watch(['./pages','./widgets'], { 
     recursive: true, 
     filter: /\.pug$/,
     delay: 1000
-  },update);
+  },throttle(update.bind(null,["pug"]),500));
+}
+
+function watchScript() {
+  watch(['./pages','./widgets'], { 
+    recursive: true, 
+    filter: /\.js$/,
+    delay: 1000
+  },throttle(update.bind(null,["js"]),500));
 }
 
 function watchSass() {
-  console.log(chalk.blue('watch') + "   scss");
-  watch('./components', { 
+  watch(['./pages','./widgets'], { 
     recursive: true,
     filter: /\.scss$/,
     sourceMap: true,
@@ -64,23 +110,22 @@ function watchSass() {
     sass.render({
       file: "./system/main.scss",
     }, function(err, result) {
-      if(err)
-        console.log(chalk.red('error') + chalk.yellow("   scss\n") + err.formatted);
-      else
+      if(err) {}
+      else {
         fs.writeFile('./static/css/main.css', result.css, function(err){
-          console.log(err);
-          if(!err){
-            update();
-          }
+         
         });
+      }
+        
      });
   });
 }
 
-if (process.env.NODE_ENV === "dev") {
-  update();
+if (config.env === "dev") {
   watchPug();
   watchSass();
+  watchScript();
+  update(["pug","js"]);
 }
 
   

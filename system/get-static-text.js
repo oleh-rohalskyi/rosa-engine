@@ -2,7 +2,7 @@ const path = require("path");
 const fs = require("fs");
 const render = require("./render");
 
-module.exports = (pathname,response) => {
+module.exports = (pathname,response,pages) => {
     return new Promise((res,rej)=>{
         pathname = "."+pathname 
         const ext = path.parse(pathname).ext;
@@ -22,11 +22,11 @@ module.exports = (pathname,response) => {
         '.doc': 'application/msword'
         };
         
-        console.log("get static: ",pathname)
         fs.exists(pathname, function (exist) {
             if(!exist) {
                 render.goError(404, response,{
-                    errorMessage: path.parse(pathname).base + " not found"
+                    errorMessage: path.parse(pathname).base + " not found",
+                    pages
                   });
                 return;
             }

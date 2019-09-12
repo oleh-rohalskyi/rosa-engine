@@ -1,135 +1,117 @@
+const config = require("./config");
+
 const render = {
-  go(response,{options,page,user,widgets}) {
-   
-      response.writeHead(200, {
-        "Content-Type": "text/html; charset=utf-8;"
-      });
+  go(response, { options, page, user },startTime) {
 
-      const widgetsForThisPage = page.rf.dependencies
-        .map(i=>i.split("/widgets/")[1])
-          .filter(i=>!!i);
+    response.writeHead(200, {
+      "Content-Type": "text/html; charset=utf-8;"
+    });
 
-      const fr = {};
+    const lang = options.lang;
+    const pugDat = {
+      langs: JSON.stringify(config.langs),
+      redirect: page.redirect, 
+      script: page.script,
+      lang,
+      user, 
+      widgets: page.widgets, 
+      reg: user.registered,
+      name: page.name,
+      data: page.data[lang],
+      pathnames: page.pathnames,
+      location: options.pathname,
+      widgetsScript: page.widgetsScript,
+      dev: config.env === "dev",
+      time: startTime,
+    };
+  
+    let html = "<div>text</div>";
 
-      widgetsForThisPage.forEach(element => {
+    try {
+      html = page.rf(pugDat);
+    } catch (error) {
+      console.log(error)
+      this.goError(500,response,{errorMessage:error,options,page})
+      return;
+    }
 
-        const frName = element.split(".pug")[0];
-       function format(w) {
-        x = {};
-        for (const key in w) {
-          if (w.hasOwnProperty(key)) {
-            const element = w[key];
-            x[element.name] = element;
-          }
-        }
-        return x;
-       }
-        widgets = format(widgets);
-
-        if (widgets[frName].translations) {
-
-          const values = widgets[frName].translations[options.lang];
-
-          for (const key in values) {
-
-              const value = values[key];
-
-              if (!fr[frName])
-                fr[frName] = {}
-              
-              fr[frName][key] = value;
-
-          }
-          
-        } else {
-          fr[frName] = {}
-        }
-        
-        
-      });
-
-      if (page.data) {
-        const data  = page.data[options.lang] || {};
-        page.values = data;
-        delete page.data;
-      }
-      
-      const pugDat = {redirect: "",options,page,user,widgets:fr,reg: user.registered};
-      
-      console.log("log data :", pugDat);
-      console.log("log widgets :", pugDat.widgets);
-
-      const html = page.rf(pugDat);
-      try {
-      } catch (error) {
-        console.log(error);
-      }
-      
-      response.write(html);
-
-      response.end();
-
+    // response.write();
+    // console.log(html);
+    response.end(html);
   },
-  goError(code, response, information) {
+  goApi(data,response) {
+    response.writeHead(200, {
+      "Content-Type": "application/json; charset=utf-8;"
+    });
+    response.end( JSON.stringify(data) );
+  },
+  goError(code, response, info) {
 
-    
-   console.log(information);
-   const tErrPage = information.pages.filter(page=>page.name==="tech-error")[0];
-   const e404 = information.pages.filter(page=>page.name==="404")[0];
-
+    const tErrPage = info.pages.filter(page => page.name === "tech-error")[0];
+    const e404 = info.pages.filter(page => page.name === "404")[0];
     const map = {
       404: {
-        code: 404,
-        errorMessage: information.errorMessage.toString(),
+        code,
+        errorMessage: info.errorMessage ? info.errorMessage.toString() : "not Fount",
         type: "none",
         page: e404,
         path: "404"
       },
       415: {
-        code: 415,
+        code,
         errorMessage: "Unsupported Media Type",
         type: "media",
         page: tErrPage,
         path: "404"
       },
       500: {
-        code: process.env.NODE_ENV === 'dev' ? 500 : 501,
-        errorMessage: information.errorMessage.toString(),
-        type: information.type || "none",
+        code: process.env.NODE_ENV === 'dev' ? code : 501,
+        errorMessage: info.errorMessage ? info.errorMessage.toString() : "server error",
+        type: info.type || "none",
+        page: tErrPage,
+        path: "500"
+      },
+      503: {
+        code,
+        errorMessage: info.errorMessage ? info.errorMessage.toString() : "server error",
+        type: info.type || "none",
         page: tErrPage,
         path: "500"
       }
     };
+
     const payload = map[code];
-    const mock = {
-      options: {
-        lang: "ru"
-      },
-      page: {
-        widgets: "[]",
-        pathnames: {
-          current: payload.path
-        },
-        values: {
-          title: payload.code,
-          meta: {
-            title: payload.code,
-            discription: payload.code,
-            robots: "none",
-          }
-        }
+    
+    const data = {
+      meta: {
+        title: code,
+        discription: "none",
+        robots: "norobots"
       }
+    };
+    
+    response.writeHead(payload.code, {
+      "Content-Type": "text/html; charset=utf-8;"
+    });
+    
+    let html = "";
+    try {
+      html = payload.page.rf({ 
+        user: {
+          role: info.options.role
+        },
+        noredirect: "yes",
+        ...payload,
+        data,
+        dev: info.options,
+        time: Date.now()
+      })
+    } catch(e) {
+      response.end("<pre>"+e.toString()+"</pre>");
     }
-      
-  
-      response.writeHead(payload.code, {
-        "Content-Type": "text/html; charset=utf-8;"
-      });
 
-      response.write(payload.page.rf({redirect: "yes",...payload,...mock,code}));
+    response.end(html);
 
-      response.end();
-      
   }
-} 
+}
 module.exports = render;

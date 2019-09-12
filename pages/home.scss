@@ -1,0 +1,9 @@
+.page-home {
+    & .content {
+        max-width: 840px;
+        margin: 0 auto;
+        & h1 {
+            text-align: center;
+        }
+    }
+}

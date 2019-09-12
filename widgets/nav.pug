@@ -1,0 +1,23 @@
+nav.widget-nav.tabs.is-centered
+    if(!reg)
+        ul
+            li(class=activeClass("home"))
+                a( href=url("home") ) О проекте
+            li
+                a(href="") Польза проекта
+            li
+                a(href="") Чему мы обучаєм?
+            li
+                a(href="") Гарантии качества
+    else
+        ul
+            li(class=activeClass("home"))
+                a(href=url("home") ) О проекте
+            li(class=activeClass("market"))
+                a(href=url("market") ) Маркет знаний
+            li
+                a(href="") Дерево знаний
+            li
+                a(href="") Личний кабинет
+            li
+                a(href="") Отзывы

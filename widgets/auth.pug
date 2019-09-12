@@ -1,0 +1,64 @@
+
+.widget-auth
+    .messages
+        .widget-auth__sign.card
+            .field
+                .label.is-small(set="forms.label-login")
+                .control.has-icons-left
+                    input.input.is-small(rosa-auth="signin:login")
+                    span.icon.is-small.is-left
+                        i.fas.fa-envelope
+            .field
+                .label.is-small(set="forms.label-pass")
+                .control.has-icons-left
+                    input.input.is-small( 
+                            type="password" 
+                            rosa-auth="signin:pass"
+                        )
+                    span.icon.is-small.is-left
+                        i.fas.fa-lock
+            .info(rosa-auth-signin-errors)
+            .widget-auth__actions.columns.is-gapless
+                .label.column.is-small.auth-modal-signup_js
+                    a(set="forms.registration")
+                .label.divider
+                .label.column.is-small 
+                    a(set="forms.pass-forgot")
+                .columns.is-gapless
+                    button.button.is-small.is-success(
+                            rosa-auth="signin:request"
+                            set="forms.label-button"
+                        )
+    .script(type="rosa/x-template" name="modal-signup-content")
+        .modal-card-head(set="forms.registration")
+        .modal-card-body.columns
+            .column
+                .field
+                    .label.is-small(set="forms.label-login")
+                    .control.has-icons-left
+                        input.is-small.input(rosa-auth="signup:login")
+                        span.is-small.icon.is-left
+                            i.fas.fa-envelope
+                .field
+                    .label.is-small(set="forms.label-pass")
+                    .control.has-icons-left
+                        input.is-small.input( type="password" rosa-auth="signup:pass")
+                        span.is-small.icon.is-left
+                            i.fas.fa-lock
+                .field
+                    .label.is-small(set="forms.confirm-pass")
+                    .control.has-icons-left
+                        input.is-small.input( type="password" rosa-auth="signup:pass")
+                        span.is-small.icon.is-left
+                            i.fas.fa-lock
+                .info(rosa-auth-signup-errors)
+        .modal-card-foot.columns.is-gapless
+            span.icon.is-left.column
+                i.fab.fa-facebook
+            span.icon.is-left.column
+                i.fab.fa-vk
+            span.icon.is-left.column
+                i.fab.fa-google-plus-square
+            .column
+                button.button.is-success(rosa-auth="signup:request" set="forms.go")  
+

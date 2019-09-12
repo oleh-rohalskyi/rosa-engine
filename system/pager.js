@@ -2,7 +2,6 @@
 
 module.exports = {
   findPageByPathname(pages,url,lang) {
-    console.log("go page");
     this.lang = lang;
     this.url = url;
     for (const key in pages) {
@@ -17,7 +16,7 @@ module.exports = {
     }
   },
   
-  findRedirectPage(pages,newRoute) {
+  findRedirectPage(pages,newRoute,lang) {
 
     this.url ="/" + encodeURI( newRoute );
 
@@ -25,11 +24,11 @@ module.exports = {
       
       const childPage = pages[key];
 
-      let route =  "/" + this.lang + "/";
+      let route =  "/" + lang + "/";
 
       const page = this.checkRoutes(
         childPage,
-        route + childPage.pathnames[this.lang],
+        route + childPage.pathnames[lang],
       );
 
       if (page) 
@@ -39,11 +38,11 @@ module.exports = {
   },
   checkRoutes(page,route) {
     if ( ( "/" + this.lang + this.url ) === encodeURI(route) ) {
-      console.log("page found")
+      console.log("page found => ", page.pageName)
       page.pathnames.current = route;
       return page;
     }
-      
+    
     if (page.childrens) {
 
       const childrens = page.childrens;
@@ -51,7 +50,7 @@ module.exports = {
       for (const key in childrens) {
 
         const childPage = childrens[key];
-
+        // console.log(childPage);
         const nextRoute = childPage.pathnames[this.lang];
         
         const page = this.checkRoutes(

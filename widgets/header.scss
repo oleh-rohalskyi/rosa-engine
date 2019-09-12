@@ -1,0 +1,33 @@
+.widget-header {
+    &__head {
+        align-items: center;
+        padding: 10px;
+    }
+    &__logo {
+        max-width: 120px;
+        height: auto;
+        border: 1px solid #E4E4E4;
+        border-radius: 5px; 
+        padding-bottom: 5px;
+    }
+    &__auth {
+        max-width: 280px;
+    }
+    &__left {
+        flex-direction: row;
+        align-items: flex-end;
+        height: 183px;
+    }
+    & .card, &__left {
+        margin: 10px !important;
+    }
+    &__nav {
+        font-size: 0.82rem;
+        border-top: none !important;
+        margin-top: 10px;
+    }
+    &__title {
+        font-size: 1.5rem;
+        text-align: center;
+    }
+}
