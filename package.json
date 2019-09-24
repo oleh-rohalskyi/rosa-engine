@@ -5,20 +5,17 @@
   "author": "Oleh Rohalskyi",
   "license": "MIT",
   "scripts": {
-    "dev": "NODE_ENV=dev node dev.js",
-    "fetch_db": "NODE_ENV=fetch_db node bootstrap.js",
-    "tmp": "node templates.js",
-    "prod": "NODE_ENV=prod node server.js"
+    "start": "node start.js --env=dev --secret=abc --role=admin --db_mock=use"
   },
   "dependencies": {
-    "chalk": "^2.4.2",
+    "csv-parse": "^4.4.6",
     "jsonwebtoken": "^8.5.1",
     "mysql": "^2.17.1",
     "node-sass": "^4.12.0",
     "node-watch": "^0.6.2",
-    "path-exists": "^4.0.0",
     "pug": "^2.0.3",
     "redis": "^2.8.0",
+    "redis-server": "^1.2.2",
     "yargs": "^13.3.0"
   }
 }

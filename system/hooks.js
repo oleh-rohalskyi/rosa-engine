@@ -1,10 +1,7 @@
 //return { action:[stop,continue],payload:{} };
 
 module.exports = {
-    request(success,error,payload) {
-        console.log("hoook fired")
-    },
-    start: function (action,) {
-
+    api(success,error,payload,key) {
+        console.log("hoook fired","request",key);
     }
 }

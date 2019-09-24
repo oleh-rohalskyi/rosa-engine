@@ -1,45 +1,24 @@
 // const data = require('./data');
 
 module.exports = {
-  findPageByPathname(pages,url,lang) {
-    this.lang = lang;
-    this.url = url;
+  findPageByPathname(pages,requestURL,lang) {
     for (const key in pages) {
       const childPage = pages[key];
-      let route =  "/" + this.lang + "/";
       const page = this.checkRoutes(
         childPage,
-        route + childPage.pathnames[lang],
+        childPage.path,
+        requestURL
       );
       if (page)
         return page;
     }
   },
-  
-  findRedirectPage(pages,newRoute,lang) {
-
-    this.url ="/" + encodeURI( newRoute );
-
-    for (const key in pages) {
-      
-      const childPage = pages[key];
-
-      let route =  "/" + lang + "/";
-
-      const page = this.checkRoutes(
-        childPage,
-        route + childPage.pathnames[lang],
-      );
-
-      if (page) 
-        return page;
-        
-    }
-  },
-  checkRoutes(page,route) {
-    if ( ( "/" + this.lang + this.url ) === encodeURI(route) ) {
-      console.log("page found => ", page.pageName)
-      page.pathnames.current = route;
+  checkRoutes(page,route,requestURL) {
+    route = encodeURI(route);
+    requestURL = encodeURI(requestURL);
+    console.log(route,requestURL)
+    if ( "/"+route === requestURL ) {
+      console.log("page found => ", page.name);
       return page;
     }
     

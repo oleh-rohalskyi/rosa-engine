@@ -1,39 +1,42 @@
-module.exports = function(success, error) {
+module.exports = {
+  async get(success, error, params) {
 
-  const con = this.dataBase.createConnection(this.conf);
-
-  con.connect((err) => {
-
-    if (err) {
-      error({ success: false, error: err.message, data: null });
-      return;
-    }
-
-    const query = `SELECT * FROM pages`;
-
-    con.query(query, (err, result) => {
-
+    const con = this.dataBase.createConnection(this.conf);
+  
+    con.connect((err) => {
+  
       if (err) {
         error({ success: false, error: err.message, data: null });
         return;
       }
-
-      if (result.length <= 0) {
-        error({ success: false, error: "NO_COINCIDENCE", data: null });
-        return;
-      }
-
-      success( listToTree(result, {
-          idKey: 'id',
-          parentKey: 'parent',
-          childrenKey: 'childrens'
-        }) );
-
+  
+      const query = `SELECT * FROM pages`;
+  
+      con.query(query, (err, result) => {
+  
+        if (err) {
+          error({ success: false, error: err.message, data: null });
+          return;
+        }
+  
+        if (result.length <= 0) {
+          error({ success: false, error: "NO_COINCIDENCE", data: null });
+          return;
+        }
+  
+        success( listToTree(result, {
+            idKey: 'id',
+            parentKey: 'parent',
+            childrenKey: 'childrens'
+          }) );
+  
+      });
+  
     });
-
-  });
-
+  
+  }
 }
+
 
 
 function listToTree(data, options) {

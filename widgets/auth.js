@@ -74,7 +74,7 @@ class {
     }
     onClick(type){
         return (e) => {
-            fetch(`/api/${type}`, {
+            fetch(`/api/auth/${type}`, {
                 body: _.help.objToPostBody({ lang: __.lang, password: this[type].pass, login: this[type].login}),
                 method: "POST",
             }).then((result)=>{

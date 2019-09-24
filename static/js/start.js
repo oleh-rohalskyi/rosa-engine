@@ -24,15 +24,15 @@ const __ = {
 }
 
 if (__.getMetaContent("proccess")==="dev") {
-    rosa.dev = true;
-    rosa.perfomance = {
-        start: __.ce("span","rosa-dev-div-start-time"),
-        end:   __.ce("span","rosa-dev-div-end-time"),
+    rosa.dev = {};
+    rosa.dev = {
+        start_time: __.ce("span","rosa-dev-div-start-time"),
+        end_time:   __.ce("span","rosa-dev-div-end-time"),
         page:  __.ce("span","rosa-dev-div-page"),
         role:  __.ce("span","rosa-dev-div-role"),
         wrap:  __.ce("div","rosa-dev-div"),
         log(where,time) {
-            if(where==="start")
+            if(where==="start_time")
                 this.startPageTime = time;
             this[where].innerText = time/1000 + "s";
         },
@@ -40,17 +40,17 @@ if (__.getMetaContent("proccess")==="dev") {
             this.result.innerText = (this.end.innerText*1 - this.start.innerText*1)
         }
     }
-    rosa.perfomance.role.innerText = __.getMetaContent("role");
-    rosa.perfomance.wrap.append(rosa.perfomance.start)
-    rosa.perfomance.wrap.append(rosa.perfomance.page)
-    rosa.perfomance.wrap.append(rosa.perfomance.end)
-    rosa.perfomance.wrap.append(rosa.perfomance.role)
-    document.querySelector("html").append(rosa.perfomance.wrap);
+    rosa.dev.role.innerText = __.getMetaContent("role");
+    rosa.dev.wrap.append(rosa.dev.start_time)
+    rosa.dev.wrap.append(rosa.dev.page)
+    rosa.dev.wrap.append(rosa.dev.end_time)
+    rosa.dev.wrap.append(rosa.dev.role)
+    document.querySelector("html").append(rosa.dev.wrap);
 
-    rosa.perfomance.requestTime = __.getMetaContent("time") * 1;
-    rosa.perfomance.log("start",Date.now() - rosa.perfomance.requestTime);
+    rosa.dev.requestTime = __.getMetaContent("time") * 1;
+    rosa.dev.log("start_time",Date.now() - rosa.dev.requestTime);
 } else {
-    rosa.perfomance = {log(){},calcResult(){}}
+    rosa.dev = {log(){},calcResult(){}}
     console.log = ()=>{};
 }
 

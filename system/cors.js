@@ -4,7 +4,7 @@ module.exports = function cors(response) {
         response.setHeader('Access-Control-Allow-Origin', '*');
 
         // Request methods you wish to allow
-        response.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS, PUT, PATCH, DELETE');
+        response.setHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, PATCH, DELETE');
 
         // Request headers you wish to allow
         response.setHeader('Access-Control-Allow-Headers', 'X-Requested-With,content-type');

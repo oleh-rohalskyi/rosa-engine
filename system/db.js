@@ -1,39 +1,46 @@
 const jwt = require('jsonwebtoken');
 const mysql = require('mysql');
-const conf = require('./db.conf');
+const conf = require('../configuration/db.conf');
 const crypto = require('crypto');
-const {secret} = require('./config');
 
-const api = require('./api');
-
-
+let {security,langs} = require('../configuration');
 
 const expiredDays = 30;
 
-const db = {
-    api: {},
-    crypto,
-    secret,
-    conf,
-    jwt,
-    escape: mysql.escape,
-    dataBase: mysql,
-    jwtStringify({id=0,role="guest",expired=0}) {
-        return jwt.sign(JSON.stringify({id,role,expired}), secret);
-    },
+module.exports = class DB {
+    constructor() {
+        this.dataBase = mysql;
+        this.crypto = crypto;
+        this.security = security;
+        this.langs = langs;
+        this.conf = conf;
+        this.jwt = jwt;
+        this.escape = mysql.escape;
+        this.q = {
+            getById() {
+                if (widgetsToGet && widgetsToGet.length) {
+                    query+= `WHERE name IN (`
+                    for (let index = 0; index < widgetsToGet.length; index++) {
+                        query+= this.escape(widgetsToGet[index]) + ","
+                    }
+                    query=query.substr(0,query.length-1)+`)`;
+                }
+            }
+        }
+    }
+    jwtStringify(payLoad) {
+        return this.jwt.sign(JSON.stringify(payLoad), this.security.secret);
+    }
     jwtParse(token) {
         let user = {role: "guest"};
         try {
-            user = jwt.verify(token, secret);
+            user = this.jwt.verify(token,  this.security.secret);
         } catch(e) {
             return user;
         }
         return user;
-    },
-    isUserExist(login) {
-        const con = this.dataBase.createConnection(conf);
-    },
-    getUser({
+    }
+    credentials({
         login,
         password
     }) {
@@ -69,15 +76,4 @@ const db = {
         })
     }
 };
-
-for (const key in api.calls) {
-    if (api.calls.hasOwnProperty(key)) {
-        db.api[key] = (opt={})=>new Promise((res,rej)=>{
-            api.hook(res,rej,opt);
-            api.calls[key].apply(db, [res,rej,opt] );
-        })
-    }
-}
-
-module.exports = db;
   

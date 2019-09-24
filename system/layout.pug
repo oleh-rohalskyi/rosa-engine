@@ -3,10 +3,9 @@ include mixins.pug
 html(lang=lang)
     head 
         meta(name="location" content=location)
-        meta(name="noredirect" content=noredirect)
         meta(name="proccess" content=(dev?"dev":"prod"))
         meta(name="time" content=time)
-        meta(name="role" content=user.role)
+        meta(name="role" content=options.role)
         script(type="text/javascript" src="/cdn/static/js/start.js")
         link(rel="icon" href="/cdn/static/favicon.ico" type="image/x-icon")
         meta(charset="UTF-8")

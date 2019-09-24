@@ -1,16 +1,18 @@
 const pug = require('pug');
 const db = require('./db');
-const data = require('../temp/index');
 const fs = require('fs');
-const {db_mock,update_db_mock} = require('./config');
+
+const {d,aliases} = require('../configuration');
 
 let updated = false;
+const Api = require('../api');
+
 
 module.exports = {
   routes: [],
   async setTmpFile(name,data) {
     return new Promise((res,rej)=>{
-      fs.writeFile("./temp/"+name+".json", JSON.stringify(data), function(err) {
+      fs.writeFile("./configuration/"+name+".json", JSON.stringify(data), function(err) {
         if (err) {
           rej(err);
         }
@@ -19,37 +21,33 @@ module.exports = {
     })
   },
   async start(files) {
+    const config = await Api.getConf();
+    const api = new Api(config)
+    this.files = files;
     this.widgetScreenShoots = [];
-    // if (!this.cashed) {
-    //   this.cashed = [];
-    // }
-      let pages = {};
-      let widgets = {};
-
-    if (update_db_mock && !updated) {
-      pages = await db.api["pages-get"]();
-      widgets = await db.api["widgets-get"]();
-      this.setTmpFile("pages",pages);
-      this.setTmpFile("widgets",widgets);
+      let _pages = {};
+      let _widgets = {};
+    if (d.update_db_mock && !updated) {
+      _pages = await api.engine.pages();
+      _widgets = await api.engine.widgets();
+      await this.setTmpFile("pages",_pages);
+      await this.setTmpFile("widgets",_widgets);
       updated = true;
     }
 
-    if (db_mock) {
-      pages = data.pages;
-      widgets = data.widgets;
-    } else {
-      pages = await db.api["pages-get"]();
-      widgets = await db.api["widgets-get"]();
+    if (d.db_mock) {
+      _pages = require('../configuration/pages.json');
+      _widgets = require('../configuration/widgets.json');
     }
-
-    let obj = await this
-      .check({childrens:(this.cashed||pages)},files);
-
-    this.cashed = obj.childrens
     
+    this.cashed = obj = await this
+      .check((this.cashed||_pages),null);
+    
+  
     return {
       pages: this.cashed,
-      widgets
+      widgets: _widgets,
+      api
     };
 
   },
@@ -64,53 +62,55 @@ module.exports = {
 
     } )  )   );
   },
-  async check(obj,files) {
-    
-    if (obj.childrens && Object.keys(obj.childrens).length > 0) {
-      obj.childrens.forEach(async(el,index)=>{
-        obj.childrens[index] = await this.check(obj.childrens[index],files);
-      })
+  async check(next,parent) {
+    let childrens = next.childrens && next.childrens.length ? next.childrens : null;
+    childrens = Array.isArray(next) ? next : null || childrens;
+    if (!next.childrens) {
+      next.childrens = [];
     }
+    if (childrens) {
+      
+      childrens.forEach(async(el,index)=>{
+        next.childrens[index] = await this.check(el,next);
+      })
 
-    if (obj.template) {
+    }
+  
 
-      obj.script = `/cdn/pages/${obj.template}.js`;
+    if (next.path) {
+      next.script = `/cdn/pages/${next.path}.js`;
 
-      if (files.indexOf("pug")>=0) {
+      if (this.files.indexOf("pug")>=0) {
 
-        obj.rf = pug.compile( await this.addLayOut(obj) , {
+        next.rf = pug.compile( await this.addLayOut(next) , {
           basedir: __dirname + "/../"
         });
-
-        obj.widgets = obj.rf.dependencies.map( (item)=>{
-          return item.split("widgets/")[1];
+        
+        next.widgets = next.rf.dependencies.map( (item)=>{
+          return item.split("/widgets/")[1];
         } ).filter(i=>!!i).map(i=>i.split(".pug")[0]);
 
       }
 
-      if (files.indexOf("js")>=0) {
-        obj.widgetsScript = "";
-        let data = await this.joinWidgets(obj.widgets);
-        obj.widgetsScript = "\n"+data.join("\n");
-        obj.widgetsScript;
+      if (this.files.indexOf("js")>=0) {
+        next.widgetsScript = "";
+        let data = await this.joinWidgets(next.widgets);
+        next.widgetsScript = "\n"+data.join("\n");
       }
-      
-
-      
-
+    
     }
     
     const j = JSON.parse;
-    obj.pathnames = typeof obj.pathnames == "object" ? obj.pathnames : j(obj.pathnames || "{}");
-    obj.roles = typeof obj.roles == "object" ? obj.roles : j(obj.roles || "{}");
-    obj.data = typeof obj.data == "object" ? obj.data : j(obj.data || "{}");
-    obj.redirect = !!obj.redirect;
-    obj.multilangual = !!obj.multilangual;
-
-    return obj;
+    next.pathnames = typeof next.pathnames == "object" ? next.pathnames : j(next.pathnames || "{}");
+    next.roles = typeof next.roles == "object" ? next.roles : j(next.roles || "{}");
+    next.data = typeof next.data == "object" ? next.data : j(next.data || "{}");
+    next.redirect = !!next.redirect;
+    next.multilangual = !!next.multilangual;
+    aliases[next.path] = next;
+    return next;
   },
   async addLayOut(obj) {
-    const fileLink = `./pages/${obj.template}.pug`;
+    const fileLink = `./pages/${obj.path}.pug`;
     let compiled = "";
     const lineReader = require('readline').createInterface({
       input: require('fs').createReadStream(fileLink)
@@ -120,7 +120,7 @@ module.exports = {
         compiled = compiled+"      "+line+"\n";
       });
       lineReader.on('close', ()=>{
-        const pageName = obj.template.replace("/","--");
+        const pageName = obj.path.replace("/","--");
         obj.pageName = pageName;
         const result = `extends /system/layout.pug \nblock content\n  div.page.page__${pageName}\n${compiled}\n`;
         res(result);

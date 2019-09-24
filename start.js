@@ -1,9 +1,9 @@
 var watch = require('node-watch');
-var startServer = require('./server.js');
-var chalk = require('chalk');
+var startServer = require('./server');
 var sass = require('node-sass');
 var fs = require('fs');
-var config = require("./system/config")
+var config = require("./configuration")
+const templateWorker = require("./system/templates-worker");
 
 Array.prototype.equals = function (array) {
     if (!array)
@@ -55,14 +55,13 @@ function throttle(func, ms) {
 
   return wrapper;
 }
-const templateWorker = require("./system/templates-worker.js");
 
 let server = null;
 
 function procces(files) {
     return new Promise((res,rej)=>{
-      templateWorker.start(files).then(({pages,widgets})=>{
-        startServer(pages,widgets,config.port).then((newServ)=>{
+      templateWorker.start(files).then(({pages,widgets,api})=>{
+        startServer(pages,widgets,config.d.port,api).then((newServ)=>{
           server = newServ;
           res();
         }).catch(e=>{rej(e)});
@@ -121,7 +120,7 @@ function watchSass() {
   });
 }
 
-if (config.env === "dev") {
+if (config.d.env === "dev") {
   watchPug();
   watchSass();
   watchScript();

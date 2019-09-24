@@ -1,4 +1,9 @@
-console.clear();
+var redis = require("redis");
+var session = redis.createClient();
+
+session.on("error", function (err) {
+    console.log("Error " + err);
+});
 
 const http = require("http");
 const pager = require("./system/pager");
@@ -6,21 +11,26 @@ const db = require("./system/db");
 const render = require("./system/render");
 const getStaticText = require("./system/get-static-text");
 const url = require('url');
-const config = require('./system/config');
-const api = require('./system/api');
+const config = require('./configuration');
+  
+module.exports = function startServer(pages, widgets, port, api) {
 
-module.exports = function startServer(pages, widgets, port) {
-  console.log("server started");
   return new Promise( res => {
     let server = http.createServer(async function (request, response) {
       let startTime = Date.now();
       let user = {
-        role: "guest"
+        role: "guest",
+        id: 0,
       }
       let options = {};
-
-      if (parseCookies(request).authentication && parseCookies(request).authentication !== "undefined") {
-        user = db.jwtParse(parseCookies(request).authentication);
+      let hash = parseCookies(request).authentication;
+      if (hash) {
+        const id = user.id;
+        user = db.jwtParse(hash);
+        session.set(id, user, hash, redis.print);
+        session.keys((key)=>{
+          console.log(key);
+        })
       }
 
       if (config.role) {
@@ -43,9 +53,12 @@ module.exports = function startServer(pages, widgets, port) {
       options.lang = langs.scope.filter(str => path1level === str)[0] || langs.common;
       
       pathname = pathname.replace(options.lang + "/", "");
-      options.role = config.role;
+
+      options.role = config.user.role;
       options.pathname = pathname;
+      console.log(options)
       let accessMessage = false;
+
       if( !( accessMessage = access(path1level,path2level,path3level) ) ) {
 
         if (accessMessage !== "sendet")
@@ -57,19 +70,10 @@ module.exports = function startServer(pages, widgets, port) {
 
       } else if (path1level === "api") {
 
-        api.index(request,{
-          role: config.role,
-          action: path2level,
-          lang: options.lang
-        },db).then(function(data){
-          render.goApi(data,response);
-        },function(err){
-          render.goError(503, response, {
-            ...err,
-            options,
-            pages
-          });
-        })
+        api.go(path2level,path3level,request).then(result=>{
+          response.setHeader('Content-type','application/json');
+          response.end(JSON.stringify(result));
+        }).catch(console.log);
         
         return;
 
@@ -95,13 +99,11 @@ module.exports = function startServer(pages, widgets, port) {
             try {
               //check what user role needed for a page or if it needed at all;
               if (page.roles && page.roles.indexOf(user.role) >= 0) {
-                console.log(1)
                 render.go(response, { options, user, page, widgets },startTime);
                 return;
               } else if (!page.roles || page.roles.indexOf("guest") >= 0) {
                 render.go(response, { options, user, page, widgets },startTime);
               } else {
-                console.log(2)
                 render.goError(500, response, {
                   errorMessage: "no access ",
                   options,
@@ -109,7 +111,6 @@ module.exports = function startServer(pages, widgets, port) {
                 });
               }
             } catch (e) {
-              console.log(e)
               render.goError(500, response, {
                 errorMessage: e,
                 options,
@@ -141,11 +142,11 @@ module.exports = function startServer(pages, widgets, port) {
             pages
           });
         }
-        let type = "";
+
         let ext = "none";
         
-      
         if (path2level === "static") return true;
+        if (path1level === "cdn" && path2level === "pages") return true;
         if (path1level === "api") {
           return true;
         } else if (!path3level) {
@@ -154,10 +155,7 @@ module.exports = function startServer(pages, widgets, port) {
           type = path3level.split(".")[0]
           ext = path3level.split(".")[1]
         }
-        console.log(ext)
         if (ext) {goError();return false;}
-        
-        if (path2level === "pages") {return true;}
         
       }
 

@@ -214,7 +214,6 @@ __.loadScript = (path,name) => {
 
 
 async function app() {
-
     rosa.widgets.uses = __.json( __.getMetaContent("widgets") || "false" );
     if (!rosa.widgets.uses) {
         return Promise.resolve([])
@@ -229,14 +228,16 @@ app()
             let request = {
                 widgets
             }
-            return Promise.resolve( await __.api.get("widgets-get",request) );
+            return Promise.resolve( await __.api.get("engine/widgets",request) );
         } catch (e) {
-            return Promise.resolve(0)
-        }
-    else return 0;
+            return Promise.resolve(null)
+        } 
+    else {
+        return Promise.resolve(null);
+    }
 })
 .then((data)=>{
-    
+
     if (!data)
         return;
 
@@ -255,7 +256,7 @@ app()
                 }
             }
         }
-
+        
         let className = "widget-"+uniqFr;
         let widgetNodes = document.querySelectorAll("."+className);
         let l = widgetNodes.length;
@@ -272,7 +273,7 @@ app()
                             let keys = e.getAttribute("set");
                             let key = keys.split(".");
                             if (key[1]) {
-                                e.innerText = data[key[0]][key[1]] || "_";
+                                e.innerText = data[key[0]][key[1]] || "lorem ipsum";
                             }
                         })
                     }
@@ -304,11 +305,11 @@ app()
     })
 }).then(function(){
     if (rosa.dev) {
-        rosa.perfomance.log(
+        rosa.dev.log(
             "page",
-            (Date.now() - rosa.perfomance.requestTime) - rosa.perfomance.startPageTime
+            (Date.now() - rosa.dev.requestTime) - rosa.dev.startPageTime
             );
-        rosa.perfomance.log("end", Date.now() - rosa.perfomance.requestTime);
+        rosa.dev.log("end_time", Date.now() - rosa.dev.requestTime);
         window.r = rosa;
     }
 });

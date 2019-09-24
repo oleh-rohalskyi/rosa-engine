@@ -1,6 +1,7 @@
-const config = require("./config");
+const config = require("../configuration");
 
 const render = {
+  
   go(response, { options, page, user },startTime) {
 
     response.writeHead(200, {
@@ -8,23 +9,21 @@ const render = {
     });
 
     const lang = options.lang;
+
     const pugDat = {
-      langs: JSON.stringify(config.langs),
-      redirect: page.redirect, 
-      script: page.script,
       lang,
-      user, 
+      user,
+      options,
+      widgetsScript: page.widgetsScript,
       widgets: page.widgets, 
       reg: user.registered,
       name: page.name,
       data: page.data[lang],
-      pathnames: page.pathnames,
-      location: options.pathname,
-      widgetsScript: page.widgetsScript,
-      dev: config.env === "dev",
+      dataJSON: JSON.stringify(page.data[lang]),
+      dev: config.d.env === "dev",
       time: startTime,
     };
-  
+
     let html = "<div>text</div>";
 
     try {
@@ -35,8 +34,6 @@ const render = {
       return;
     }
 
-    // response.write();
-    // console.log(html);
     response.end(html);
   },
   goApi(data,response) {
@@ -55,28 +52,32 @@ const render = {
         errorMessage: info.errorMessage ? info.errorMessage.toString() : "not Fount",
         type: "none",
         page: e404,
-        path: "404"
+        path: "404",
+        options: info.options
       },
       415: {
         code,
         errorMessage: "Unsupported Media Type",
         type: "media",
         page: tErrPage,
-        path: "404"
+        path: "404",
+        options: info.options
       },
       500: {
         code: process.env.NODE_ENV === 'dev' ? code : 501,
         errorMessage: info.errorMessage ? info.errorMessage.toString() : "server error",
         type: info.type || "none",
         page: tErrPage,
-        path: "500"
+        path: "500",
+        options: info.options
       },
       503: {
         code,
         errorMessage: info.errorMessage ? info.errorMessage.toString() : "server error",
         type: info.type || "none",
         page: tErrPage,
-        path: "500"
+        path: "500",
+        options: info.options
       }
     };
 
