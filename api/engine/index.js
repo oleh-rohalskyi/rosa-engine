@@ -1,4 +1,4 @@
-const DB = require('../../system/DB');
+const DB = require('../../system/db');
 
 const pages = require("./pages");
 const widgets = require("./widgets");

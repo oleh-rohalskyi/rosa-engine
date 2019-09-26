@@ -1,79 +1,102 @@
-var redis = require("redis");
-var session = redis.createClient();
 
-session.on("error", function (err) {
-    console.log("Error " + err);
-});
 
 const http = require("http");
-const pager = require("./system/pager");
-const db = require("./system/db");
 const render = require("./system/render");
+const Session = require("./system/session")
 const getStaticText = require("./system/get-static-text");
 const url = require('url');
-const config = require('./configuration');
+const conf = require('./system/conf');
+let errCounter = -1;
+
+const session = new Session((err)=>{
+
+  conf.log("r","redis error: "+(++errCounter),["b",err.errno]);
   
-module.exports = function startServer(pages, widgets, port, api) {
+});
+
+module.exports = function startServer(pages, widgets, api, langs) {
+  
+  let subTitlesConf = [];
+  for (const key in conf) {
+    if (conf.hasOwnProperty(key)) {
+      const element = conf[key];
+      subTitlesConf.push("b");
+      subTitlesConf.push( key + ":" + JSON.stringify(element) );
+    }
+  }
+  
+  conf.log("c","cofig",subTitlesConf);
 
   return new Promise( res => {
+
     let server = http.createServer(async function (request, response) {
+      
       let startTime = Date.now();
+
       let user = {
         role: "guest",
         id: 0,
       }
-      let options = {};
-      let hash = parseCookies(request).authentication;
-      if (hash) {
-        const id = user.id;
-        user = db.jwtParse(hash);
-        session.set(id, user, hash, redis.print);
-        session.keys((key)=>{
-          console.log(key);
-        })
-      }
+      
+      let req = {};
 
-      if (config.role) {
-        user.role = config.role;
+      if (conf.role) {
+        user.role = conf.role;
       }
 
       user.registered = user.role !== "guest";
-      const parsedUrl = url.parse(request.url);
-      let pathname = parsedUrl.pathname;
       
-      console.log("Request =================>" + pathname);
-
+      let parsedUrl = url.parse(request.url,true);
+      let pathname = parsedUrl.pathname;
       const sURL = request.url.split("/")
 
       let path1level = sURL[1];
       let path2level = sURL[2];
       let path3level = sURL[3];
 
-      const { langs } = config;
-      options.lang = langs.scope.filter(str => path1level === str)[0] || langs.common;
-      
-      pathname = pathname.replace(options.lang + "/", "");
+      if (request.method === "GET") {
+        req.params = parsedUrl.query;
+      } else {
+        req.params = api.readBody(request);
+      }
 
-      options.role = config.user.role;
-      options.pathname = pathname;
-      console.log(options)
+      if (langs.route_type === "pre_path") {
+        req.lang = langs.scope.filter(str => path1level === str)[0] || langs.common;
+        pathname = pathname.replace(req.lang + "/", ""); 
+      } else {
+        req.lang = langs.scope.filter(str => req.params.lang === str)[0] || langs.common;
+      }
+      
+      
+      req.role = conf.role || "guest";
+      req.pathname = pathname;
+
+      conf.log("c","request", ["b","path: "+req.pathname,"b","role: "+req.role,"b","lang: "+req.lang]);
+
       let accessMessage = false;
 
       if( !( accessMessage = access(path1level,path2level,path3level) ) ) {
 
-        if (accessMessage !== "sendet")
+        if (accessMessage !== "sendet") {
+
           render.goError(503, response, {
             errorMessage: "no access",
-            options,
+            req,
             pages
           });
+          
+        }
+          
 
       } else if (path1level === "api") {
 
-        api.go(path2level,path3level,request).then(result=>{
+        api.go(path2level,path3level,request,req).then(result=>{
           response.setHeader('Content-type','application/json');
           response.end(JSON.stringify(result));
-        }).catch(console.log);
+        }).catch(function(result){
+          response.setHeader('Content-type','application/json');
+          response.end(JSON.stringify(result));
+        });
         
         return;
 
@@ -87,47 +110,40 @@ module.exports = function startServer(pages, widgets, port, api) {
         return;
 
       } else {
-        let page = pager.findPageByPathname(pages, options.pathname, options.lang);
+
+        let page = pages[pathname];
+        req.redirect  = !!page.redirect;
+        if (!!page.redirect) {
+          page = pages[page.to];
+        }
         if (page) {
-          if (page.redirect)
-            page = pager.findRedirectPage(
-              pages,
-              page.to,
-              options.lang
-            );
-          if (page) {
+            conf.log("g","page '"+ page.name+"' founded",["b","redirect "+req.redirect]);
             try {
               //check what user role needed for a page or if it needed at all;
               if (page.roles && page.roles.indexOf(user.role) >= 0) {
-                render.go(response, { options, user, page, widgets },startTime);
+                render.go(response, { req, user, page, widgets },startTime);
                 return;
               } else if (!page.roles || page.roles.indexOf("guest") >= 0) {
-                render.go(response, { options, user, page, widgets },startTime);
+                render.go(response, { req, user, page, widgets },startTime);
               } else {
                 render.goError(500, response, {
                   errorMessage: "no access ",
-                  options,
+                  req,
                   pages
                 });
               }
             } catch (e) {
               render.goError(500, response, {
                 errorMessage: e,
-                options,
+                req,
                 pages
               });
             }
-          } else {
-            render.goError(404, response, {
-              errorMessage: decodeURI(request.url) + " not found",
-              options,
-              pages
-            });
-          }
+        
         } else {
           render.goError(404, response, {
             errorMessage: decodeURI(request.url) + " not found",
-            options,
+            req,
             pages,
           });
         }
@@ -138,7 +154,7 @@ module.exports = function startServer(pages, widgets, port, api) {
         function goError() {
           render.goError(503, response, {
             errorMessage: "no access",
-            options,
+            req,
             pages
           });
         }
@@ -161,7 +177,7 @@ module.exports = function startServer(pages, widgets, port, api) {
 
     })
 
-    server.listen(port, () => {
+    server.listen(conf.port, () => {
       res(server);
     });
 
@@ -169,8 +185,9 @@ module.exports = function startServer(pages, widgets, port, api) {
 }
 
 function parseCookies(request) {
+
   var list = {},
-    rc = request.headers.cookie;
+  rc = request.headers.cookie;
 
   rc && rc.split(';').forEach(function (cookie) {
     var parts = cookie.split('=');
@@ -178,6 +195,7 @@ function parseCookies(request) {
   });
 
   return list;
+
 }
 
 

@@ -22,7 +22,7 @@ module.exports = class Auth extends DB {
                     delimiter: '|',
                     trim: true
                   }, function(err, output){
-                    output.shift()
+                    output.shift();
                     output = output[0];
                     res({
                         current: output[0].split(","),

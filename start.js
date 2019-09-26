@@ -2,7 +2,7 @@ var watch = require('node-watch');
 var startServer = require('./server');
 var sass = require('node-sass');
 var fs = require('fs');
-var config = require("./configuration")
+var config = require("./system/conf")
 const templateWorker = require("./system/templates-worker");
 
 Array.prototype.equals = function (array) {
@@ -60,8 +60,8 @@ let server = null;
 
 function procces(files) {
     return new Promise((res,rej)=>{
-      templateWorker.start(files).then(({pages,widgets,api})=>{
-        startServer(pages,widgets,config.d.port,api).then((newServ)=>{
+      templateWorker.start(files).then(({pages,widgets,api,langs})=>{
+        startServer(pages,widgets,api,langs).then((newServ)=>{
           server = newServ;
           res();
         }).catch(e=>{rej(e)});
@@ -120,7 +120,7 @@ function watchSass() {
   });
 }
 
-if (config.d.env === "dev") {
+if (config.env === "dev") {
   watchPug();
   watchSass();
   watchScript();

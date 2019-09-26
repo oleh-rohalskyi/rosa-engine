@@ -1,12 +1,12 @@
 const url = require('url');
-const DB = require('../system/DB');
+const DB = require('../system/db');
 
 const querystring = require('querystring');
 const csvParse = require("csv-parse");
 const { readFile } = require("fs");
 
 const Engine = require("./engine");
-const Custom = require("./custom");
+const Inserts = require("./inserts");
 const Lists = require("./lists");
 const Auth = require("./auth");
 const Forms = require("./forms");
@@ -14,21 +14,22 @@ const Translations = require("./translations");
 const User = require("./user");
 
 class Api extends DB {
+
     constructor(routes) {
 
         super();
         
         this.routes = routes;
-
         this.engine = new Engine();
         this.auth = new Auth();
         this.lists = new Lists();
         this.forms = new Forms();
-        this.custom = new Custom();
+        this.inserts = new Inserts();
         this.translations = new Translations();
         this.user = new User();
 
     }
+
     async go(type,path,request) {
 
         const route = "/" + path;
@@ -41,8 +42,11 @@ class Api extends DB {
             })[0];
 
             if (c) {
+                
                 return new Promise( async (res,rej) => {
+
                     try {
+
                         try {
 
                             let params = {};
@@ -60,6 +64,7 @@ class Api extends DB {
                         } catch (error) {
                             rej({success:false,error});
                         }
+                        
                     } catch (error) {
                         rej({success:false,error})
                     }
@@ -76,7 +81,6 @@ class Api extends DB {
         return new Promise((res,rej)=>{
             readFile('./api/config.csv', 'utf8', function(err, contents) {
                 if (err) rej(err);
-                console.log(contents)
                 csvParse(contents, {
                     comment: '#',
                     delimiter: '|',

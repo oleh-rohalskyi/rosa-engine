@@ -1,4 +1,4 @@
-const config = require("../configuration");
+const config = require("./conf");
 
 const render = {
   
@@ -20,7 +20,7 @@ const render = {
       name: page.name,
       data: page.data[lang],
       dataJSON: JSON.stringify(page.data[lang]),
-      dev: config.d.env === "dev",
+      dev: config.env === "dev",
       time: startTime,
     };
 
@@ -36,16 +36,19 @@ const render = {
 
     response.end(html);
   },
+  
   goApi(data,response) {
     response.writeHead(200, {
       "Content-Type": "application/json; charset=utf-8;"
     });
     response.end( JSON.stringify(data) );
   },
-  goError(code, response, info) {
 
+  goError(code, response, info) {
+    console.log(info);
     const tErrPage = info.pages.filter(page => page.name === "tech-error")[0];
     const e404 = info.pages.filter(page => page.name === "404")[0];
+
     const map = {
       404: {
         code,

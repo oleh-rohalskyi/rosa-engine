@@ -1,11 +1,11 @@
-type  |method  |route        |controller  |access
+type    |method |route    |controller   |access
 #Engine
-engine|get     |/pages       |pages       |admin
-engine|get     |/widgets     |widgets     |
+engine  |get    |/pages   |pages        |admin
+engine  |get    |/widgets |widgets      |
 #Auth
-auth  |post    |/signin      |login       |guest
-auth  |post    |/signup      |registration|guest
-auth  |post    |/signout     |logout      |registered
+auth    |post   |/signin  |login        |guest
+auth    |post   |/signup  |registration |guest
+auth    |post   |/signout |logout       |registered
 #User
 #Lists
 #Custom
