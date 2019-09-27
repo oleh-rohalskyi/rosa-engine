@@ -58,7 +58,7 @@ class {
         this.nodes[type].login[fun]("input",this.onChange(type,"login"));
         this.nodes[type].pass[fun]("input",this.onChange(type,"pass"));
     }
-    logout() {
+    logout() {  
         fetch(`/api/auth/logout`, {
             method: "POST",
         }).then((result)=>{

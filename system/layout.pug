@@ -5,24 +5,24 @@ html(lang=lang)
         meta(name="location" content=location)
         meta(name="proccess" content=(dev?"dev":"prod"))
         meta(name="time" content=time)
-        meta(name="role" content=options.role)
-        script(type="text/javascript" src="/cdn/static/js/start.js")
+        meta(name="role" content=role)
         link(rel="icon" href="/cdn/static/favicon.ico" type="image/x-icon")
         meta(charset="UTF-8")
         meta(name="viewport", content="width=device-width, initial-scale=1.0")
-        meta(name="title", title=data.meta.title)
+        meta(name="title", title=translations.meta.title)
         meta(http-equiv="X-UA-Compatible", content="ie=edge")
-        meta(name="discription", discription=data.meta.discription)
-        meta(name="robots" content=data.meta.robots)
+        meta(name="discription", discription=translations.meta.discription)
+        meta(name="robots" content=translations.meta.robots)
         meta(name="widgets" content=widgets)
 
-        title=data.meta.title
+        title=translations.meta.title
         //libs
-        link(rel="stylesheet" type="text/css" href="/cdn/static/css/bulma.min.css")
-        script(type="text/javascript" src="https://use.fontawesome.com/releases/v5.3.1/js/all.js")
         //system
         link(rel="stylesheet" type="text/css" href="/cdn/static/css/main.css")
     body(id="app" class=(dev?"dev":""))
+        if(dev)
+            include ./dev-pannel
+        script(type="text/javascript" src="/cdn/static/js/start.js")
         block content
         //system lib
         script(type="text/javascript" src="/cdn/static/js/balalaika.js")
@@ -30,19 +30,5 @@ html(lang=lang)
         script(type="text/javascript")!=widgetsScript
         script(type="text/javascript" src="/cdn/static/js/end.js")
         script(type="text/javascript" src=script)
-        if(dev)
-            style.
-                .rosa-dev-div {
-                    position: fixed;
-                    bottom: 0;
-                    width: 100vw;
-                    height: 20px;
-                    line-height: 18px;
-                    font-size: 16px;
-                    background-color: #19A9A1;
-                    color: white;
-                }
-                .rosa-dev-div span {
-                    margin-left: 10px;
-                }
+            
     

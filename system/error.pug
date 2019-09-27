@@ -1,0 +1,102 @@
+.rosa-error-message-wrap.disabled
+    .rosa-error-message-wrap-close close
+    .rosa-error-message-wrap-title Error
+    .rosa-error-message-wrap-message
+        if(type)
+            span=type
+            span : 
+        span=message
+    .rosa-error-message-wrap-file
+        if(line)
+            a(href="vscode://file"+filename+":"+line)=filename
+            span on line: 
+            span=line
+    if(stack)
+        pre=stack
+script.
+    (function(){
+        let close = document.querySelector(".rosa-error-message-wrap-close");
+        close.addEventListener("click",()=>{
+            document.querySelector(".rosa-error-message-wrap").classList.add("disabled");
+        })
+    })();
+style.
+    .rosa-error-message-wrap {
+        border-radius: 0 0 5px 5px;
+        position: fixed;
+        top: 0;
+        left: 0;
+        background-color: #05180A;
+        width: 100vw;
+        box-sizing: border-box;
+        padding: 15px 10px;
+        box-shadow: 0 10px 20px rgba(0,0,0,0.19), 0 6px 6px rgba(0,0,0,0.23);
+        transition: 0.5s;
+    }
+
+    .rosa-error-message-wrap.disabled {
+        top: -2000px;
+    }
+    .rosa-error-message-wrap pre {
+        border-radius: 4px;
+        padding: 10px;
+        background-color: #fff;
+        color: #7C43FF;
+        width: calc(100vw - 50px);
+        margin: 10px auto 20px auto;
+        overflow-x: scroll;
+    }
+    .rosa-error-message-wrap-close {
+      cursor: pointer;
+       margin-left: auto;
+       border-radius: 3px;
+       background-color: #0B795B;
+       padding: 3px 5px;
+       transition: 0.2s;
+       color: #D4E8DA;
+       width: 50px;
+       text-align: center;
+       position: absolute;
+       right: 15px;
+       top: 10px;
+    }
+    .rosa-error-message-wrap-close:hover {
+        background-color: #D4E8DA;
+        color:#0B795B;
+    }
+
+    .rosa-error-message-wrap-title {
+        font-size: 20px;
+        color: #C84630;
+        font-weight: bold;
+        padding: 5px;
+    }
+    .rosa-error-message-wrap-message {
+        font-size: 16px;
+        color: #6BB07F;
+        padding: 5px;
+    }
+    .rosa-error-message-wrap-message span:first-child {
+        font-size: 18px;
+        color: #C84630;
+    }
+    .rosa-error-message-wrap-file {
+        font-size: 16px;
+        color: #310A31;
+        padding: 5px;
+    }
+    .rosa-error-message-wrap-file a {
+        display: inline-block;
+        padding: 3px 5px;
+        margin: 0 4px 0 0;
+        line-height: 16px;
+        border-radius: 3px;
+        font-size: 16px;
+        background-color: #0B795B;
+        color: #D4E8DA;
+       transition: 0.2s;
+    }
+    .rosa-error-message-wrap-file a:hover {
+        background-color: #D4E8DA;
+        color:#0B795B;
+    }

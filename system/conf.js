@@ -77,6 +77,7 @@ class consoleConfig extends filesConfig {
     }
 
     log(titleColor,title,list) {
+        let ll = list.length;
         let text = "⎩" + colors[titleColor](title) + "\n";
         let fDevider = "";
 
@@ -94,7 +95,7 @@ class consoleConfig extends filesConfig {
             }
         }
             
-        console.log("シ⏋\n"+text);
+        console.log("シ⟅\n"+text);
 
     }
 

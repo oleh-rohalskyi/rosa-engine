@@ -1,0 +1,62 @@
+.rosa-dev-pannel-error-messages
+    include ./error
+.rosa-dev-pannel
+    .rosa-dev-pannel-timing
+        +static("image","server","22px")
+        div.rosa-dev-pannel-start-time undefined
+        +static("image","page","22px")
+        div.rosa-dev-pannel-page-time undefined
+        +static("image","success","22px")
+        div.rosa-dev-pannel-end-time undefined
+    .rosa-dev-pannel-pagename
+        b=name.toUpperCase()
+    .rosa-dev-pannel-role undefined
+    .move
+script.
+style.
+    .rosa-dev-pannel img {
+        margin: 0 5px 0 12px;
+        background-color: #6BB07F;
+        border-radius: 3px;
+        padding: 1px;
+    }  
+    .rosa-dev-pannel {
+        align-items: center;
+        color: #6BB07F;
+        font-size: 17px;
+        display: flex;
+        flex-direction: row;
+        position: fixed;
+        bottom: 0;
+        background-color: rgba(0,0,0,0.85);
+        width: 100%;
+        border-top: 1px solid #48DC32;
+        border-radius: 3px 3px 0 0;
+        box-sizing: border-box;
+        padding: 3px;
+    }
+    .rosa-dev-pannel-pagename {
+        color: #D4E8DA;
+        font-weight: bold;
+        letter-spacing: 3px;
+        margin-left: auto;
+        margin-right: 5px;
+    }
+    .rosa-dev-pannel-role {
+       cursor: pointer;
+       margin-left: auto;
+       border-radius: 3px;
+       background-color: #0B795B;
+       padding: 3px 5px;
+       transition: 0.3s;
+       color: #D4E8DA;
+    }
+    .rosa-dev-pannel-role:hover {
+        background-color: #D4E8DA;
+        color:#0B795B;
+    }
+    .rosa-dev-pannel-timing {
+        display: flex;
+        align-items: center;
+        flex-direction: row;
+    }

@@ -26,7 +26,8 @@ module.exports = class Auth extends DB {
                     output = output[0];
                     res({
                         current: output[0].split(","),
-                        scope: output[1].split(",")
+                        scope: output[1].split(","),
+                        useMail: output[2] === "yes"
                     });
                   })
             })

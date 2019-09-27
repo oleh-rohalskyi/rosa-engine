@@ -45,7 +45,7 @@ module.exports = {
     }
 
     this.cashed = await this.check((this.cashed||_pages),files);
-    console.log(langs);
+
     return {
       pages: this.cashed,
       widgets: _widgets,
@@ -57,13 +57,11 @@ module.exports = {
   
   async joinWidgets(widgets) {
     return Promise.all(   widgets.map(  element => new Promise( (res,rej)=>{
-      
       fs.readFile('widgets/'+element+'.js', 'utf8', function(err, contents) {
           let trimed = contents.trim();
           res(!trimed ? `rosa.widgets.classes["${element.toUpperCase()}"]=false;` : `rosa.widgets.classes["${element.toUpperCase()}"]=${trimed}`);
           if (err) rej(err)
       });
-
     } )  )   );
 
   },
@@ -71,6 +69,8 @@ module.exports = {
   async check(pages,files) {
     let output = {};
     return new Promise(async(res)=>{
+      let layoutLog = [];
+      let jsLog = [];
       for (let index = 0; index < pages.length; index++) {
           const page = pages[index];
           page.redirect = !!page.redirect;
@@ -81,18 +81,29 @@ module.exports = {
           page.script = `/cdn/pages${page.path}.js`;
     
           if (files.indexOf("pug")>=0 && !page.redirect) {
-    
+            layoutLog.push("b");
+            layoutLog.push("file: "+`pages${page.path}.pug`);
             page.rf = pug.compile( await this.addLayOut(page) , {
               basedir: __dirname + "/../"
             });
             
-            page.widgets = page.rf.dependencies.map( (item)=>{
-              return item.split("/widgets/")[1];
-            } ).filter(i=>!!i).map(i=>i.split(".pug")[0]);
+            page.widgets = page
+              .rf
+              .dependencies
+              .map(item=>item
+                .split("/widgets/")[1]
+              )
+              .filter(i=>!!i)
+              .map(item=>item
+                .split(".pug")[0]
+              );
     
           }
 
           if (files.indexOf("js")>=0 && !page.redirect) {
+            
+            jsLog.push("b");
+            jsLog.push("file: "+page.script);
 
             page.widgetsScript = "";
             let data = await this.joinWidgets(page.widgets);
@@ -108,11 +119,15 @@ module.exports = {
           
         }
 
+        conf.log("c","layout worker end with: ",layoutLog);
+        conf.log("c","Js worker end with: ",jsLog);
+
         res(output);
 
     })
   },
   async addLayOut(obj) {
+    
     const fileLink = `pages${obj.path}.pug`;
     let compiled = "";
 
@@ -121,6 +136,7 @@ module.exports = {
       const lineReader = require('readline').createInterface({
         input: require('fs').createReadStream(fileLink)
       });
+
       return new Promise((res)=>{
         lineReader.on('line', (line) => {
           compiled = compiled+"      "+line+"\n";
@@ -128,7 +144,7 @@ module.exports = {
         lineReader.on('close', ()=>{
           const pageName = obj.path.replace("/","--");
           obj.pageName = pageName;
-          const result = `extends /system/layout.pug \nblock content\n  div.page.page__${pageName}\n${compiled}\n`;
+          const result = `extends /system/layout.pug \nblock content\n  div.page.page${pageName}\n${compiled}\n`;
           res(result);
         })
       });
@@ -139,6 +155,7 @@ module.exports = {
       if (fs.existsSync(fileLink)) {
         return await modify();
       } else {
+        conf.log("y","Atention",["m",'no file: '+fileLink+' but page exist on db']);
         return ""
       }
     } catch(err) {

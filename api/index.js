@@ -30,15 +30,15 @@ class Api extends DB {
 
     }
 
-    async go(type,path,request) {
-
-        const route = "/" + path;
+    async go(req) {
+        const route = "/" + req.pathname.split("/api/")[1];
+        console.log(route,this.routes);
         const types = this.routes.filter(i=>i.type === type);
 
         if (types.length>0) {
-            
+            const method = req.fullRequest.method;
             const c = types.filter(i=>{
-                return i.route === route && i.method === request.method.toLowerCase();
+                return i.route === route && i.method === method.toLowerCase();
             })[0];
 
             if (c) {
@@ -51,29 +51,32 @@ class Api extends DB {
 
                             let params = {};
 
-                            if (request.method === "GET") {
-                                params = url.parse(request.url,true).query;
+                            if (method === "GET") {
+                                params = url.parse(req.fullRequest.url,true).query;
                             } else {
-                                params = this.readBody(request);
+                                params = this.readBody(req.fullRequest);
                             }
 
                             const controller = this[c.type][c.controller][c.method].bind(this);
 
                             await controller(res,rej,params);
 
-                        } catch (error) {
-                            rej({success:false,error});
+                        } catch (e) {
+                            console.log(65,e);
+                            rej(e);
                         }
                         
                     } catch (error) {
-                        rej({success:false,error})
+                        rej(e);
                     }
                 } );
             } else {
-                return {success:false,error:"no api"}
+                this.conf.log("r","error",["b","no api"]);
+                return {success:false,error:{message:"no api for: "+path}}
             }
         } else {
-            return {success:false,error:"no api"}
+            this.conf.log("r","error",["b","no api for: "+path]);
+            return {success:false,error:{message:"no api"}}
         }
 
     }

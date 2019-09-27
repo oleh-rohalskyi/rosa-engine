@@ -6,6 +6,7 @@ const Session = require("./system/session")
 const getStaticText = require("./system/get-static-text");
 const url = require('url');
 const conf = require('./system/conf');
+
 let errCounter = -1;
 
 const session = new Session((err)=>{
@@ -67,36 +68,24 @@ module.exports = function startServer(pages, widgets, api, langs) {
         req.lang = langs.scope.filter(str => req.params.lang === str)[0] || langs.common;
       }
       
-      
+      req.pages = pages;
       req.role = conf.role || "guest";
       req.pathname = pathname;
+      req.fullRequest = request;
 
       conf.log("c","request", ["b","path: "+req.pathname,"b","role: "+req.role,"b","lang: "+req.lang]);
 
       let accessMessage = false;
 
-      if( !( accessMessage = access(path1level,path2level,path3level) ) ) {
+      if (path1level === "api") {
 
-        if (accessMessage !== "sendet") {
-
-          render.goError(503, response, {
-            errorMessage: "no access",
-            req,
-            pages
+        api.go(req)
+          .then((data)=>{
+            render.goApi(data,response)
+          })
+          .catch((e)=>{
+            render.goApiError(500,response, req,e)
           });
-          
-        }
-          
-
-      } else if (path1level === "api") {
-
-        api.go(path2level,path3level,request,req).then(result=>{
-          response.setHeader('Content-type','application/json');
-          response.end(JSON.stringify(result));
-        }).catch(function(result){
-          response.setHeader('Content-type','application/json');
-          response.end(JSON.stringify(result));
-        });
         
         return;
 
@@ -112,67 +101,33 @@ module.exports = function startServer(pages, widgets, api, langs) {
       } else {
 
         let page = pages[pathname];
-        req.redirect  = !!page.redirect;
-        if (!!page.redirect) {
+        
+        if (page && !!page.redirect) {
+          req.redirect = !!page.redirect;
           page = pages[page.to];
         }
+
         if (page) {
-            conf.log("g","page '"+ page.name+"' founded",["b","redirect "+req.redirect]);
+            conf.log("g","page '"+ page.name+"' founded",["b","redirect "+!!page.redirect]);
+            req.page = page;
             try {
               //check what user role needed for a page or if it needed at all;
-              if (page.roles && page.roles.indexOf(user.role) >= 0) {
-                render.go(response, { req, user, page, widgets },startTime);
+              if (page.roles && page.roles.indexOf(req.role) >= 0) {
+                render.go(response, req, startTime);
                 return;
               } else if (!page.roles || page.roles.indexOf("guest") >= 0) {
-                render.go(response, { req, user, page, widgets },startTime);
+                render.go(response, req, startTime);
               } else {
-                render.goError(500, response, {
-                  errorMessage: "no access ",
-                  req,
-                  pages
-                });
+                render.goError(503,response,req,"no access");
               }
             } catch (e) {
-              render.goError(500, response, {
-                errorMessage: e,
-                req,
-                pages
-              });
+              render.goError(500,response,req,e);
             }
         
         } else {
-          render.goError(404, response, {
-            errorMessage: decodeURI(request.url) + " not found",
-            req,
-            pages,
-          });
+          render.goError(404,response, req, req.pathname + " not found");
         }
         return;
-      }
-      
-      function access(path1level,path2level,path3level) {
-        function goError() {
-          render.goError(503, response, {
-            errorMessage: "no access",
-            req,
-            pages
-          });
-        }
-
-        let ext = "none";
-        
-        if (path2level === "static") return true;
-        if (path1level === "cdn" && path2level === "pages") return true;
-        if (path1level === "api") {
-          return true;
-        } else if (!path3level) {
-          return true
-        } else {
-          type = path3level.split(".")[0]
-          ext = path3level.split(".")[1]
-        }
-        if (ext) {goError();return false;}
-        
       }
 
     })

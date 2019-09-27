@@ -1,11 +1,7 @@
 .widget-header.columns.is-gapless
     include modal.pug
-    .column.widget-header__left
-        .columns.widget-header__head.card
-            .column.widget-header__logo
-                a()
-                    img(src="/cdn/static/images/logo.png")
-            if(!reg)
-                h1.column.widget-header__title Онлайн-Университет Новейших Психотехнологий
-        include nav.pug
+    a
+        +static("image","logo","100px")
+    h1 rosa-engine
+    include nav.pug
     include auth.pug

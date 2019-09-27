@@ -26,29 +26,14 @@ const __ = {
 if (__.getMetaContent("proccess")==="dev") {
     rosa.dev = {};
     rosa.dev = {
-        start_time: __.ce("span","rosa-dev-div-start-time"),
-        end_time:   __.ce("span","rosa-dev-div-end-time"),
-        page:  __.ce("span","rosa-dev-div-page"),
-        role:  __.ce("span","rosa-dev-div-role"),
-        wrap:  __.ce("div","rosa-dev-div"),
-        log(where,time) {
-            if(where==="start_time")
-                this.startPageTime = time;
-            this[where].innerText = time/1000 + "s";
-        },
-        calcResult() {
-            this.result.innerText = (this.end.innerText*1 - this.start.innerText*1)
-        }
+        pannel:  document.querySelector(".rosa-dev-pannel")
     }
-    rosa.dev.role.innerText = __.getMetaContent("role");
-    rosa.dev.wrap.append(rosa.dev.start_time)
-    rosa.dev.wrap.append(rosa.dev.page)
-    rosa.dev.wrap.append(rosa.dev.end_time)
-    rosa.dev.wrap.append(rosa.dev.role)
-    document.querySelector("html").append(rosa.dev.wrap);
-
+    rosa.role = __.getMetaContent("role");
+    rosa.dev.pannel.querySelector(".rosa-dev-pannel-role").innerText = rosa.role;
     rosa.dev.requestTime = __.getMetaContent("time") * 1;
-    rosa.dev.log("start_time",Date.now() - rosa.dev.requestTime);
+    rosa.dev.startPageTime = Date.now() - rosa.dev.requestTime;
+    console.log(rosa.dev.requestTime);
+    rosa.dev.pannel.querySelector(".rosa-dev-pannel-start-time").innerText = rosa.dev.startPageTime/1000 + "s";
 } else {
     rosa.dev = {log(){},calcResult(){}}
     console.log = ()=>{};

@@ -1,2 +1,4 @@
-//- - var url = function(name) {return "/"+lang+"/"+name};
-//- - var activeClass = function(name) {return pathnames.current.split(lang)[1] === "/"+name ? "is-active" : ""}
+mixin static(type,path,width)
+    if (type == "image")
+        img(src="/cdn/static/images/"+path+".png" width=(width||"100%") )
+        

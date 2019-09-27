@@ -70,7 +70,17 @@ function procces(files) {
 }
 
 const update = function(files,evt,filename) {
+
   if (server !== null) {
+    config
+      .log( 
+        "c",
+        "server stopped",
+        [ 
+          "b",
+          "start update " + (files.length > 1 ? JSON.stringify(files.filter(i=>i)).join(",") + " files":  files.length > 0?filename+" file":"no update")
+        ]
+      );
     server.close( procces.bind(null,files) );
   } else {
     procces(files).catch(e=>console.log(e));
@@ -88,7 +98,7 @@ function watchPug() {
     recursive: true, 
     filter: /\.pug$/,
     delay: 1000
-  },throttle(update.bind(null,["pug"]),500));
+  },throttle(update.bind(null,["pug"]),1000));
 }
 
 function watchScript() {
@@ -96,7 +106,7 @@ function watchScript() {
     recursive: true, 
     filter: /\.js$/,
     delay: 1000
-  },throttle(update.bind(null,["js"]),500));
+  },throttle(update.bind(null,["js"]),1000));
 }
 
 function watchSass() {

@@ -230,16 +230,18 @@ app()
             }
             return Promise.resolve( await __.api.get("engine/widgets",request) );
         } catch (e) {
-            return Promise.resolve(null)
+            return Promise.resolve(e);
         } 
     else {
-        return Promise.resolve(null);
+        return Promise.resolve(e);
     }
 })
 .then((data)=>{
-
-    if (!data)
-        return;
+    
+    if (!data.success)
+        return {then:function(cb){
+            cb(data);
+        }};
 
     if (rosa.widgets.uses)
         rosa.w = {};
@@ -303,13 +305,40 @@ app()
             });
         } 
     })
-}).then(function(){
+}).then(function(data){
+    console.log(data.error.errorLinkHtml);
     if (rosa.dev) {
-        rosa.dev.log(
-            "page",
-            (Date.now() - rosa.dev.requestTime) - rosa.dev.startPageTime
-            );
-        rosa.dev.log("end_time", Date.now() - rosa.dev.requestTime);
+        rosa.dev.pannel.querySelector(".rosa-dev-pannel-page-time").innerText =( (Date.now() - rosa.dev.requestTime) - rosa.dev.startPageTime )/1000 + "s";
+        rosa.dev.pannel.querySelector(".rosa-dev-pannel-end-time").innerText = (Date.now() - rosa.dev.requestTime)/1000 + "s";
+        console.log(data.error,data.success);
+        if (!data.success && data.error) {
+            if (data.error.message) {
+                document
+                    .querySelector(".rosa-error-message-wrap-message")
+                    .innerHTML = `<span>${data.error.type}:</span><span> ${data.error.message}</span>`;
+            }
+            if (data.error.errorLinkHtml) {
+                document
+                    .querySelector(".rosa-error-message-wrap-file")
+                    .innerHTML = data.error.errorLinkHtml;
+            }
+            if (data.error.errorLinkHtml) {
+                document
+                    .querySelector(".rosa-error-message-wrap-file")
+                    .innerHTML = data.error.errorLinkHtml;
+            }
+            let pre = __.ce("div","rosa-error-message-some-class");
+            if (data.error.stack) {
+                pre.remove();
+                pre = __.ce("pre","rosa-error-message-wrap-stack");
+                pre.innerText = data.error.stack;
+            }
+            let mw = document.querySelector(".rosa-error-message-wrap");
+            mw.appendChild(pre);
+            mw.classList.remove("disabled");
+
+        }
+        
         window.r = rosa;
     }
 });

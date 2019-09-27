@@ -1,117 +1,131 @@
-const config = require("./conf");
+const conf = require("./conf");
+const parseError = require('parse-error');
+const pug = require('pug');
 
 const render = {
   
-  go(response, { options, page, user },startTime) {
+  go(response, req, startTime) {
 
     response.writeHead(200, {
       "Content-Type": "text/html; charset=utf-8;"
     });
 
-    const lang = options.lang;
+    const lang = req.lang;
 
-    const pugDat = {
-      lang,
-      user,
-      options,
-      widgetsScript: page.widgetsScript,
-      widgets: page.widgets, 
-      reg: user.registered,
-      name: page.name,
-      data: page.data[lang],
-      dataJSON: JSON.stringify(page.data[lang]),
-      dev: config.env === "dev",
-      time: startTime,
+    let data = {
+      translations: {
+        meta: {
+          title: "development",
+          discription: "none",
+          robots: "norobots"
+        }
+      }
     };
 
-    let html = "<div>text</div>";
+    data = {
+      lang,
+      ...data,
+      role: req.role,
+      widgetsScript: req.page.widgetsScript,
+      widgets: req.page.widgets, 
+      reg: req.role !== "guest",
+      name: req.page.name,
+      dev: conf.env === "dev",
+      time: startTime,
+      location: req.pathname,
+    };
+    
+    let html = "";
 
     try {
-      html = page.rf(pugDat);
-    } catch (error) {
-      console.log(error)
-      this.goError(500,response,{errorMessage:error,options,page})
+      html = req.page.rf(data);
+    } catch (e) {
+      this.goError(500,response,req,e)
       return;
     }
-
     response.end(html);
   },
-  
   goApi(data,response) {
     response.writeHead(200, {
       "Content-Type": "application/json; charset=utf-8;"
     });
     response.end( JSON.stringify(data) );
   },
-
-  goError(code, response, info) {
-    console.log(info);
-    const tErrPage = info.pages.filter(page => page.name === "tech-error")[0];
-    const e404 = info.pages.filter(page => page.name === "404")[0];
-
-    const map = {
-      404: {
-        code,
-        errorMessage: info.errorMessage ? info.errorMessage.toString() : "not Fount",
-        type: "none",
-        page: e404,
-        path: "404",
-        options: info.options
-      },
-      415: {
-        code,
-        errorMessage: "Unsupported Media Type",
-        type: "media",
-        page: tErrPage,
-        path: "404",
-        options: info.options
-      },
-      500: {
-        code: process.env.NODE_ENV === 'dev' ? code : 501,
-        errorMessage: info.errorMessage ? info.errorMessage.toString() : "server error",
-        type: info.type || "none",
-        page: tErrPage,
-        path: "500",
-        options: info.options
-      },
-      503: {
-        code,
-        errorMessage: info.errorMessage ? info.errorMessage.toString() : "server error",
-        type: info.type || "none",
-        page: tErrPage,
-        path: "500",
-        options: info.options
+  goApiError(code, response, req,e) {
+    response.writeHead(code, {
+      "Content-Type": "application/json; charset=utf-8;"
+    });
+    let data = parseError(e);
+    this.logE(data);
+    data.errorLink = "vscode://file"+data.filename+":"+data.line;
+    data.errorLinkHtml = `<a href="${data.errorLink}">${data.filename} on line <b>${data.line}</b></a>`;
+    response.end(JSON.stringify({success:false,error:data.type?data:{
+      message:e,
+    }}));
+  },
+   logE(e) {
+    data = parseError(e);
+    if (!e.type) {
+      conf.log("r","error",["b",JSON.stringify(e)])
+      return;
+    }
+    e = data;
+    let subTitlesConf = [];
+    for (const key in e) {
+      if (e.hasOwnProperty(key)) {
+        const element = e[key];
+        
+        if (key === "stack") {
+          subTitlesConf.push("m");
+          subTitlesConf.push( key + ":" + element );
+        }
+        else {
+          subTitlesConf.push("b");
+          subTitlesConf.push( key + ":" + element );
+        }
+      }
+    }
+    conf.log("r","error",subTitlesConf);
+  },
+  goError(code, response, req,e) {
+    let data = {
+      translations: {
+        meta: {
+          title: 500,
+          discription: "none",
+          robots: "norobots"
+        }
       }
     };
+    data.translations.title = code;
+    let e404 = {};
+    let html = "";
 
-    const payload = map[code];
-    
-    const data = {
-      meta: {
-        title: code,
-        discription: "none",
-        robots: "norobots"
+    for (const key in req.pages) {
+      if (req.pages.hasOwnProperty(key)) {
+        const page = req.pages[key];
+        if (page.name === "404")
+          e404 = page;
       }
-    };
+    }
     
-    response.writeHead(payload.code, {
+    response.writeHead(code, {
       "Content-Type": "text/html; charset=utf-8;"
     });
     
-    let html = "";
+    
     try {
-      html = payload.page.rf({ 
-        user: {
-          role: info.options.role
-        },
-        noredirect: "yes",
-        ...payload,
-        data,
-        dev: info.options,
-        time: Date.now()
-      })
+      if (code === "404") {
+        html = e404.rf(meta);
+      } else {
+        data = parseError(e);
+        this.logE(e);
+        html = pug.compileFile('./system/error.pug')( data.type?data:{message:e} );
+      }
     } catch(e) {
-      response.end("<pre>"+e.toString()+"</pre>");
+      data = parseError(e);
+      this.logE(e);
+      html = pug.compileFile('./system/error.pug')( data.type?data:{message:e} );
     }
 
     response.end(html);
