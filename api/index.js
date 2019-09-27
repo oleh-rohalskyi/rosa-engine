@@ -31,16 +31,14 @@ class Api extends DB {
     }
 
     async go(req) {
-        const route = "/" + req.pathname.split("/api/")[1];
-        console.log(route,this.routes);
+        const route = req.pathname.split("/api/")[1];
+        const type = route.split("/")[0];
         const types = this.routes.filter(i=>i.type === type);
-
         if (types.length>0) {
             const method = req.fullRequest.method;
             const c = types.filter(i=>{
-                return i.route === route && i.method === method.toLowerCase();
+                return i.route === route.split(type)[1] && i.method === method.toLowerCase();
             })[0];
-
             if (c) {
                 
                 return new Promise( async (res,rej) => {
@@ -49,20 +47,14 @@ class Api extends DB {
 
                         try {
 
-                            let params = {};
+                            const controller = this[c.type][c.controller][c.method];
+                            console.log()
+                            let result = await controller(req,this);
 
-                            if (method === "GET") {
-                                params = url.parse(req.fullRequest.url,true).query;
-                            } else {
-                                params = this.readBody(req.fullRequest);
-                            }
-
-                            const controller = this[c.type][c.controller][c.method].bind(this);
-
-                            await controller(res,rej,params);
+                            res(result);
 
                         } catch (e) {
-                            console.log(65,e);
+
                             rej(e);
                         }
                         
@@ -71,12 +63,12 @@ class Api extends DB {
                     }
                 } );
             } else {
-                this.conf.log("r","error",["b","no api"]);
-                return {success:false,error:{message:"no api for: "+path}}
+                this.conf.log("r","error",["b","no apifor: "+req.pathname]);
+                return {success:false,error:{message:"no api for: "+req.pathname}}
             }
         } else {
-            this.conf.log("r","error",["b","no api for: "+path]);
-            return {success:false,error:{message:"no api"}}
+            this.conf.log("r","error",["b","no api for: "+req.pathname]);
+            return {success:false,error:{message:"no apifor: "+req.pathname}}
         }
 
     }

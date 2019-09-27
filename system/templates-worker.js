@@ -29,8 +29,8 @@ module.exports = {
 
     if (conf.mock.update && !updated) {
       
-      _pages = await api.engine.pages.get(null,api);
-      _widgets = await api.engine.widgets.get(null,api);
+      _pages = await api.engine.pages.get({},api);
+      _widgets = await api.engine.widgets.get({},api);
 
       await this.setTmpFile("pages",_pages);
       await this.setTmpFile("widgets",_widgets);
@@ -68,6 +68,7 @@ module.exports = {
   
   async check(pages,files) {
     let output = {};
+    conf.pages = {};
     return new Promise(async(res)=>{
       let layoutLog = [];
       let jsLog = [];
@@ -114,8 +115,15 @@ module.exports = {
           const j = JSON.parse;
 
           page.roles = j(page.roles);
+
           output[page.path] = page;
           output[page.name] = page;
+
+          conf.pages[page.name] = {
+            href: page.path,
+            name: page.name,
+            roles: page.roles.length ? page.roles : false
+          }
           
         }
 

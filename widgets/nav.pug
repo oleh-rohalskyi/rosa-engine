@@ -1,3 +1,9 @@
-nav
-    a(href="/admin/fast-admin") admin-page
+.widget-nav
+    ul
+        li
+            +getLink("home")(title=pages["home"].name)
+        li
+            +getLink("about")(title=pages["about"].name)
+        li
+            +getLink("admin")(title=pages["admin"].name)
     

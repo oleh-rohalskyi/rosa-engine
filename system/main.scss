@@ -1,26 +1,29 @@
 @import "sass/index";
 
-// pages
-@import "pages/home";
-@import "pages/404";
-@import "pages/tech-error";
-@import "pages/admin";
-@import "pages/admin/fast-admin";
-
-// widgets
-@import "widgets/auth";
-@import "widgets/header";
-@import "widgets/footer";
-
-
-
-//reset
-.card {
-    border-radius: 5px;
+.none {
+    display: none;
 }
-
+.fixed {
+    position: fixed;
+}
+.absolute {
+    position: absolute;
+}
+.inherit {
+    position: static;
+}
 .content {
-    padding: 10px;
+    padding: 5px 10px;
 }
 
-
+html, body, .page { height:100%; margin:0; }
+body.dev {
+    & .page {
+        height: calc(100% - 33px);
+    }
+}
+.page {
+  display:flex; 
+  flex-direction:column;
+}
+ 

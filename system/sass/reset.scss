@@ -1,4 +1,8 @@
-body,html {
+body, html, p, h1, h2, h3, h4, ul, li {
     padding: 0;
     margin: 0;
+}
+
+* {
+    position: relative;
 }

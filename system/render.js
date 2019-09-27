@@ -33,6 +33,8 @@ const render = {
       dev: conf.env === "dev",
       time: startTime,
       location: req.pathname,
+      pages: conf.pages,
+      langRouting: conf.langRouting
     };
     
     let html = "";
@@ -40,6 +42,7 @@ const render = {
     try {
       html = req.page.rf(data);
     } catch (e) {
+      this.logE(e);
       this.goError(500,response,req,e)
       return;
     }
@@ -55,8 +58,7 @@ const render = {
     response.writeHead(code, {
       "Content-Type": "application/json; charset=utf-8;"
     });
-    let data = parseError(e);
-    this.logE(data);
+    data = this.logE(e);
     data.errorLink = "vscode://file"+data.filename+":"+data.line;
     data.errorLinkHtml = `<a href="${data.errorLink}">${data.filename} on line <b>${data.line}</b></a>`;
     response.end(JSON.stringify({success:false,error:data.type?data:{
@@ -64,8 +66,14 @@ const render = {
     }}));
   },
    logE(e) {
-    data = parseError(e);
-    if (!e.type) {
+     if (typeof e === "string") {
+       return {message: e}
+     }
+     data = parseError(e);
+     if (e.path) {
+       data.filename = e.path;
+     }
+    if (!data.type) {
       conf.log("r","error",["b",JSON.stringify(e)])
       return;
     }
@@ -86,6 +94,7 @@ const render = {
       }
     }
     conf.log("r","error",subTitlesConf);
+    return data;
   },
   goError(code, response, req,e) {
     let data = {
@@ -113,19 +122,22 @@ const render = {
       "Content-Type": "text/html; charset=utf-8;"
     });
     
-    
     try {
       if (code === "404") {
         html = e404.rf(meta);
       } else {
-        data = parseError(e);
-        this.logE(e);
-        html = pug.compileFile('./system/error.pug')( data.type?data:{message:e} );
+        data = this.logE(e);
+        if (e.path) {
+          data.filename = e.path;
+        }
+        html = pug.compileFile('./system/error.pug')(  { ...(data.type?data:{message:e}),errorPage:true } );
       }
     } catch(e) {
-      data = parseError(e);
-      this.logE(e);
-      html = pug.compileFile('./system/error.pug')( data.type?data:{message:e} );
+      data = this.logE(e);
+      if (e.path) {
+        data.filename = e.path;
+      }
+      html = pug.compileFile('./system/error.pug')( { ...(data.type?data:{message:e}),errorPage:true } );
     }
 
     response.end(html);

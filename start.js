@@ -5,27 +5,6 @@ var fs = require('fs');
 var config = require("./system/conf")
 const templateWorker = require("./system/templates-worker");
 
-Array.prototype.equals = function (array) {
-    if (!array)
-        return false;
-
-    if (this.length != array.length)
-        return false;
-
-    for (var i = 0, l=this.length; i < l; i++) {
-        if (this[i] instanceof Array && array[i] instanceof Array) {
-            if (!this[i].equals(array[i]))
-                return false;       
-        }           
-        else if (this[i] != array[i]) {
-            return false;   
-        }           
-    }       
-    return true;
-}
-
-Object.defineProperty(Array.prototype, "equals", {enumerable: false});
-
 function throttle(func, ms) {
 
   let isThrottled = false,
@@ -57,7 +36,6 @@ function throttle(func, ms) {
 }
 
 let server = null;
-
 function procces(files) {
     return new Promise((res,rej)=>{
       templateWorker.start(files).then(({pages,widgets,api,langs})=>{
@@ -119,7 +97,9 @@ function watchSass() {
     sass.render({
       file: "./system/main.scss",
     }, function(err, result) {
-      if(err) {}
+      if(err) {
+        console.log(err);
+      }
       else {
         fs.writeFile('./static/css/main.css', result.css, function(err){
          

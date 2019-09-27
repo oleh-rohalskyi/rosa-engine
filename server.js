@@ -18,6 +18,7 @@ const session = new Session((err)=>{
 module.exports = function startServer(pages, widgets, api, langs) {
   
   let subTitlesConf = [];
+  
   for (const key in conf) {
     if (conf.hasOwnProperty(key)) {
       const element = conf[key];
@@ -46,37 +47,36 @@ module.exports = function startServer(pages, widgets, api, langs) {
       }
 
       user.registered = user.role !== "guest";
-      
       let parsedUrl = url.parse(request.url,true);
       let pathname = parsedUrl.pathname;
-      const sURL = request.url.split("/")
-
-      let path1level = sURL[1];
-      let path2level = sURL[2];
-      let path3level = sURL[3];
 
       if (request.method === "GET") {
         req.params = parsedUrl.query;
       } else {
         req.params = api.readBody(request);
       }
-
-      if (langs.route_type === "pre_path") {
-        req.lang = langs.scope.filter(str => path1level === str)[0] || langs.common;
-        pathname = pathname.replace(req.lang + "/", ""); 
+      
+      req.lang = "no needed";
+      let path1level = pathname.split("/")[1];
+      conf.langRouting = langs.route_type;
+      if (conf.langRouting === "pre_path") {
+        const type = pathname.split("/")[1];
+        if (langs.scope.indexOf(type)>=0) {
+          path1level = "page";
+          req.lang = langs.scope.filter(str => type === str)[0] || langs.common;
+          pathname = pathname.replace(req.lang + "/", ""); 
+        }
       } else {
+        path1level = pathname.split("/")[0];
         req.lang = langs.scope.filter(str => req.params.lang === str)[0] || langs.common;
       }
-      
       req.pages = pages;
       req.role = conf.role || "guest";
       req.pathname = pathname;
       req.fullRequest = request;
-
+      
       conf.log("c","request", ["b","path: "+req.pathname,"b","role: "+req.role,"b","lang: "+req.lang]);
-
-      let accessMessage = false;
-
+      
       if (path1level === "api") {
 
         api.go(req)
@@ -98,7 +98,7 @@ module.exports = function startServer(pages, widgets, api, langs) {
 
         return;
 
-      } else {
+      } else if (path1level === "page") {
 
         let page = pages[pathname];
         
@@ -110,7 +110,7 @@ module.exports = function startServer(pages, widgets, api, langs) {
         if (page) {
             conf.log("g","page '"+ page.name+"' founded",["b","redirect "+!!page.redirect]);
             req.page = page;
-            try {
+           
               //check what user role needed for a page or if it needed at all;
               if (page.roles && page.roles.indexOf(req.role) >= 0) {
                 render.go(response, req, startTime);
@@ -120,12 +120,9 @@ module.exports = function startServer(pages, widgets, api, langs) {
               } else {
                 render.goError(503,response,req,"no access");
               }
-            } catch (e) {
-              render.goError(500,response,req,e);
-            }
-        
+         
         } else {
-          render.goError(404,response, req, req.pathname + " not found");
+          render.goError(404,response, req, "page " + req.pathname + " not found");
         }
         return;
       }

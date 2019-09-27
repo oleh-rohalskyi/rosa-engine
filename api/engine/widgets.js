@@ -1,11 +1,11 @@
 module.exports = {
-    async get(params,db) {
+    async get(req,db) {
+        console.log(req.params);
         try { 
-            let widgetsToGet = params?params.widgets:[];
+            let widgetsToGet = (req&&req.params)?req.params.widgets:[];
             return await db.q.get.getByColumn("widgets","name",widgetsToGet);
         } catch {
 
         }
-        
     }
 }

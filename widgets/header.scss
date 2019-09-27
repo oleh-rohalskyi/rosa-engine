@@ -1,0 +1,12 @@
+.widget-header {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    & h1 {
+        color: #41123D;
+    }
+    & img {
+        margin: 10px 0;
+    }
+}

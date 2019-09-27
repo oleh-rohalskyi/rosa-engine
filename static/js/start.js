@@ -9,11 +9,6 @@ const __ = {
         return el;
     },
     lang: document.documentElement.lang,
-    setUrlLocation() {
-        return;
-        if (this.getMetaContent("location")!==decodeURI(location.pathname) && !this.getMetaContent("noredirect")) 
-            location.href = this.getMetaContent("location");
-    },
     getLoko() {
         return this.getMetaContent("location");
     },
@@ -32,11 +27,8 @@ if (__.getMetaContent("proccess")==="dev") {
     rosa.dev.pannel.querySelector(".rosa-dev-pannel-role").innerText = rosa.role;
     rosa.dev.requestTime = __.getMetaContent("time") * 1;
     rosa.dev.startPageTime = Date.now() - rosa.dev.requestTime;
-    console.log(rosa.dev.requestTime);
     rosa.dev.pannel.querySelector(".rosa-dev-pannel-start-time").innerText = rosa.dev.startPageTime/1000 + "s";
 } else {
-    rosa.dev = {log(){},calcResult(){}}
+    rosa.dev = {log(){}}
     console.log = ()=>{};
 }
-
-__.setUrlLocation();
