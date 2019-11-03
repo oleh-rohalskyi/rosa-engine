@@ -20,6 +20,9 @@ module.exports = function startServer(pages, widgets, api, langs) {
   let subTitlesConf = [];
   
   for (const key in conf) {
+    if (key === "api") {
+      continue;
+    }
     if (conf.hasOwnProperty(key)) {
       const element = conf[key];
       subTitlesConf.push("b");
@@ -53,7 +56,14 @@ module.exports = function startServer(pages, widgets, api, langs) {
       if (request.method === "GET") {
         req.params = parsedUrl.query;
       } else {
-        req.params = api.readBody(request);
+        console.log(request.headers);
+        req.params = await api.readBody(request);
+        if (request.headers["content-type"]==="application/json") {
+          for (const key in req.params) {
+              req.params = JSON.parse(key);
+          }
+        }
+        console.log(3,req.params)
       }
       
       req.lang = "no needed";

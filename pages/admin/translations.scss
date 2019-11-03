@@ -1,0 +1,32 @@
+.page--admin--translations {
+    & button.save {
+        width: 200px;
+        height: 30px;
+        margin: 30px auto !important; 
+        display: block;
+        border: none;
+        background-color: rgb(41, 140, 41);
+        color: #EDE8ED;
+        transition: all 0.3s;
+        &:hover {
+            background-color: rgb(23, 101, 23);
+        }
+    }
+    & .jsoneditor-menu {
+        background-color: #41123D;
+        border: none;
+    }
+    & .jsoneditor {
+        border: none;
+    }
+    & .translation-result {
+        margin-left: -11px;
+        margin-right: -10px;
+        margin-top: 10px;
+        border-left: 1px solid #585858;
+    }
+    & select, button:not(:disabled) {
+        cursor: pointer;
+        margin-left: 10px; 
+    }
+}

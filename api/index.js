@@ -1,4 +1,3 @@
-const url = require('url');
 const DB = require('../system/db');
 
 const querystring = require('querystring');
@@ -6,10 +5,7 @@ const csvParse = require("csv-parse");
 const { readFile } = require("fs");
 
 const Engine = require("./engine");
-const Inserts = require("./inserts");
-const Lists = require("./lists");
 const Auth = require("./auth");
-const Forms = require("./forms");
 const Translations = require("./translations");
 const User = require("./user");
 
@@ -22,9 +18,6 @@ class Api extends DB {
         this.routes = routes;
         this.engine = new Engine();
         this.auth = new Auth();
-        this.lists = new Lists();
-        this.forms = new Forms();
-        this.inserts = new Inserts();
         this.translations = new Translations();
         this.user = new User();
 
@@ -46,9 +39,7 @@ class Api extends DB {
                     try {
 
                         try {
-
                             const controller = this[c.type][c.controller][c.method];
-                            console.log()
                             let result = await controller(req,this);
 
                             res(result);
@@ -113,4 +104,5 @@ class Api extends DB {
         });
     }
 }
+
 module.exports = Api;

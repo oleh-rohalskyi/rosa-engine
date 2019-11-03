@@ -1,0 +1,15 @@
+mixin adminNav()
+    .admin-wrap
+        .widget-admin__admin-nav.admin-wrap__nav
+            ul  
+                li
+                    +getLink("admin")(title=pages["admin"].name)
+                li
+                    +getLink("translations")(title=pages["translations"].name)
+                li
+                    +getLink("widgets")(title=pages["widgets"].name)
+                li
+                    +getLink("pages")(title=pages["pages"].name)
+        .admin-wrap__content
+            .admin-wrap__content-block
+                block

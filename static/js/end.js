@@ -95,11 +95,33 @@ __.api = {
         return str;
     },
     domain: "http://localhost:3001",
-    lang: "ru",
-    async get(url,data) {
-        data.lang = this.lang;
+    lang: document.documentElement.lang,
+    async post(url,data) {
+        if (!data) {
+            data = {};
+        }
+       data.lang = data.lang || this.lang;
+       const result = await fetch(`${this.domain}/api/${url}`, {
+        method: 'POST',
+        headers: {
+          'Accept': 'application/json',
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(data)
+       })
+       return result.json();
+   },
+     async get(url,data) {
+         if (!data) {
+             data = {};
+         }
+        data.lang = data.lang || this.lang;
         const result = await fetch(`${this.domain}/api/${url}?${this.encodeParams(data)}`, {
             method: "GET",
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json'
+            },
         })
         return result.json();
     }
@@ -183,12 +205,13 @@ async function app() {
 
 app()
 .then((widgets)=>{
+    
     rosa.widgets.w = {};
     rosa.widgets.uses = widgets;
     let error = null;
-    __.for(rosa.widgets.uses,(uniqFr,key,stop)=>{
 
-        let className = "widget-"+uniqFr;
+    __.for(rosa.widgets.uses,(uniqFr,key,stop)=>{
+        let className = "widget-"+uniqFr.replace("/","__");
         let widgetNodes = document.querySelectorAll("."+className);
         let l = widgetNodes.length;
         if (l > 0) {

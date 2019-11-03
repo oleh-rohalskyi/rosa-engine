@@ -55,6 +55,7 @@ module.exports = class DB {
 
                                 default:
                                     break;
+                                    
                             }
 
                             const callback = (err,result) => {
@@ -70,7 +71,7 @@ module.exports = class DB {
                                 }
 
                                 res(result);
-
+                                con.destroy();
                             }
 
                             conf.log("c","query",["b",query]);
@@ -79,6 +80,8 @@ module.exports = class DB {
                                 con.query(query,params,callback);
                             else 
                                 con.query(query,callback);
+                            
+                                // con.destroy();
                         })   
                     })
                 }

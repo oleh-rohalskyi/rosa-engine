@@ -23,6 +23,8 @@ module.exports = {
     const apiConf = await Api.getConf();
     const api = new Api(apiConf);
 
+    conf.api = api;
+    
     let _pages = {};
     let _widgets = {};
     let langs = await conf.getLangs();
@@ -31,7 +33,7 @@ module.exports = {
       
       _pages = await api.engine.pages.get({},api);
       _widgets = await api.engine.widgets.get({},api);
-
+      
       await this.setTmpFile("pages",_pages);
       await this.setTmpFile("widgets",_widgets);
 
@@ -43,7 +45,8 @@ module.exports = {
       _pages = require('../mocks/pages.json');
       _widgets = require('../mocks/widgets.json');
     }
-
+    
+    conf.widgets = _widgets;
     this.cashed = await this.check((this.cashed||_pages),files);
 
     return {
@@ -84,6 +87,7 @@ module.exports = {
           if (files.indexOf("pug")>=0 && !page.redirect) {
             layoutLog.push("b");
             layoutLog.push("file: "+`pages${page.path}.pug`);
+
             page.rf = pug.compile( await this.addLayOut(page) , {
               basedir: __dirname + "/../"
             });
@@ -98,7 +102,6 @@ module.exports = {
               .map(item=>item
                 .split(".pug")[0]
               );
-    
           }
 
           if (files.indexOf("js")>=0 && !page.redirect) {
@@ -120,9 +123,11 @@ module.exports = {
           output[page.name] = page;
 
           conf.pages[page.name] = {
+            redirect: page.redirect,
             href: page.path,
             name: page.name,
-            roles: page.roles.length ? page.roles : false
+            roles: page.roles.length ? page.roles : false,
+            id: page.id
           }
           
         }
@@ -135,7 +140,6 @@ module.exports = {
     })
   },
   async addLayOut(obj) {
-    
     const fileLink = `pages${obj.path}.pug`;
     let compiled = "";
 
@@ -150,8 +154,12 @@ module.exports = {
           compiled = compiled+"      "+line+"\n";
         });
         lineReader.on('close', ()=>{
-          const pageName = obj.path.replace("/","--");
+          function ra (obj,search,replace){
+            return obj.split(search).join(replace);
+          }
+          const pageName = ra(obj.path,"/","--");
           obj.pageName = pageName;
+          console.log(`div.page.page${pageName}`)
           const result = `extends /system/layout.pug \nblock content\n  div.page.page${pageName}\n${compiled}\n`;
           res(result);
         })

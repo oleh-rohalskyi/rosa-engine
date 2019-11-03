@@ -33,9 +33,10 @@ module.exports = class User extends DB {
                         user.expired = new Date().getTime() + 86400000 * expiredDays;
                         const token = this.jwtStringify(user);
                         res({success: true, error: null, data: {...user,token}});
-        
+                        con.destroy();
                     });
                 });
+                
             })
         }
     }

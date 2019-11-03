@@ -4,5 +4,6 @@ body, html, p, h1, h2, h3, h4, ul, li {
 }
 
 * {
+    box-sizing: border-box;
     position: relative;
 }

@@ -3,6 +3,7 @@ body, html, p, h1, h2, h3, h4, ul, li {
   margin: 0; }
 
 * {
+  box-sizing: border-box;
   position: relative; }
 
 .page--home .content h1 {
@@ -10,6 +11,35 @@ body, html, p, h1, h2, h3, h4, ul, li {
   margin-top: 10px;
   text-align: center;
   margin-bottom: 5px; }
+
+.page--admin--translations button.save {
+  width: 200px;
+  height: 30px;
+  margin: 30px auto !important;
+  display: block;
+  border: none;
+  background-color: #298c29;
+  color: #EDE8ED;
+  transition: all 0.3s; }
+  .page--admin--translations button.save:hover {
+    background-color: #176517; }
+
+.page--admin--translations .jsoneditor-menu {
+  background-color: #41123D;
+  border: none; }
+
+.page--admin--translations .jsoneditor {
+  border: none; }
+
+.page--admin--translations .translation-result {
+  margin-left: -11px;
+  margin-right: -10px;
+  margin-top: 10px;
+  border-left: 1px solid #585858; }
+
+.page--admin--translations select, .page--admin--translations button:not(:disabled) {
+  cursor: pointer;
+  margin-left: 10px; }
 
 .page--about .content h1 {
   color: #c9a823;
@@ -51,6 +81,37 @@ body, html, p, h1, h2, h3, h4, ul, li {
     text-transform: capitalize; }
     .widget-nav a.active, .widget-nav a:hover {
       color: #2479e9; }
+
+.admin-wrap {
+  display: flex;
+  height: 100%;
+  background-color: #41123D; }
+  .admin-wrap__content {
+    width: 100%;
+    background-color: #EDE8ED;
+    border-radius: 5px 0 0 0; }
+    .admin-wrap__content-block {
+      padding: 10px; }
+    .admin-wrap__content-nav-title {
+      text-align: center;
+      font-size: 20px; }
+  .admin-wrap__nav {
+    width: 120px;
+    height: 100%;
+    background-color: #41123D; }
+    .admin-wrap__nav ul {
+      height: 100%;
+      padding-left: 10px;
+      flex-direction: column;
+      display: flex; }
+      .admin-wrap__nav ul li {
+        padding: 5px; }
+      .admin-wrap__nav ul a {
+        color: #EDE8ED;
+        text-decoration: none;
+        text-transform: capitalize; }
+        .admin-wrap__nav ul a.active, .admin-wrap__nav ul a:hover {
+          color: #F8B955; }
 
 .none {
   display: none; }

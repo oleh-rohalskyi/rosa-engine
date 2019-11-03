@@ -1,6 +1,5 @@
 
-var redis = require("redis");
-
+const redis = require("redis");
 module.exports = class Session {
     constructor(onError) {
         this.onError = onError;

@@ -3,14 +3,18 @@
 .rosa-dev-pannel
     .rosa-dev-pannel-timing
         +static("image","server","22px")
-        div.rosa-dev-pannel-start-time undefined
+        div.rosa-dev-pannel-start-time 
         +static("image","page","22px")
-        div.rosa-dev-pannel-page-time undefined
+        div.rosa-dev-pannel-page-time 
         +static("image","success","22px")
-        div.rosa-dev-pannel-end-time undefined
+        div.rosa-dev-pannel-end-time 
     .rosa-dev-pannel-pagename
         b=name.toUpperCase()
-    .rosa-dev-pannel-role undefined
+    .rosa-dev-pannel-role
+    if(name !== "admin")
+        .rosa-dev-pannel-settings-button
+            +getLink("admin")
+                +static("image","settings","22px")
     .move
 script.
 style.
@@ -58,4 +62,12 @@ style.
         display: flex;
         align-items: center;
         flex-direction: row;
+    }
+    .rosa-dev-pannel-settings-button a {
+        display: flex;
+        align-items: center;
+        cursor: pointer;
+    }
+    .rosa-dev-pannel-settings-button a img:hover {
+        background-color: #C8A733;
     }
