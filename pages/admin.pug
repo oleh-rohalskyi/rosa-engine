@@ -1,4 +1,6 @@
-include /widgets/admin/admin-nav
-+adminNav()(title="Home admin")
-    p main content
-include /widgets/footer
+block content
+    include /widgets/admin/admin-nav
+    +adminNav()(title="Home admin")
+        p main content
+block footer
+    include /widgets/footer

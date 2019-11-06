@@ -6,13 +6,17 @@ body, html, p, h1, h2, h3, h4, ul, li {
   box-sizing: border-box;
   position: relative; }
 
+.line {
+  height: 1px;
+  background-color: darkgrey; }
+
 .page--home .content h1 {
   color: #175227;
   margin-top: 10px;
   text-align: center;
   margin-bottom: 5px; }
 
-.page--admin--translations button.save {
+.page__admin--translations button.save {
   width: 200px;
   height: 30px;
   margin: 30px auto !important;
@@ -21,23 +25,23 @@ body, html, p, h1, h2, h3, h4, ul, li {
   background-color: #298c29;
   color: #EDE8ED;
   transition: all 0.3s; }
-  .page--admin--translations button.save:hover {
+  .page__admin--translations button.save:hover {
     background-color: #176517; }
 
-.page--admin--translations .jsoneditor-menu {
+.page__admin--translations .jsoneditor-menu {
   background-color: #41123D;
   border: none; }
 
-.page--admin--translations .jsoneditor {
+.page__admin--translations .jsoneditor {
   border: none; }
 
-.page--admin--translations .translation-result {
+.page__admin--translations .translation-result {
   margin-left: -11px;
   margin-right: -10px;
   margin-top: 10px;
   border-left: 1px solid #585858; }
 
-.page--admin--translations select, .page--admin--translations button:not(:disabled) {
+.page__admin--translations select, .page__admin--translations button:not(:disabled) {
   cursor: pointer;
   margin-left: 10px; }
 
@@ -46,6 +50,49 @@ body, html, p, h1, h2, h3, h4, ul, li {
   margin-top: 10px;
   text-align: center;
   margin-bottom: 5px; }
+
+.widget-auth .auth-form__container {
+  margin: 5px auto;
+  display: flex;
+  flex-direction: column;
+  width: 320px; }
+
+.widget-auth .auth-form label {
+  display: flex;
+  flex-direction: row;
+  padding: 4px; }
+  .widget-auth .auth-form label input {
+    margin-left: auto;
+    width: 150px;
+    height: 20px; }
+
+.widget-auth .auth-form__btn-resend {
+  margin-left: auto !important;
+  width: 100px;
+  height: 20px; }
+
+.widget-auth .auth-form__loader {
+  text-align: center;
+  padding: 4px;
+  height: 24px;
+  padding: 2px;
+  border-bottom: 1px solid #ccc; }
+
+.widget-auth .auth-form__btn {
+  display: inline-block;
+  border: none;
+  background-color: #0f9d58 !important;
+  color: #fff;
+  box-shadow: 0 2px 5px 0 rgba(0, 0, 0, 0.26);
+  border-radius: 2px;
+  font-size: 0.9em;
+  background-color: #fff; }
+
+.widget-auth .auth-form__btn:not(.auth-form__btn-resend) {
+  margin: 0 auto;
+  width: 150px;
+  height: 25px;
+  line-height: 25px; }
 
 .widget-header {
   display: flex;
@@ -129,12 +176,12 @@ body, html, p, h1, h2, h3, h4, ul, li {
   padding: 5px 10px; }
 
 html, body, .page {
-  height: 100%;
   margin: 0; }
 
-body.dev .page {
-  height: calc(100% - 33px); }
-
-.page {
+body {
+  min-height: 100vh;
   display: flex;
   flex-direction: column; }
+
+.page {
+  flex: 1; }

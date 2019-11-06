@@ -1,11 +1,35 @@
-
-.widget-auth.none
-    form 
-        label(for="") login
-            input(type="text")
-        label(for="") password
-            input(type="password")
-    .script(type="rosa/x-template" name="modal-signup-content")
-        .register-form register form6
+.widget-auth
+    form.auth-form
+        .auth-form__loader.auth-form__loader_js Loading...
+        .auth-form__container
+            label resend email
+                button.auth-form__btn.auth-form__btn-resend.auth-form__resend_r_js resend
+        .auth-form__container
+            .line
+            label=tr.widgets.auth.form.email_label
+                input.auth-form__email_r_js.auth-form__input
+            label login
+                input.auth-form__login_r_js.auth-form__input
+            label password
+                input.auth-form__pass_r_js.auth-form__input(type="password")
+            label repeat password
+                input.auth-form__repeat-pass_r_js.auth-form__input
+            label captcha
+                .auth-form__captcha-img_r_js
+                input.auth-form__captcha_r_js.auth-form__captcha
+            label your hash
+                div.auth-form__hash_r_js.auth-form__hash
+            button.auth-form__btn.auth-form__reg_js registration
+        .auth-form__container
+            .line
+            label email
+                input.auth-form__login_l_js.auth-form__input
+            label login
+                input.auth-form__login_l_js.auth-form__input
+            label your hash
+                input.auth-form__hash_l_js.auth-form__inpu
+            label password
+                input.auth-form__pass_l_js.auth-form__pass(type="password")
+            button.auth-form__btn.auth-form__reg_js.auth-form__button login
          
 

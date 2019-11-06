@@ -13,7 +13,7 @@ module.exports = class Auth extends DB {
         this.logout = logout;
         this.registration = registration;
     }
-    static getConf() {
+    getConf() {
         return new Promise((res,rej)=>{
             readFile("./api/auth/config.csv", 'utf8', function(err, contents) {
                 if (err) rej(err);
@@ -25,9 +25,9 @@ module.exports = class Auth extends DB {
                     output.shift();
                     output = output[0];
                     res({
-                        current: output[0].split(","),
+                        current: output[0],
                         scope: output[1].split(","),
-                        useMail: output[2] === "yes"
+                        active: output[2] === "yes"
                     });
                   })
             })

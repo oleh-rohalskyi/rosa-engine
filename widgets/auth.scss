@@ -1,0 +1,48 @@
+.widget-auth {
+    & .auth-form {
+        &__container {
+            margin: 5px auto;
+            display: flex;
+            flex-direction: column;
+            width: 320px;
+        }
+        & label {
+            display: flex;
+            flex-direction: row;
+            padding: 4px;
+            & input {
+                margin-left: auto;
+                width: 150px; 
+                height: 20px;
+            }
+        }
+        &__btn-resend {
+            margin-left: auto !important;
+            width: 100px;
+            height: 20px;
+        }
+        &__loader {
+            text-align: center;
+            padding: 4px; 
+            height: 24px; 
+            padding: 2px;
+            border-bottom: 1px solid #ccc;
+        }
+        &__btn {
+            display: inline-block;
+            border: none;
+            background-color: #0f9d58 !important;
+            color: #fff;
+            box-shadow: 0 2px 5px 0 rgba(0, 0, 0, 0.26);
+            border-radius: 2px;
+            font-size: 0.9em;
+            background-color: #fff;
+        }
+        &__btn:not(.auth-form__btn-resend) {
+            margin: 0 auto;
+            width: 150px; 
+            height: 25px;
+            line-height: 25px;
+        }
+    }
+}

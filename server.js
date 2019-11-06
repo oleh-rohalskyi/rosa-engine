@@ -56,17 +56,14 @@ module.exports = function startServer(pages, widgets, api, langs) {
       if (request.method === "GET") {
         req.params = parsedUrl.query;
       } else {
-        console.log(request.headers);
         req.params = await api.readBody(request);
         if (request.headers["content-type"]==="application/json") {
           for (const key in req.params) {
               req.params = JSON.parse(key);
           }
         }
-        console.log(3,req.params)
       }
-      
-      req.lang = "no needed";
+
       let path1level = pathname.split("/")[1];
       conf.langRouting = langs.route_type;
       if (conf.langRouting === "pre_path") {
@@ -80,6 +77,9 @@ module.exports = function startServer(pages, widgets, api, langs) {
         path1level = pathname.split("/")[0];
         req.lang = langs.scope.filter(str => req.params.lang === str)[0] || langs.common;
       }
+      if (!req.lang) {
+        req.lang = langs.common;
+      }
       req.pages = pages;
       req.role = conf.role || "guest";
       req.pathname = pathname;
@@ -87,6 +87,7 @@ module.exports = function startServer(pages, widgets, api, langs) {
       
       conf.log("c","request", ["b","path: "+req.pathname,"b","role: "+req.role,"b","lang: "+req.lang]);
       
+
       if (path1level === "api") {
 
         api.go(req)
@@ -108,10 +109,10 @@ module.exports = function startServer(pages, widgets, api, langs) {
 
         return;
 
-      } else if (path1level === "page") {
-
+      } else if (path1level === "page" || req.pathname === "/") {
+    
         let page = pages[pathname];
-        
+       
         if (page && !!page.redirect) {
           req.redirect = !!page.redirect;
           page = pages[page.to];
@@ -120,12 +121,9 @@ module.exports = function startServer(pages, widgets, api, langs) {
         if (page) {
             conf.log("g","page '"+ page.name+"' founded",["b","redirect "+!!page.redirect]);
             req.page = page;
-           
               //check what user role needed for a page or if it needed at all;
-              if (page.roles && page.roles.indexOf(req.role) >= 0) {
-                render.go(response, req, startTime);
-                return;
-              } else if (!page.roles || page.roles.indexOf("guest") >= 0) {
+              if (page.roles.indexOf("guest") >= 0 || (page.roles && page.roles.indexOf(req.role) >= 0) ) {
+                console.log(123)
                 render.go(response, req, startTime);
               } else {
                 render.goError(503,response,req,"no access");

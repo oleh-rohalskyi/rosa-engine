@@ -24,9 +24,10 @@ const render = {
     }
 
     conf.api.translations.full.get(req.page.widgets,lang,fp(req.page.name)).then((result)=>{
+      
       let tr = {};
-
       let wn = (id,table) => {
+        console.log(id,table)
         if (table === "pages") {
           for (const key in conf.pages) {
             if (conf.pages.hasOwnProperty(key) && conf.pages[key].id === id) {
@@ -37,18 +38,24 @@ const render = {
           return conf[table].filter((i)=>i.id === id*1)[0].name;
         }
       }
-  
+
       try {
         result.forEach(element => {
+          console.log(element,lang)
           if (!tr[element.table_name])
             tr[element.table_name] = {};
           tr[element.table_name][wn(element.row_id,element.table_name)] = JSON.parse(element[lang]);
         });
+
       } catch (error) {
-        console.log(error);
+
       }
-      data = {
+      
+      let data = {
         lang,
+        isAuth: conf.authConf.active,
+        auth: JSON.stringify(conf.auth),
+        pageName: req.page.pageName,
         tr: tr.pages ? {
           page: tr.pages[req.page.name],
           widgets: tr.widgets
@@ -72,15 +79,17 @@ const render = {
         time: startTime,
         location: req.pathname,
         pages: conf.pages,
+        langs: conf.langs,
         langRouting: conf.langRouting
       };
       
       let html = "";
-
+      console.log(222)
       try {
         html = req.page.rf(data);
+        console.log(2223)
       } catch (e) {
-        this.logE(e);
+        console.log(e);
         this.goError(500,response,req,e)
         return;
       }
@@ -101,52 +110,10 @@ const render = {
     response.writeHead(code, {
       "Content-Type": "application/json; charset=utf-8;"
     });
-    data = this.logE(e);
-    if (!data) {
-      response.end(JSON.stringify({success:false,error:e}));
-    } else {
-      data.errorLink = "vscode://file"+data.filename+":"+data.line;
-      data.errorLinkHtml = `<a href="${data.errorLink}">${data.filename} on line <b>${data.line}</b></a>`;
-      response.end(JSON.stringify({success:false,error:data.type?data:{
-        message:e,
-      }}));
-    }
     
-  },
-   logE(e) {
-     if (typeof e === "string") {
-       return {message: e}
-     }
-     if (!e) {
-       console.log(e);
-       return;
-     }
-     data = parseError(e);
-     if (e.path) {
-       data.filename = e.path;
-     }
-    if (!data.type) {
-      conf.log("r","error",["b",JSON.stringify(e)])
-      return;
-    }
-    e = data;
-    let subTitlesConf = [];
-    for (const key in e) {
-      if (e.hasOwnProperty(key)) {
-        const element = e[key];
-        
-        if (key === "stack") {
-          subTitlesConf.push("m");
-          subTitlesConf.push( key + ":" + element );
-        }
-        else {
-          subTitlesConf.push("b");
-          subTitlesConf.push( key + ":" + element );
-        }
-      }
-    }
-    conf.log("r","error",subTitlesConf);
-    return data;
+    response.end(JSON.stringify({success:false,error:e}));
+    
+    
   },
   goError(code, response, req,e) {
     let data = {
@@ -178,18 +145,18 @@ const render = {
       if (code === "404") {
         html = e404.rf(meta);
       } else {
-        data = this.logE(e);
-        if (e.path) {
+        if ( e && e.path) {
           data.filename = e.path;
         }
-        html = pug.compileFile('./system/error.pug')(  { ...(data.type?data:{message:e}),errorPage:true } );
+        console.log(e);
+        html = pug.compileFile('./system/error.pug')(  { message:e,errorPage:true } );
       }
     } catch(e) {
-      data = this.logE(e);
+      console.log(e);
       if (e.path) {
         data.filename = e.path;
       }
-      html = pug.compileFile('./system/error.pug')( { ...(data.type?data:{message:e}),errorPage:true } );
+      html = pug.compileFile('./system/error.pug')( { message:e,errorPage:true } );
     }
 
     response.end(html);

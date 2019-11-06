@@ -1,3 +1,18 @@
+if (__.getMetaContent("proccess")==="dev") {
+    rosa.dev = {};
+    rosa.dev = {
+        pannel:  document.querySelector(".rosa-dev-pannel")
+    }
+    rosa.role = __.getMetaContent("role");
+    rosa.dev.pannel.querySelector(".rosa-dev-pannel-role").innerText = rosa.role;
+    rosa.dev.requestTime = __.getMetaContent("time") * 1;
+    rosa.dev.startPageTime = Date.now() - rosa.dev.requestTime;
+    rosa.dev.pannel.querySelector(".rosa-dev-pannel-start-time").innerText = rosa.dev.startPageTime/1000 + "s";
+} else {
+    rosa.dev = {log(){}}
+    console.log = ()=>{};
+}
+
 const isClass = fn => /^\s*class/.test(fn?fn.toString():"");
 let r = {};
 
@@ -221,7 +236,7 @@ app()
                 const id = className+"_"+(i+1);
                 let controller = {};
                 node.setAttribute("id",id);
-
+                console.log(rosa.widgets.classes[uniqFr.toUpperCase()]);
                 let classEx = rosa.widgets.classes[uniqFr.toUpperCase()];
                 
                 if( isClass(classEx) ) {
@@ -230,6 +245,8 @@ app()
 
                     try {
                         controller = new classEx(_node,{widgets});
+                        controller._node = _node;
+                        console.log(authConfig);
                     } catch (e) {
                         error = e;
                         stop();
@@ -252,7 +269,6 @@ app()
     
 }).catch((error)=>{
     console.log([error]);
-    console.error(error);
     if (rosa.dev)
         rosa.dev.pushError({success:false,error});
     return Promise.resolve();

@@ -13,7 +13,7 @@ module.exports = class Translations extends DB {
                     let json = this.escape( JSON.stringify(req.params.data) );
                     json = json.substring(1);
                     json = json.substring(0, json.length - 1);
-                    console.log(json);
+                    
                     let query = `UPDATE translations `;
                         query += `SET ${req.params.lang} = "${json}" `;
                         query += `WHERE id = ${req.params.id}`;
@@ -89,7 +89,7 @@ module.exports = class Translations extends DB {
                 return new Promise(async(res,rej)=>{
                         const con = this.cc();
                         let ids = [];
-                       
+                       console.log(names,lang,pageIds);
                         this.conf.widgets.forEach(widget=>{
                             if (names.indexOf(widget.name)>=0) {
                                 ids.push(widget.id);

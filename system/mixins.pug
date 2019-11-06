@@ -4,5 +4,5 @@ mixin static(type,path,width)
     if (type == "image")
         img(src="/cdn/static/images/"+path+".png" width=(width||"100%") )
 mixin getLink(pageName)
-    a(class=((attributes.class || "") + (pages[pageName].href === location?" active":"") ) href=langToLink(pages[pageName].href))= attributes.title
+    a(class=((attributes.class || "") + (name === pageName?" active":"") ) href=langToLink(pages[pageName].href))= attributes.title
         block

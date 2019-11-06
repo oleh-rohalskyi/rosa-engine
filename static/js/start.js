@@ -18,17 +18,3 @@ const __ = {
     }
 }
 
-if (__.getMetaContent("proccess")==="dev") {
-    rosa.dev = {};
-    rosa.dev = {
-        pannel:  document.querySelector(".rosa-dev-pannel")
-    }
-    rosa.role = __.getMetaContent("role");
-    rosa.dev.pannel.querySelector(".rosa-dev-pannel-role").innerText = rosa.role;
-    rosa.dev.requestTime = __.getMetaContent("time") * 1;
-    rosa.dev.startPageTime = Date.now() - rosa.dev.requestTime;
-    rosa.dev.pannel.querySelector(".rosa-dev-pannel-start-time").innerText = rosa.dev.startPageTime/1000 + "s";
-} else {
-    rosa.dev = {log(){}}
-    console.log = ()=>{};
-}

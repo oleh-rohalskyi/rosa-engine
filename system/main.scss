@@ -16,16 +16,13 @@
     padding: 5px 10px;
 }
 
-html, body, .page { height:100%; margin:0; }
-
-body.dev {
-    & .page {
-        height: calc(100% - 33px);
-    }
-}
-
-.page {
+html, body, .page { margin:0; }
+body {
+  min-height: 100vh;
   display:flex; 
   flex-direction:column;
+}
+.page {
+  flex: 1;
 }
  

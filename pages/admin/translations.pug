@@ -1,22 +1,24 @@
 include /widgets/admin/admin-nav
-+adminNav()(title="Translations")
-    form(action="").search-form
-        select(name="lang").langs
-            each lang in ["ru","en"]
-                option(value=lang)=lang
-        select(name="table_name").tables
-            option(value="pages") pages
-            option(value="widgets") widgets
-        select(name="w_id",style="display:none;").widgets-names
-            each widget in allWidgets
-                option(value=widget.id)=widget.name
-        select(name="p_id").pages-names
-            each page in pages
-                if !page.redirect
-                    option(value=page.id)="[ "+page.name+" ]["+page.href+"]"
-        button.search-translation get
-    .translation-result
-    button.save Save
-    script(src="/cdn/static/js/jsoneditor-minimalist.min.js")
-    link(rel="stylesheet" type="text/css" href="/cdn/static/css/jsoneditor.min.css")
-include /widgets/footer
+block content
+    +adminNav()(title="Translations")
+        form(action="").search-form
+            select(name="lang").langs
+                each lang in ["ru","en"]
+                    option(value=lang)=lang
+            select(name="table_name").tables
+                option(value="pages") pages
+                option(value="widgets") widgets
+            select(name="w_id",style="display:none;").widgets-names
+                each widget in allWidgets
+                    option(value=widget.id)=widget.name
+            select(name="p_id").pages-names
+                each page in pages
+                    if !page.redirect
+                        option(value=page.id)="[ "+page.name+" ]["+page.href+"]"
+            button.search-translation get
+        .translation-result
+        button.save Save
+        script(src="/cdn/static/js/jsoneditor-minimalist.min.js")
+        link(rel="stylesheet" type="text/css" href="/cdn/static/css/jsoneditor.min.css")
+block footer
+    include /widgets/footer

@@ -22,12 +22,42 @@ module.exports = {
     
     const apiConf = await Api.getConf();
     const api = new Api(apiConf);
-
     conf.api = api;
     
     let _pages = {};
     let _widgets = {};
     let langs = await conf.getLangs();
+    conf.langs = langs;
+    conf.authConf = await api.auth.getConf();
+    console.log(conf.authConf)
+    conf.auth = {};
+    switch (conf.authConf.current) {
+      case "BASIC":
+        conf.auth = {
+          sendEmail: true,
+          reg: {
+            login: true,
+            pass: true,
+            captcha: true
+          },
+          login: {
+            login: true,
+            pass: true
+          }
+        };
+        break;
+      case "HASH":
+        conf.auth = {
+          reg: {
+            pass: true,
+            captcha: true
+          },
+          login: {
+            hash: true
+          }
+        };
+        break;
+    }
 
     if (conf.mock.update && !updated) {
       
@@ -95,8 +125,9 @@ module.exports = {
             page.widgets = page
               .rf
               .dependencies
-              .map(item=>item
-                .split("/widgets/")[1]
+              .map(item=>{
+                return item.split("/widgets/")[1]
+              }
               )
               .filter(i=>!!i)
               .map(item=>item
@@ -151,16 +182,18 @@ module.exports = {
 
       return new Promise((res)=>{
         lineReader.on('line', (line) => {
-          compiled = compiled+"      "+line+"\n";
+          compiled += line+"\n";
         });
         lineReader.on('close', ()=>{
           function ra (obj,search,replace){
             return obj.split(search).join(replace);
           }
+          console.log(obj.path)
           const pageName = ra(obj.path,"/","--");
-          obj.pageName = pageName;
-          console.log(`div.page.page${pageName}`)
-          const result = `extends /system/layout.pug \nblock content\n  div.page.page${pageName}\n${compiled}\n`;
+
+          obj.pageName = pageName.substr(2);
+
+          const result = `extends /system/layout.pug\n${compiled}\n`;
           res(result);
         })
       });
