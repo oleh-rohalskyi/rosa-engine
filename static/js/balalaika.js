@@ -241,15 +241,4 @@ _.fn.parents = function(selector) {
 	return collection;
 };
 
-_.help = {
-	objToPostBody(params) {
-		const keys = Object.keys(params)
-		return keys.length
-			? keys
-				.map(key => encodeURIComponent(key)
-					+ "=" + encodeURIComponent(params[key]))
-				.join("&")
-			: ""
-	}
-}
 

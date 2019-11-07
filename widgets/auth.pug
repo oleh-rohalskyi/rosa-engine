@@ -1,35 +1,37 @@
-.widget-auth
+script.
+    const authConfig=JSON.parse(`!{auth}`);
+.widget-auth-.none
     form.auth-form
-        .auth-form__loader.auth-form__loader_js Loading...
+        .auth-form__loader(auth-loading) Loading...
         .auth-form__container
             label resend email
-                button.auth-form__btn.auth-form__btn-resend.auth-form__resend_r_js resend
+                button.auth-form__btn.auth-form__btn-resend(auth-resend-email) resend
         .auth-form__container
             .line
             label=tr.widgets.auth.form.email_label
-                input.auth-form__email_r_js.auth-form__input
+                //- input.auth-form__input(auth-reg-email type="email")
             label login
-                input.auth-form__login_r_js.auth-form__input
+                input.auth-form__input(auth-reg-login)
             label password
-                input.auth-form__pass_r_js.auth-form__input(type="password")
+                input.auth-form__input(type="password" auth-reg-pass)
             label repeat password
-                input.auth-form__repeat-pass_r_js.auth-form__input
+                input.auth-form__input(type="password" auth-reg-passconfirm)
             label captcha
-                .auth-form__captcha-img_r_js
-                input.auth-form__captcha_r_js.auth-form__captcha
+                div(auth-reg-captcha-img)
+                input.auth-form__captcha(auth-reg-captcha)
             label your hash
-                div.auth-form__hash_r_js.auth-form__hash
-            button.auth-form__btn.auth-form__reg_js registration
+                div.auth-form__hash(auth-reg-hash)
+            button.auth-form__btn(auth-reg-submit) registration
         .auth-form__container
             .line
             label email
-                input.auth-form__login_l_js.auth-form__input
+                input.auth-form__input(type="email" auth-sign-email)
             label login
-                input.auth-form__login_l_js.auth-form__input
+                input.auth-form__input(auth-sign-login)
             label your hash
-                input.auth-form__hash_l_js.auth-form__inpu
+                input.auth-form__input(auth-sign-hash)
             label password
-                input.auth-form__pass_l_js.auth-form__pass(type="password")
-            button.auth-form__btn.auth-form__reg_js.auth-form__button login
+                input.auth-form__pass(type="password" auth-sign-pass)
+            button.auth-form__btn.auth-form__button(auth-sign-submit) login
          
 

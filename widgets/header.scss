@@ -1,12 +1,38 @@
-.widget-header {
+.widget-header { 
+    height: 94px;
+    top: 0; 
+    left: 0;
+    right: 0;
+    z-index: 99;
+    position: fixed;
     display: flex;
     align-items: center;
-    justify-content: center;
-    flex-direction: column;
+    & ul {
+        font-weight: 400;
+        align-items: center;
+        width: calc(100vw - 138px);
+        display: flex; 
+        & li {
+            & a {
+                text-decoration: none;
+                font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+                color: white;
+                font-size: 17px;
+                line-height: 18px;
+            }
+            display: block;
+            margin-left: 40px;
+            &:first-child {
+                margin-left: 100px;
+            }
+        }
+    }
     & h1 {
         color: #41123D;
     }
     & img {
-        margin: 10px 0;
+        margin-left: 55px;
+        width: 138px;
+        height: 63px;
     }
 }

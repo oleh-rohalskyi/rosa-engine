@@ -1,10 +1,9 @@
 include mixins.pug
-block toplevel
 <!DOCTYPE html>
 html(lang=lang)
     head 
         meta(name="location" content=location)
-        meta(name="proccess" content=(dev?"dev":"prod"))
+        //- meta(name="proccess" content=(dev?"dev":"prod"))
         meta(name="time" content=time)
         meta(name="role" content=role)
         meta(name="auth", content=isAuth)
@@ -23,11 +22,22 @@ html(lang=lang)
         link(rel="stylesheet" type="text/css" href="/cdn/static/css/main.css")
     body(id="app" class=(dev?"dev":""))
         script(type="text/javascript" src="/cdn/static/js/start.js")
-        script.
-            const authConfig=JSON.parse(`!{auth}`);
         div.page(class="page__"+pageName)
             if(dev)
                 include ./dev-pannel
+                script.
+                    let pannel = document.querySelector(".rosa-dev-pannel")
+                    if (pannel) {
+                        rosa.dev = {};
+                        rosa.dev = {
+                            pannel
+                        }
+                        rosa.role = __.getMetaContent("role");
+                        rosa.dev.pannel.querySelector(".rosa-dev-pannel-role").innerText = rosa.role;
+                        rosa.dev.requestTime = __.getMetaContent("time") * 1;
+                        rosa.dev.startPageTime = Date.now() - rosa.dev.requestTime;
+                        rosa.dev.pannel.querySelector(".rosa-dev-pannel-start-time").innerText = rosa.dev.startPageTime/1000 + "s";
+                    }
             if(isAuth)
                 include /widgets/auth
             block header

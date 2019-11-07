@@ -1,5 +1,11 @@
 .widget-header
     +static("image","logo","100px")
-    h1 Rosa
-include nav.pug
-include modal.pug
+    ul
+        li
+            +getLink("home")(title="ГОЛОВНА")
+        li
+            +getLink("about")(title="ПРО НАС")
+        li
+            +getLink("about")(title="ПОСЛУГИ")
+        li
+            +getLink("about")(title="КОНТАКТИ")

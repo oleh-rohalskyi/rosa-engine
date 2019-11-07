@@ -1,7 +1,5 @@
 const conf = require("./conf");
-const parseError = require('parse-error');
 const pug = require('pug');
-const api = require("../api")
 
 const render = {
   
@@ -14,6 +12,7 @@ const render = {
     const lang = req.lang;
 
     const fp = (name) => {
+      console.log("fp",name,conf.pages)
       let ids = [];
       for (const key in conf.pages) {
         if (conf.pages.hasOwnProperty(key) && conf.pages[key].name === name) {
@@ -22,52 +21,40 @@ const render = {
       }
       return ids;
     }
-
+    console.log(fp(req.page.name));
     conf.api.translations.full.get(req.page.widgets,lang,fp(req.page.name)).then((result)=>{
-      
       let tr = {};
-      let wn = (id,table) => {
-        console.log(id,table)
-        if (table === "pages") {
-          for (const key in conf.pages) {
-            if (conf.pages.hasOwnProperty(key) && conf.pages[key].id === id) {
-              return conf.pages[key].name
+        
+        let wn = (id,table) => {
+          if (table === "pages") {
+            for (const key in conf.pages) {
+              if (conf.pages.hasOwnProperty(key) && conf.pages[key].id === id) {
+                return conf.pages[key].name
+              }
             }
+          } else if (conf[table]) {
+            return conf[table].filter((i)=>i.id === id*1)[0].name;
           }
-        } else if (conf[table]) {
-          return conf[table].filter((i)=>i.id === id*1)[0].name;
         }
-      }
 
-      try {
-        result.forEach(element => {
-          console.log(element,lang)
-          if (!tr[element.table_name])
-            tr[element.table_name] = {};
-          tr[element.table_name][wn(element.row_id,element.table_name)] = JSON.parse(element[lang]);
-        });
-
-      } catch (error) {
-
-      }
-      
+        try {
+          result.forEach(element => {
+            if (!tr[element.table_name])
+              tr[element.table_name] = {};
+            tr[element.table_name][wn(element.row_id,element.table_name)] = JSON.parse(element[lang]);
+          });
+          console.log("trrr",tr);
+        } catch (error) {
+          console.log(50,error)
+        }
+      tr.page = tr.pages[req.page.pageName];
+    
       let data = {
         lang,
         isAuth: conf.authConf.active,
         auth: JSON.stringify(conf.auth),
         pageName: req.page.pageName,
-        tr: tr.pages ? {
-          page: tr.pages[req.page.name],
-          widgets: tr.widgets
-        } : {
-          page: {
-            meta: "",
-            title: "",
-            discription: "",
-            robots: ""
-          },
-          widgets: tr.widgets
-        },
+        tr,
         role: req.role,
         widgetsScript: req.page.widgetsScript,
         widgets: req.page.widgets,
@@ -82,12 +69,11 @@ const render = {
         langs: conf.langs,
         langRouting: conf.langRouting
       };
-      
+        console.log("go",data);
       let html = "";
-      console.log(222)
+
       try {
         html = req.page.rf(data);
-        console.log(2223)
       } catch (e) {
         console.log(e);
         this.goError(500,response,req,e)
@@ -95,7 +81,9 @@ const render = {
       }
 
       response.end(html);
-    }).catch(e=>console.log);
+    }).catch(e=>{
+      console.log(e);
+    });
    
     
     

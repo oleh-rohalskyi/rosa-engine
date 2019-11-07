@@ -1,6 +1,66 @@
-.page--home .content h1 {
-    color: #175227;
-    margin-top: 10px;
-    text-align: center;
-    margin-bottom: 5px;
+.page__home {
+    & * {
+        font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+    }
+    .button {
+        font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+        padding: 8px 8px;
+        width: 120px;
+        text-align: left;
+        font-size: 20px;
+        color: white;
+        display: block;
+        border: 1px solid white;
+        background-color: transparent;
+    }
+    & .blocks {
+        & .block {
+            height: calc( 100vh - 94px );
+        }  
+    }
+    & .num-1 {
+        & .frame {
+            height: calc( 100% - 50px );
+            margin: 0 50px 50px 50px;
+            border: 1px solid #576067;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            & .slide {
+                color: white;
+                font-weight: 600;
+                font-size: 50px;
+                text-align: center;
+                margin-bottom: 10px;
+            }
+            
+        }
+    }
+    & .num-2 { 
+         background-color: #FBFBFB;
+         display: flex;
+         justify-content: center;
+         padding: 30px;
+         & .blogs-text {
+             margin: 20px;
+             &__title {
+                margin-bottom: 20px;
+                font-size: 30px;
+                color: #323031;
+                font-weight: 600;
+                line-height: 30px;
+             }
+             &__content {
+                font-size: 17px;
+                color: #323031;
+             }
+         }
+         & .blogs-image {
+             border: 2px solid #E1E1E4;
+             margin: 20px 60px 60px 20px;
+             width: 480px;
+             margin-left: auto;
+         }
+    }
 }

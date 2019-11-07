@@ -13,7 +13,7 @@
     position: static;
 }
 .content {
-    padding: 5px 10px;
+    margin-top: 94px;
 }
 
 html, body, .page { margin:0; }
@@ -23,6 +23,7 @@ body {
   flex-direction:column;
 }
 .page {
+  background: #161616;
   flex: 1;
 }
  

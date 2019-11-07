@@ -1,6 +1,5 @@
-.rosa-dev-pannel-error-messages
-    include ./error
-.rosa-dev-pannel
+.rosa-dev-pannel-error-messages(style="display:none;")
+.rosa-dev-pannel(style="display:none;")
     .rosa-dev-pannel-timing
         +static("image","server","22px")
         div.rosa-dev-pannel-start-time 
@@ -15,7 +14,6 @@
         .rosa-dev-pannel-settings-button
             +getLink("admin")
                 +static("image","settings","22px")
-    .move
 style.
     .rosa-dev-pannel img {
         margin: 0 5px 0 12px;

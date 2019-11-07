@@ -1,2 +1,2 @@
-current|scope|active|user_id_type
-BASIC|BASIC,HASH,SHORT_BASIC,FACE_BOOK|yes|email
+current|scope|active|user_id_type|social
+BASIC|BASIC,HASH|yes|email|false

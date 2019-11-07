@@ -71,7 +71,7 @@ module.exports = class DB {
                                 }
 
                                 res(result);
-                                con.destroy();
+                                //con.destroy();
                             }
 
                             conf.log("c","query",["b",query]);
@@ -81,7 +81,7 @@ module.exports = class DB {
                             else 
                                 con.query(query,callback);
                             
-                                // con.destroy();
+                                // //con.destroy();
                         })   
                     })
                 }

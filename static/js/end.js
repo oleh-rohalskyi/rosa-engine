@@ -1,19 +1,5 @@
-if (__.getMetaContent("proccess")==="dev") {
-    rosa.dev = {};
-    rosa.dev = {
-        pannel:  document.querySelector(".rosa-dev-pannel")
-    }
-    rosa.role = __.getMetaContent("role");
-    rosa.dev.pannel.querySelector(".rosa-dev-pannel-role").innerText = rosa.role;
-    rosa.dev.requestTime = __.getMetaContent("time") * 1;
-    rosa.dev.startPageTime = Date.now() - rosa.dev.requestTime;
-    rosa.dev.pannel.querySelector(".rosa-dev-pannel-start-time").innerText = rosa.dev.startPageTime/1000 + "s";
-} else {
-    rosa.dev = {log(){}}
-    console.log = ()=>{};
-}
-
 const isClass = fn => /^\s*class/.test(fn?fn.toString():"");
+
 let r = {};
 
 const np = (fun) => {
@@ -22,32 +8,6 @@ const np = (fun) => {
 
 const cl = console.log;
 
-rosa.dev.pushError = (data)=>{
-    if (data.error.message) {
-        document
-            .querySelector(".rosa-error-message-wrap-message")
-            .innerHTML = `<span>${data.error.type || ""}</span> <span>${data.error.message}</span>`;
-    }
-    if (data.error.errorLinkHtml) {
-        document
-            .querySelector(".rosa-error-message-wrap-file")
-            .innerHTML = data.error.errorLinkHtml;
-    }
-    if (data.error.errorLinkHtml) {
-        document
-            .querySelector(".rosa-error-message-wrap-file")
-            .innerHTML = data.error.errorLinkHtml;
-    }
-    let pre = __.ce("div","rosa-error-message-some-class");
-    if (data.error.stack) {
-        pre.remove();
-        pre = __.ce("pre","rosa-error-message-wrap-stack");
-        pre.innerText = data.error.stack;
-    }
-    let mw = document.querySelector(".rosa-error-message-wrap");
-    mw.appendChild(pre);
-    mw.classList.remove("disabled");
-}
 
 String.prototype.delLast = function() {
     return this.substring(0, this.length - 1);
@@ -220,7 +180,6 @@ async function app() {
 
 app()
 .then((widgets)=>{
-    
     rosa.widgets.w = {};
     rosa.widgets.uses = widgets;
     let error = null;
@@ -236,22 +195,13 @@ app()
                 const id = className+"_"+(i+1);
                 let controller = {};
                 node.setAttribute("id",id);
-                console.log(rosa.widgets.classes[uniqFr.toUpperCase()]);
                 let classEx = rosa.widgets.classes[uniqFr.toUpperCase()];
                 
                 if( isClass(classEx) ) {
 
                     const _node = _("#"+id);
-
-                    try {
-                        controller = new classEx(_node,{widgets});
-                        controller._node = _node;
-                        console.log(authConfig);
-                    } catch (e) {
-                        error = e;
-                        stop();
-                    }
-
+                    controller = new classEx(_node,{widgets});
+                    
                     const result = {
                         controller,
                         _node
@@ -267,11 +217,6 @@ app()
     if (error) return Promise.reject(error);
     return Promise.resolve({success: true});
     
-}).catch((error)=>{
-    console.log([error]);
-    if (rosa.dev)
-        rosa.dev.pushError({success:false,error});
-    return Promise.resolve();
 }).then(function(){
     
     if (rosa.dev) {

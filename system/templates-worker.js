@@ -29,19 +29,21 @@ module.exports = {
     let langs = await conf.getLangs();
     conf.langs = langs;
     conf.authConf = await api.auth.getConf();
-    console.log(conf.authConf)
+    let id_type_key = conf.authConf.id_type_key
     conf.auth = {};
+    console.log(123,conf.authConf);
     switch (conf.authConf.current) {
       case "BASIC":
         conf.auth = {
           sendEmail: true,
           reg: {
-            login: true,
+            [id_type_key]: true,
             pass: true,
+            passconfirm: true,
             captcha: true
           },
-          login: {
-            login: true,
+          sign: {
+            [id_type_key]: true,
             pass: true
           }
         };
@@ -50,9 +52,10 @@ module.exports = {
         conf.auth = {
           reg: {
             pass: true,
-            captcha: true
+            captcha: true,
+            hash: true
           },
-          login: {
+          sign: {
             hash: true
           }
         };

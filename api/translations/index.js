@@ -1,5 +1,6 @@
 const DB = require('../../system/db');
-
+const cashResult = require('../../mocks/translation.json');
+const fs = require('fs');
 module.exports = class Translations extends DB {
     constructor() {
         super();
@@ -31,8 +32,10 @@ module.exports = class Translations extends DB {
                             rej("not inserted");
                             return;
                         }
+
+                        
                         res({success:true,affectedRows:result.affectedRows});
-                        con.destroy();
+                        //con.destroy();
 
                     });
                 })
@@ -56,7 +59,7 @@ module.exports = class Translations extends DB {
                             }
                             
                             res({success:true,tr:result[0][req.params.lang]});
-                            con.destroy();
+                            //con.destroy();
 
                         });
                     });
@@ -78,7 +81,7 @@ module.exports = class Translations extends DB {
                             if(err) rej(err);
                             if(!result) rej(false);
                             res(result);
-                            con.destroy();
+                            //con.destroy();
                         });
                     });
                 });
@@ -89,7 +92,7 @@ module.exports = class Translations extends DB {
                 return new Promise(async(res,rej)=>{
                         const con = this.cc();
                         let ids = [];
-                       console.log(names,lang,pageIds);
+                        
                         this.conf.widgets.forEach(widget=>{
                             if (names.indexOf(widget.name)>=0) {
                                 ids.push(widget.id);
@@ -107,7 +110,7 @@ module.exports = class Translations extends DB {
                                     query+= this.escape(ids[index]) + ",";
                                 }
                                 query=query.substr(0,query.length-1) + ")";
-                            } 
+                            }
                             let mp = pageIds.length > 0;
                             let mpq = mp?" AND TrRe.row_id IN (":"";
                             query += `) or (TrRe.table_name="pages"${mpq}`;
@@ -118,14 +121,35 @@ module.exports = class Translations extends DB {
                                 query=query.substr(0,query.length-1) + ")";
                             }
                             query += `)`;
-                            
+                            console.log("Aaaa",this.conf,cashResult)
+                        if (cashResult[query] && !this.conf.mock.update) {
+                            res(cashResult[query]);
+                        }
                         con.connect((err) => {
+                            if (err && err.code === "ENOTFOUND" && err.fatal) {
+                                res(false);
+                            }
                             if(err) rej(err);
+                            console.log(query)
                             con.query( query, ( err, result ) => {
+                                if (err && err.code === 'PROTOCOL_ENQUEUE_AFTER_FATAL_ERROR' && !err.fatal) {
+                                    res(false);
+                                    return;
+                                }
                                 if(err) rej(err);
-                                if(!result) rej(false);
-                                res(result);
-                                con.destroy();
+                                if(!result) rej("hm...");
+                                if (!cashResult[query]&&!this.conf.mock.update) {
+                                    cashResult[query] = result;
+                                    fs.writeFile("./mocks/translation.json", JSON.stringify(cashResult), function(err) {
+                                        if (err) {
+                                          rej(err);
+                                        }
+                                        res(result);
+                                      })
+                                } else {
+                                    res(result);
+                                }
+                                //con.destroy();
                             });
                         });
         

@@ -27,7 +27,8 @@ module.exports = class Auth extends DB {
                     res({
                         current: output[0],
                         scope: output[1].split(","),
-                        active: output[2] === "yes"
+                        active: output[2] === "yes",
+                        id_type_key: output[3]
                     });
                   })
             })

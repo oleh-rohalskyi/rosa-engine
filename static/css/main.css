@@ -10,11 +10,59 @@ body, html, p, h1, h2, h3, h4, ul, li {
   height: 1px;
   background-color: darkgrey; }
 
-.page--home .content h1 {
-  color: #175227;
-  margin-top: 10px;
-  text-align: center;
-  margin-bottom: 5px; }
+.page__home * {
+  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif; }
+
+.page__home .button {
+  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+  padding: 8px 8px;
+  width: 120px;
+  text-align: left;
+  font-size: 20px;
+  color: white;
+  display: block;
+  border: 1px solid white;
+  background-color: transparent; }
+
+.page__home .blocks .block {
+  height: calc( 100vh - 94px); }
+
+.page__home .num-1 .frame {
+  height: calc( 100% - 50px);
+  margin: 0 50px 50px 50px;
+  border: 1px solid #576067;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center; }
+  .page__home .num-1 .frame .slide {
+    color: white;
+    font-weight: 600;
+    font-size: 50px;
+    text-align: center;
+    margin-bottom: 10px; }
+
+.page__home .num-2 {
+  background-color: #FBFBFB;
+  display: flex;
+  justify-content: center;
+  padding: 30px; }
+  .page__home .num-2 .blogs-text {
+    margin: 20px; }
+    .page__home .num-2 .blogs-text__title {
+      margin-bottom: 20px;
+      font-size: 30px;
+      color: #323031;
+      font-weight: 600;
+      line-height: 30px; }
+    .page__home .num-2 .blogs-text__content {
+      font-size: 17px;
+      color: #323031; }
+  .page__home .num-2 .blogs-image {
+    border: 2px solid #E1E1E4;
+    margin: 20px 60px 60px 20px;
+    width: 480px;
+    margin-left: auto; }
 
 .page__admin--translations button.save {
   width: 200px;
@@ -95,14 +143,36 @@ body, html, p, h1, h2, h3, h4, ul, li {
   line-height: 25px; }
 
 .widget-header {
+  height: 94px;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 99;
+  position: fixed;
   display: flex;
-  align-items: center;
-  justify-content: center;
-  flex-direction: column; }
+  align-items: center; }
+  .widget-header ul {
+    font-weight: 400;
+    align-items: center;
+    width: calc(100vw - 138px);
+    display: flex; }
+    .widget-header ul li {
+      display: block;
+      margin-left: 40px; }
+      .widget-header ul li a {
+        text-decoration: none;
+        font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+        color: white;
+        font-size: 17px;
+        line-height: 18px; }
+      .widget-header ul li:first-child {
+        margin-left: 100px; }
   .widget-header h1 {
     color: #41123D; }
   .widget-header img {
-    margin: 10px 0; }
+    margin-left: 55px;
+    width: 138px;
+    height: 63px; }
 
 .widget-footer {
   background-color: #ccc;
@@ -173,7 +243,7 @@ body, html, p, h1, h2, h3, h4, ul, li {
   position: static; }
 
 .content {
-  padding: 5px 10px; }
+  margin-top: 94px; }
 
 html, body, .page {
   margin: 0; }
@@ -184,4 +254,5 @@ body {
   flex-direction: column; }
 
 .page {
+  background: #161616;
   flex: 1; }
