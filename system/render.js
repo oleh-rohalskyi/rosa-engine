@@ -43,11 +43,11 @@ const render = {
               tr[element.table_name] = {};
             tr[element.table_name][wn(element.row_id,element.table_name)] = JSON.parse(element[lang]);
           });
-          console.log("trrr",tr);
         } catch (error) {
           console.log(50,error)
         }
-      tr.page = tr.pages[req.page.pageName];
+        
+      tr.page = tr.pages ? tr.pages[req.page.pageName] : {meta:{}};
     
       let data = {
         lang,

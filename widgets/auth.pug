@@ -1,6 +1,6 @@
 script.
     const authConfig=JSON.parse(`!{auth}`);
-.widget-auth-.none
+.widget-auth
     form.auth-form
         .auth-form__loader(auth-loading) Loading...
         .auth-form__container
@@ -9,16 +9,19 @@ script.
         .auth-form__container
             .line
             label=tr.widgets.auth.form.email_label
-                //- input.auth-form__input(auth-reg-email type="email")
+                input.auth-form__input(auth-reg-email type="email")
             label login
                 input.auth-form__input(auth-reg-login)
             label password
                 input.auth-form__input(type="password" auth-reg-pass)
             label repeat password
                 input.auth-form__input(type="password" auth-reg-passconfirm)
-            label captcha
-                div(auth-reg-captcha-img)
-                input.auth-form__captcha(auth-reg-captcha)
+            label(for="captcha-input").auth-form__captcha 
+                .auth-form__capthca-title
+                    span captcha
+                    div.auth-form__capthca-image(auth-reg-captcha-img)
+                    button.auth-form__btn(auth-reg-captcha-refresh) refresh
+                input#captcha-input(auth-reg-captcha)
             label your hash
                 div.auth-form__hash(auth-reg-hash)
             button.auth-form__btn(auth-reg-submit) registration

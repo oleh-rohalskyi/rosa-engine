@@ -2,21 +2,13 @@
 
 const http = require("http");
 const render = require("./system/render");
-const Session = require("./system/session")
 const getStaticText = require("./system/get-static-text");
 const url = require('url');
 const conf = require('./system/conf');
 
-let errCounter = -1;
 
-const session = new Session((err)=>{
-
-  conf.log("r","redis error: "+(++errCounter),["b",err.errno]);
-  
-});
-
-module.exports = function startServer(pages, widgets, api, langs) {
-  
+module.exports = function startServer(pages, api, langs, session) {
+  // console.log(session);
   let subTitlesConf = [];
   
   for (const key in conf) {
@@ -75,6 +67,7 @@ module.exports = function startServer(pages, widgets, api, langs) {
         }
       } else {
         path1level = pathname.split("/")[0];
+        console.log(123123,langs)
         req.lang = langs.scope.filter(str => req.params.lang === str)[0] || langs.common;
       }
       if (!req.lang) {
@@ -89,12 +82,13 @@ module.exports = function startServer(pages, widgets, api, langs) {
       
 
       if (path1level === "api") {
-
+        req.session = session;
         api.go(req)
           .then((data)=>{
             render.goApi(data,response)
           })
           .catch((e)=>{
+            console.log(e);
             render.goApiError(500,response, req,e)
           });
         
@@ -122,8 +116,9 @@ module.exports = function startServer(pages, widgets, api, langs) {
             conf.log("g","page '"+ page.name+"' founded",["b","redirect "+!!page.redirect]);
             req.page = page;
               //check what user role needed for a page or if it needed at all;
-              if (page.roles.indexOf("guest") >= 0 || (page.roles && page.roles.indexOf(req.role) >= 0) ) {
-                console.log(123)
+              if (!page.roles || !(page.roles && page.roles.length) ) {
+                render.go(response, req, startTime);
+              } else if (page.roles.indexOf("guest") >= 0 || (page.roles && page.roles.indexOf(req.role) >= 0) ) {
                 render.go(response, req, startTime);
               } else {
                 render.goError(503,response,req,"no access");

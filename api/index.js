@@ -41,7 +41,6 @@ class Api extends DB {
                         try {
                             const controller = this[c.type][c.controller][c.method];
                             let result = await controller(req,this);
-
                             res(result);
 
                         } catch (e) {

@@ -99,6 +99,26 @@ body, html, p, h1, h2, h3, h4, ul, li {
   text-align: center;
   margin-bottom: 5px; }
 
+.page.page__auth {
+  background-color: white; }
+
+.widget-auth .auth-form__capthca-image {
+  margin: 5px 0; }
+
+.widget-auth .auth-form__captcha {
+  display: flex;
+  height: 108px;
+  margin-bottom: 10px; }
+  .widget-auth .auth-form__captcha span {
+    width: 100%; }
+  .widget-auth .auth-form__captcha > input {
+    align-self: center;
+    margin-top: 6px; }
+  .widget-auth .auth-form__captcha .auth-form__btn {
+    width: 80px !important;
+    margin: 0 auto;
+    display: block; }
+
 .widget-auth .auth-form__container {
   margin: 5px auto;
   display: flex;

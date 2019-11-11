@@ -35,11 +35,12 @@ function throttle(func, ms) {
   return wrapper;
 }
 
+
 let server = null;
 function procces(files) {
     return new Promise((res,rej)=>{
-      templateWorker.start(files).then(({pages,widgets,api,langs})=>{
-        startServer(pages,widgets,api,langs).then((newServ)=>{
+      templateWorker.start(files).then(({pages,api,langs,session})=>{
+        startServer(pages,api,langs,session).then((newServ)=>{
           server = newServ;
           res();
         }).catch(e=>{rej(e)});

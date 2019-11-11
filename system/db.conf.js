@@ -1,6 +1,6 @@
 module.exports = {
-    host: "espera01.mysql.tools",
-    user: "espera01_db",
-    password: "7nUk3dj2U2PV",
-    database: "espera01_db"
+    host: "ha368730.mysql.tools",
+    user: "ha368730_db",
+    password: "AneGNz69",
+    database: "ha368730_db"
 };

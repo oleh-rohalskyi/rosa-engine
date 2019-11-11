@@ -4,6 +4,7 @@ const csvParse = require("csv-parse");
 const login = require("./login");
 const logout = require("./logout");
 const registration = require("./registration");
+const captcha = require("./captcha");
 const {readFile} = require("fs");
 
 module.exports = class Auth extends DB {
@@ -12,6 +13,7 @@ module.exports = class Auth extends DB {
         this.login = login;
         this.logout = logout;
         this.registration = registration;
+        this.captcha = captcha;
     }
     getConf() {
         return new Promise((res,rej)=>{

@@ -6,10 +6,11 @@ engine  |get    |/widgets |widgets      |guest
 auth    |post   |/signin  |login        |guest
 auth    |post   |/signup  |registration |guest
 auth    |post   |/signout |logout       |registered
+auth    |get    |/init    |captcha      |guest
 #Translations
-translations|get|/edit|edit|guest
-translations|get|/id|id|guest
-translations|post|/id|id|guest
+translations|get |/edit|edit|guest
+translations|get |/id  |id  |guest
+translations|post|/id  |id  |guest
 #User
 #Lists
 #Custom

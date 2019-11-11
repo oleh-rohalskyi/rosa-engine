@@ -1,5 +1,25 @@
 .widget-auth {
     & .auth-form {
+        &__capthca-image {
+            margin: 5px 0;
+        }
+        &__captcha {
+            display: flex;
+            height: 108px;
+            margin-bottom: 10px;
+            & span {
+                width: 100%;
+            }
+            &>input {
+                align-self: center;
+                margin-top: 6px;
+            }
+            & .auth-form__btn {
+                width: 80px !important;
+                margin: 0 auto;
+                display: block;
+            }
+        }
         &__container {
             margin: 5px auto;
             display: flex;

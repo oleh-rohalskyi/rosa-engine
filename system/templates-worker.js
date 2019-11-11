@@ -81,12 +81,19 @@ module.exports = {
     
     conf.widgets = _widgets;
     this.cashed = await this.check((this.cashed||_pages),files);
+    let session;
+    try {
+      session = await require("./session")();
+    } catch (err) {
+      session = {err: true, message:"can't connect"};
+    }
+    
 
     return {
       pages: this.cashed,
-      widgets: _widgets,
       api,
-      langs
+      langs,
+      session
     };
 
   },
