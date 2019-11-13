@@ -4,11 +4,13 @@ class {
         return new Promise(res=>{
             __.api.get("auth/init",{refresh:refresh||"",id:this.captchaId||0}).then(result=>{
                 if (result.success) {
+                    console.log(result)
                     this.captchaId = result.data.id;
+                    this.user_id_type = result.data.user_id_type;
                     res(result.data);
                 }
             })
-        })
+        })  
     }
     constructor(el,data) {
         
@@ -33,6 +35,7 @@ class {
         let pr = "reg";
         let img = el.find("[auth-reg-captcha-img]");
         this.getCaptcha().then((result)=>{
+            console.log(result)
             img.html = result.image;
             el.find("[auth-reg-captcha-refresh]").on("click",()=>{
                 this.getCaptcha(true).then(result=>{
@@ -79,9 +82,11 @@ class {
 
     }
     onSubmit(pr,e) {
-        console.log(pr,e)
         e.preventDefault();
-        console.log(pr,this.data[pr])
+        let req = this.data[pr];
+        let errors = rosa.validation.auth.registration(pr,this.user_id_type);
+        req.captcha_id = this.captchaId;
+        __.api.post("auth/signup",req);
     }
     prepareInputs(pr,i,key) {
         let node = _("[auth-"+pr+"-"+key+"]");

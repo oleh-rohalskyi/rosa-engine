@@ -36,6 +36,7 @@ module.exports = {
       case "BASIC":
         conf.auth = {
           sendEmail: true,
+          id_type_key: id_type_key,
           reg: {
             [id_type_key]: true,
             pass: true,
@@ -50,6 +51,7 @@ module.exports = {
         break;
       case "HASH":
         conf.auth = {
+          id_type_key: id_type_key,
           reg: {
             pass: true,
             captcha: true,

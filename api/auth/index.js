@@ -13,6 +13,7 @@ module.exports = class Auth extends DB {
         this.login = login;
         this.logout = logout;
         this.registration = registration;
+        this.registration.post.apply(null,this);
         this.captcha = captcha;
     }
     getConf() {

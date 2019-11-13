@@ -1,5 +1,6 @@
 module.exports = {
-    async post(success,error,params) {
+    async post(req) {
+        console.log(req.params)
         let result = {
             success: false,
             data: {}

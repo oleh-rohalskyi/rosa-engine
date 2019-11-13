@@ -83,6 +83,7 @@ module.exports = function startServer(pages, api, langs, session) {
 
       if (path1level === "api") {
         req.session = session;
+        req.config = conf;
         api.go(req)
           .then((data)=>{
             render.goApi(data,response)

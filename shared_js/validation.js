@@ -2,25 +2,20 @@
     
     const init = () => {
 
-        rosa.shared.validation = {
-            forEach(cb) {
-                const self = this;
-                for (const key in self) {
-                    if (self.hasOwnProperty(key) && key !== "forEach") {
-                        const element = self[key];
-                        cb(element);
+        rosa.validation = {
+            auth: {
+                registration: (pr,uuidType) => {
+                    let errors = [];
+                    switch (true) {
+                        case !pr["pass"]:   errors.push("EMPTY__PASS")
+                        case !pr[uuidType]: errors.push("EMPTY__"+uuidType.toUpperCase())
+                        case pr["pass"]!==pr["passconfirm"]: errors.push("DIFF__PASS")
+                        case !pr["captcha"]: errors.push("EMPTY__CAPTCHA")
+                        return errors.length?errors:null;
                     }
                 }
-            },
-            ["is-empty"](value) {
-                return value.replace(/\s/g,'') === "";
-            },
-            ["less-then-6"](value) {
-                return value.length < 6;
-            },
-            ["less-then-4"](value) {
-                return value.length < 4;
             }
+            
         }
         
     }
@@ -28,7 +23,7 @@
     if(module) {
         rosa = {shared:{}};
         init();
-        module.exports = rosa.shared.validation;
+        module.exports = rosa.validation;
     } else {
         init();
     }
