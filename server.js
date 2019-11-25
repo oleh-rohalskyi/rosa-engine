@@ -6,7 +6,6 @@ const getStaticText = require("./system/get-static-text");
 const url = require('url');
 const conf = require('./system/conf');
 
-
 module.exports = function startServer(pages, api, langs, session) {
   // console.log(session);
   let subTitlesConf = [];

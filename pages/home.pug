@@ -3,16 +3,154 @@ block header
 block content
     .content
         .blocks
-            .block.num-1
+            .block.section.num-1(data-anchor=opPage("page"))
                 .frame
-                    .slide ЗБУДУЙ СВОЮ МРIЮ
-                    button.button про нас
+                    .sliden=tr.page.discript.build_dream
+                    a(href="#page-2").button=tr.page.discript.about
                 .numbers
-            .block.num-2
+            .block.section.num-2(data-anchor=opPage("page"))
                 .blogs-text
                     .blogs-text__title
-                        | ВIТАЄМО В 
-                        span ОРЛАН
-                    .blogs-text__content Ми Iнноваційна...
+                        a=tr.page.discript.welcome_in+" "
+                        span=tr.page.discript.company
+                    .blogs-text__content=tr.page.step_1.who_we_are_discript
                 .blogs-image
                     +static("image","example")
+            .block.section.num-2-1(data-anchor="page 2.1")
+            .block.section.num-3(data-anchor=opPage("page"))
+                .photo-title=tr.page.step_1.who_we_are_discript_2
+                .photo-blocks
+                    .right
+                        .element
+                            .discript 
+                                .discript__head=tr.page.step_3.general
+                                a.discript__sub(href="#page-9")=tr.page.step_3.more
+                            .shadow
+                        .element
+                            .discript 
+                                .discript__head=tr.page.step_3.reincarnation
+                                a.discript__sub(href="#page-10")=tr.page.step_3.more
+                            .shadow
+                    .right
+                        .element
+                            .discript 
+                                .discript__head=tr.page.step_3.reconstruction
+                                a.discript__sub(href="#page-6")=tr.page.step_3.more
+                            .shadow
+                        .element
+                            .discript 
+                                .discript__head=tr.page.step_3.replanning
+                                a.discript__sub(href="#page-13")=tr.page.step_3.more
+                            .shadow
+                    .left
+                        .element
+                            .discript 
+                                .discript__head=tr.page.step_3.terra
+                                a.discript__sub(href="#page-14")=tr.page.step_3.more
+                            .shadow
+                        .element
+                            .discript 
+                                .discript__head=tr.page.step_3.multifloors
+                                a.discript__sub(href="#page-9")=tr.page.step_3.more
+                            .shadow
+            .block.section.num-4(data-anchor=opPage("page"))
+                .blur
+                .text
+                    div=tr.page.step_4.think 
+                    div=tr.page.step_4.alternative 
+                    div=tr.page.step_4.observe 
+                    div=tr.page.step_4.proecting 
+            .block.section.num-5(data-anchor=opPage("page"))
+                .grid-container
+                    .grid-item
+                        .discript 
+                            .discript__head 
+                                +static("image","building")
+                            a.discript__sub(href="#page-8")=tr.page.step_5.building 
+                        .shadow
+                    .grid-item
+                        .discript 
+                            .discript__head
+                                +static("image","contract")
+                            a.discript__sub(href="#page-9")=tr.page.step_5.contract 
+                        .shadow
+                    .grid-item
+                        .discript 
+                            .discript__head
+                                +static("image","medicine")
+                            a.discript__sub(href="#page-10")=tr.page.step_5.medicine 
+                        .shadow
+                    .grid-item
+                        .discript 
+                            .discript__head 
+                                +static("image","drill")
+                            a.discript__sub(href="#page-6")=tr.page.step_5.drill
+                        .shadow
+                    .grid-item
+                        .discript 
+                            .discript__head 
+                                +static("image","creativity")
+                            a.discript__sub(href="#page-11")=tr.page.step_5.creativity
+                        .shadow
+                    .grid-item
+                        .discript 
+                            .discript__head
+                                +static("image","sketch")
+                            a.discript__sub(href="#page-12")=tr.page.step_5.sketch 
+                        .shadow
+                    .grid-item
+                        .discript 
+                            .discript__head
+                                +static("image","redesign")
+                            a.discript__sub(href="#page-13")=tr.page.step_5.redesign
+
+                        .shadow
+                    .grid-item
+                        .discript 
+                            .discript__head
+                                +static("image","terrain")
+                            a.discript__sub(href="#page-14")=tr.page.step_5.terrain
+                        .shadow
+            .block.section.article-block.contract(data-anchor=opPage("page"))
+                .article-block__head=tr.page.step_5.drill
+                .article-block__slidenr
+                    .article-block__slidenr-item.slide
+                        .article-block__slidenr-item-head.rolldown-list=tr.page.repair.floor
+                        ul.article-block__slidenr-item-discript.rolldown-list!=tr.page.repair.floar_list
+                    .article-block__slidenr-item.slide
+                        .article-block__slidenr-item-head.rolldown-list=tr.page.repair.gaps
+                        ul.article-block__slidenr-item-discript.rolldown-list!=tr.page.repair.gaps_list
+                    .article-block__slidenr-item.slide
+                        .article-block__slidenr-item-head.rolldown-list=tr.page.repair.roof
+                        ul.article-block__slidenr-item-discript.rolldown-list!=tr.page.repair.roof_list
+            .block.section.article-block(data-anchor=opPage("page"))
+                .article-block__slidenr.creation
+                    .article-block__slidenr-item.slide
+                        .list-slidenr__item-head=tr.page.additional.creation
+                        ul.list-slidenr__item-list.rolldown-list!=tr.page.additional.creation_list
+                    .article-block__slidenr-item.slide
+                        .list-slidenr__item-head=tr.page.additional.individual
+                        ul.list-slidenr__item-list.rolldown-list!=tr.page.additional.ind_list
+            .block.section.article-block(data-anchor=opPage("page"))
+                .article-block__head=tr.page.step_5.building
+                ul.article-block__discript.rolldown-list!=tr.page.building.list
+            .block.section.article-block(data-anchor=opPage("page"))
+                .article-block__head=tr.page.step_5.contract
+                ul.article-block__discript.rolldown-list!=tr.page.building.contract
+            .block.section.article-block(data-anchor=opPage("page"))
+                .article-block__head=tr.page.step_5.medicine
+                ul.article-block__discript.rolldown-list!=tr.page.building.medicine
+            .block.section.article-block(data-anchor=opPage("page"))
+                .article-block__head=tr.page.step_5.creativity
+                .article-block__discript need discript
+            .block.section.article-block(data-anchor=opPage("page"))
+                .article-block__head=tr.page.step_5.sketch
+                .article-block__discript need discript
+            .block.section.article-block(data-anchor=opPage("page"))
+                .article-block__head=tr.page.step_5.redesign
+                ul.article-block__discript.rolldown-list!=tr.page.redesign.list
+            .block.section.article-block(data-anchor=opPage("page"))
+                .article-block__head=tr.page.step_5.terrain
+                ul.article-block__discript.rolldown-list!=tr.page.terrain.list
+            .block.section.num-2-1(data-anchor="page 15")
+    script(type="text/javascript" src="/cdn/static/js/op.min.js")

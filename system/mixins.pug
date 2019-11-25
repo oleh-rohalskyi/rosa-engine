@@ -1,8 +1,12 @@
 - var langToLink = ( route ) => langRouting === "pre_path" ? "/"+lang+route : route+"?lnag="+lang;
-
+- var opPageNum = 1;
 mixin static(type,path,width)
     if (type == "image")
         img(src="/cdn/static/images/"+path+".png" width=(width||"100%") )
 mixin getLink(pageName)
     a(class=((attributes.class || "") + (name === pageName?" active":"") ) href=langToLink(pages[pageName].href))= attributes.title
         block
+-function opPage(name) {
+-    return name + " " + (opPageNum++);
+-}
+    

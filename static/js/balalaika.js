@@ -166,6 +166,13 @@ _.fn.addClass = function( className ) {
 	});
 	return this;
 };
+_.fn.removeClass = function( className ) {
+	this.forEach( function( item ) {
+		var classList = item.classList;
+		classList.remove.apply( classList, className.split( /\s/ ) );
+	});
+	return this;
+};
 
 _.fn.add = function( node ) {
 	this[0].append(node);

@@ -1,11 +1,12 @@
 .widget-header
-    +static("image","logo","100px")
+    a(href="#page-1")
+        +static("image","logo","100px")
     ul
         li
-            +getLink("home")(title="ГОЛОВНА")
+            a(href="#page-1") ГОЛОВНА
         li
-            +getLink("about")(title="ПРО НАС")
+            a(href="#page-2") ПРО НАС
         li
-            +getLink("about")(title="ПОСЛУГИ")
+            a(href="#page-3") ПОСЛУГИ
         li
-            +getLink("about")(title="КОНТАКТИ")
+            a(href="#page-15") КОНТАКТИ

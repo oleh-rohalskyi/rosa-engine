@@ -10,7 +10,7 @@ module.exports = function () {
         const get = promisify(c.hget).bind(c);
         c.rosa = {};
         c.on("error", function (err) {
-            rej("Error " + err);
+            console.log("Error " + err);
         });
         c.setCaptcha = (id,number) => {
             return new Promise(res=>{

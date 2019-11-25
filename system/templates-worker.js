@@ -159,7 +159,8 @@ module.exports = {
           }
 
           const j = JSON.parse;
-
+          console.log();
+          console.log(page.roles);
           page.roles = j(page.roles);
 
           output[page.path] = page;

@@ -16,8 +16,6 @@ module.exports = {
             // return {success: false, error: "WRONG__CAPTCHA"};
         }
 
-
-
         const con = help.cc();
 
         let user = {
@@ -28,11 +26,12 @@ module.exports = {
         let query = `INSERT INTO users (${itk}) SELECT ${help.escape(itkValue || "")} `;
         query += `WHERE NOT EXISTS ( SELECT ${itk} FROM users WHERE ${itk}=${help.escape(itkValue || "")} ) LIMIT 1 `;
         let error = null;
+
         let pr = () => {
             return new Promise(res => {
 
-
                 con.query(query, (err, result) => {
+
                     console.log(err, result)
                     if (err) {
                         res({ success: false, error: err.message, data: null, code: err.code });
@@ -42,9 +41,8 @@ module.exports = {
 
                     if (result.affectedRows)
                         res({ success: true });
-                    else res({ success: false, "error": "EXIST__USER" })
-                    //con.destroy();
-
+                    else res({ success: false, "error": "EXIST__USER" });
+            
                 });
             })
         }
