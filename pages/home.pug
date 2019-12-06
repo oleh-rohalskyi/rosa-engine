@@ -4,21 +4,47 @@ block content
     .content
         .blocks
             .block.section.num-1(data-anchor=opPage("page"))
-                .frame
-                    .sliden=tr.page.discript.build_dream
-                    a(href="#page-2").button=tr.page.discript.about
-                .numbers
+                .frame.paralax
+                    .paralax__item(data-depth="0.1" data-calibrate-x="0.1" data-calibrate-y="0")
+                        div.paralax__item_1
+                            +static("image","third_plan")
+                    .paralax__item(data-depth="0.2")
+                        div.paralax__item_2
+                            +static("image","second_plan")
+                    .paralax__item(data-depth="0.25").first=tr.page.discript.build_dream
+                        a(href="#page-2").button=tr.page.discript.about
+                    .paralax__item(data-depth="0.3")
+                        div.paralax__item_3
+                            +static("image","first_plan")
+                            +static("image","first_plan")
             .block.section.num-2(data-anchor=opPage("page"))
                 .blogs-text
                     .blogs-text__title
-                        a=tr.page.discript.welcome_in+" "
-                        span=tr.page.discript.company
+                        h1=tr.page.discript.welcome_in+" "
+                            span=tr.page.discript.company
                     .blogs-text__content=tr.page.step_1.who_we_are_discript
+                    .blogs-text__content=tr.page.step_1.who_we_are_discript_2
                 .blogs-image
-                    +static("image","example")
+                    +staticOld("image","main")
             .block.section.num-2-1(data-anchor="page 2.1")
+                h1 Ремонтні внутрішні та зовнішні роботи
+                div.new-wrap
+                    .new-wrap__item
+                        .new-wrap__title підлога
+                        .new-wrap__img
+                            +static("image","r1")
+                        .new-wrap__discript Lorem ipsum dolor sit amet consectetur adipisicing elit. Modi nihil impedit nobis facere odit.
+                    .new-wrap__item
+                        .new-wrap__title стіни перегородки прорізи
+                        .new-wrap__img
+                            +static("image","r2")
+                        .new-wrap__discript  Lorem ipsum dolor sit amet consectetur adipisicing elit. Modi nihil impedit nobis facere odit.
+                    .new-wrap__item
+                        .new-wrap__title стеля
+                        .new-wrap__img
+                            +static("image","r3")
+                        .new-wrap__discript  Lorem ipsum dolor sit amet consectetur adipisicing elit. Modi nihil impedit nobis facere odit.
             .block.section.num-3(data-anchor=opPage("page"))
-                .photo-title=tr.page.step_1.who_we_are_discript_2
                 .photo-blocks
                     .right
                         .element
@@ -111,26 +137,33 @@ block content
                                 +static("image","terrain")
                             a.discript__sub(href="#page-14")=tr.page.step_5.terrain
                         .shadow
-            .block.section.article-block.contract(data-anchor=opPage("page"))
+            .block.section.contract(data-anchor=opPage("page"))
                 .article-block__head=tr.page.step_5.drill
-                .article-block__slidenr
-                    .article-block__slidenr-item.slide
-                        .article-block__slidenr-item-head.rolldown-list=tr.page.repair.floor
-                        ul.article-block__slidenr-item-discript.rolldown-list!=tr.page.repair.floar_list
-                    .article-block__slidenr-item.slide
-                        .article-block__slidenr-item-head.rolldown-list=tr.page.repair.gaps
-                        ul.article-block__slidenr-item-discript.rolldown-list!=tr.page.repair.gaps_list
-                    .article-block__slidenr-item.slide
-                        .article-block__slidenr-item-head.rolldown-list=tr.page.repair.roof
-                        ul.article-block__slidenr-item-discript.rolldown-list!=tr.page.repair.roof_list
-            .block.section.article-block(data-anchor=opPage("page"))
-                .article-block__slidenr.creation
-                    .article-block__slidenr-item.slide
-                        .list-slidenr__item-head=tr.page.additional.creation
-                        ul.list-slidenr__item-list.rolldown-list!=tr.page.additional.creation_list
-                    .article-block__slidenr-item.slide
-                        .list-slidenr__item-head=tr.page.additional.individual
-                        ul.list-slidenr__item-list.rolldown-list!=tr.page.additional.ind_list
+                .creation.slider_js
+                    button.btn.btn-blow
+                        span Далі
+                    .track
+                        .article-block-item
+                            .article-block-item-head=tr.page.repair.floor
+                            .article-block-item-discript.rolldown-list!=tr.page.repair.floar_list
+                        .article-block-item
+                            .article-block-item-head=tr.page.repair.gaps
+                            .article-block-item-discript.rolldown-list!=tr.page.repair.gaps_list
+                        .article-block-item
+                            .article-block-item-head=tr.page.repair.roof
+                            .article-block-item-discript.rolldown-list!=tr.page.repair.roof_list
+            .block.section.contract(data-anchor=opPage("page"))
+                .article-block__head=tr.page.step_5.drill
+                .creation.slider_js_2
+                    button.btn.btn-blow
+                        span Далі
+                    .track
+                        .article-block-item
+                            .article-block-item-head=tr.page.additional.creation
+                            .article-block-item-discript.rolldown-list!=tr.page.additional.creation_list
+                        .article-block-item
+                            .article-block-item-head=tr.page.additional.individual
+                            .article-block-item-discript.rolldown-list!=tr.page.additional.ind_list
             .block.section.article-block(data-anchor=opPage("page"))
                 .article-block__head=tr.page.step_5.building
                 ul.article-block__discript.rolldown-list!=tr.page.building.list
@@ -153,4 +186,34 @@ block content
                 .article-block__head=tr.page.step_5.terrain
                 ul.article-block__discript.rolldown-list!=tr.page.terrain.list
             .block.section.num-2-1(data-anchor="page 15")
+                #mapContainer(style="width: 100%; height: 25%")
+                link(href='https://fonts.googleapis.com/css?family=Lato' rel='stylesheet' type='text/css')
+                form#contact-form
+                    p Привіт,
+                    p
+                        label(for='your-name') Я
+                        input#your-name(type='text' name='your-name' minlength='3' placeholder="(ваше ім'я тут)" required='')
+                        | і
+                    p
+                        | моя 
+                        label(for='email') електронна адреса
+                        input#email(type='email' name='your-email' placeholder='електронна адреса тут' required='')
+                    p
+                        | Я маю 
+                        label(for='your-message') повідомлення 
+                        |  для вас,
+                    p
+                        textarea#your-message.expanding(name='your-message' placeholder='(ваше повідомлення)' required='')
+                    p
+                        button(type='submit')
+                        svg.send-icn(version='1.1' xmlns='http://www.w3.org/2000/svg' xmlns:xlink='http://www.w3.org/1999/xlink' x='0px' y='0px' width='100px' height='36px' viewbox='0 0 100 36' enable-background='new 0 0 100 36' xml:space='preserve')
+                            path(d='M100,0L100,0 M23.8,7.1L100,0L40.9,36l-4.7-7.5L22,34.8l-4-11L0,30.5L16.4,8.7l5.4,15L23,7L23.8,7.1z M16.8,20.4l-1.5-4.3\
+                            l-5.1,6.7L16.8,20.4z M34.4,25.4l-8.1-13.1L25,29.6L34.4,25.4z M35.2,13.2l8.1,13.1L70,9.9L35.2,13.2z')
+                        small send
+
     script(type="text/javascript" src="/cdn/static/js/op.min.js")
+    script(type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/parallax/3.1.0/parallax.min.js")
+    script(type="text/javascript" src="https://js.api.here.com/v3/3.1/mapsjs-core.js")
+    script(type="text/javascript" src="https://js.api.here.com/v3/3.1/mapsjs-service.js")
+ 
+    

@@ -201,7 +201,7 @@ app()
 
                     const _node = _("#"+id);
                     controller = new classEx(_node,{widgets});
-                    
+                    controller.node = _node;
                     const result = {
                         controller,
                         _node
@@ -223,8 +223,8 @@ app()
         rosa.dev.pannel.querySelector(".rosa-dev-pannel-page-time").innerText =( (Date.now() - rosa.dev.requestTime) - rosa.dev.startPageTime )/1000 + "s";
         rosa.dev.pannel.querySelector(".rosa-dev-pannel-end-time").innerText = (Date.now() - rosa.dev.requestTime)/1000 + "s";
     }
+
     window.r = rosa;
-    console.log(rosa);
 
 })
 
