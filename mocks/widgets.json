@@ -1,1 +1,1 @@
-[{"id":1,"name":"header","data":"null"},{"id":2,"name":"footer","data":"null"},{"id":4,"name":"auth","data":"null"},{"id":5,"name":"admin-nav","data":"null"}]
+[{"id":1,"name":"header","data":"null","js_deps":"","path":"/header"},{"id":2,"name":"footer","data":"null","js_deps":"","path":"/footer"},{"id":4,"name":"auth","data":"null","js_deps":"","path":"/auth"},{"id":5,"name":"admin-nav","data":"null","js_deps":"","path":"/admin/admin-nav"}]

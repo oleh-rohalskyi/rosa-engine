@@ -1,9 +1,9 @@
 module.exports = {
-  async get(params, db) {
+  get: async (req, worker) => {
     try {
-      return await db.q.get.getByColumn("pages");
+      return await worker.getByColumn("pages");
     } catch (error) {
-      
+      return error;
     }
   }
 }

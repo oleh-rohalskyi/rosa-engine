@@ -1,0 +1,6 @@
+{
+    "scope": ["ru","en"],
+    "common": "ru",
+    "route_types": ["pre_path","params"],
+    "route_type": "pre_path"
+}

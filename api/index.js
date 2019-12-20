@@ -1,4 +1,4 @@
-const DB = require('../system/db');
+const DB = require('../src/back-end/db');
 
 const querystring = require('querystring');
 const csvParse = require("csv-parse");
@@ -11,15 +11,15 @@ const User = require("./user");
 
 class Api extends DB {
 
-    constructor(routes) {
+    constructor(offline) {
 
         super();
-        
-        this.routes = routes;
-        this.engine = new Engine();
-        this.auth = new Auth();
-        this.translations = new Translations();
-        this.user = new User();
+        this._offline = offline;
+        // this.routes = routes;
+        this.engine = Engine;
+        this.auth = Auth;
+        this.translations = Translations;
+        this.user = User;
 
     }
 

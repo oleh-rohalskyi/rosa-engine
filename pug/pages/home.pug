@@ -1,0 +1,214 @@
+block header
+    include /widgets/header
+block content
+    .content
+        .blocks
+            .block.section.num-1(data-anchor=opPage("page"))
+                .frame.paralax
+                    .paralax__item(data-depth="0.1" data-calibrate-x="0.1" data-calibrate-y="0")
+                        div.paralax__item_1
+                            +static("image","third_plan")
+                    .paralax__item(data-depth="0.2")
+                        div.paralax__item_2
+                            +static("image","second_plan")
+                    .paralax__item(data-depth="0.25").first=tr.page.discript.build_dream
+                        a(href="#page-2").button=tr.page.discript.about
+                    .paralax__item(data-depth="0.3")
+                        div.paralax__item_3
+                            +static("image","first_plan")
+                            +static("image","first_plan")
+            .block.section.num-2(data-anchor=opPage("page"))
+                .blogs-text
+                    .blogs-text__title
+                        h1=tr.page.discript.welcome_in+" "
+                            span=tr.page.discript.company
+                    .blogs-text__content=tr.page.step_1.who_we_are_discript
+                    .blogs-text__content=tr.page.step_1.who_we_are_discript_2
+                .blogs-image
+                    +staticOld("image","main")
+            .block.section.num-2-1(data-anchor="page 2.1")
+                h1 Ремонтні внутрішні та зовнішні роботи
+                div.new-wrap
+                    .new-wrap__item
+                        .new-wrap__title підлога
+                        .new-wrap__img
+                            +static("image","r1")
+                        .new-wrap__discript Lorem ipsum dolor sit amet consectetur adipisicing elit. Modi nihil impedit nobis facere odit.
+                    .new-wrap__item
+                        .new-wrap__title стіни перегородки прорізи
+                        .new-wrap__img
+                            +static("image","r2")
+                        .new-wrap__discript  Lorem ipsum dolor sit amet consectetur adipisicing elit. Modi nihil impedit nobis facere odit.
+                    .new-wrap__item
+                        .new-wrap__title стеля
+                        .new-wrap__img
+                            +static("image","r3")
+                        .new-wrap__discript  Lorem ipsum dolor sit amet consectetur adipisicing elit. Modi nihil impedit nobis facere odit.
+            .block.section.num-3(data-anchor=opPage("page"))
+                .photo-blocks
+                    .right
+                        .element
+                            .discript 
+                                .discript__head=tr.page.step_3.general
+                                a.discript__sub(href="#page-9")=tr.page.step_3.more
+                            .shadow
+                        .element
+                            .discript 
+                                .discript__head=tr.page.step_3.reincarnation
+                                a.discript__sub(href="#page-10")=tr.page.step_3.more
+                            .shadow
+                    .right
+                        .element
+                            .discript 
+                                .discript__head=tr.page.step_3.reconstruction
+                                a.discript__sub(href="#page-6")=tr.page.step_3.more
+                            .shadow
+                        .element
+                            .discript 
+                                .discript__head=tr.page.step_3.replanning
+                                a.discript__sub(href="#page-13")=tr.page.step_3.more
+                            .shadow
+                    .left
+                        .element
+                            .discript 
+                                .discript__head=tr.page.step_3.terra
+                                a.discript__sub(href="#page-14")=tr.page.step_3.more
+                            .shadow
+                        .element
+                            .discript 
+                                .discript__head=tr.page.step_3.multifloors
+                                a.discript__sub(href="#page-9")=tr.page.step_3.more
+                            .shadow
+            .block.section.num-4(data-anchor=opPage("page"))
+                .blur
+                .text
+                    div=tr.page.step_4.think 
+                    div=tr.page.step_4.alternative 
+                    div=tr.page.step_4.observe 
+                    div=tr.page.step_4.proecting 
+            .block.section.num-5(data-anchor=opPage("page"))
+                .grid-container
+                    .grid-item
+                        .discript 
+                            .discript__head 
+                                +static("image","building")
+                            a.discript__sub(href="#page-8")=tr.page.step_5.building 
+                        .shadow
+                    .grid-item
+                        .discript 
+                            .discript__head
+                                +static("image","contract")
+                            a.discript__sub(href="#page-9")=tr.page.step_5.contract 
+                        .shadow
+                    .grid-item
+                        .discript 
+                            .discript__head
+                                +static("image","medicine")
+                            a.discript__sub(href="#page-10")=tr.page.step_5.medicine 
+                        .shadow
+                    .grid-item
+                        .discript 
+                            .discript__head 
+                                +static("image","drill")
+                            a.discript__sub(href="#page-6")=tr.page.step_5.drill
+                        .shadow
+                    .grid-item
+                        .discript 
+                            .discript__head 
+                                +static("image","creativity")
+                            a.discript__sub(href="#page-11")=tr.page.step_5.creativity
+                        .shadow
+                    .grid-item
+                        .discript 
+                            .discript__head
+                                +static("image","sketch")
+                            a.discript__sub(href="#page-12")=tr.page.step_5.sketch 
+                        .shadow
+                    .grid-item
+                        .discript 
+                            .discript__head
+                                +static("image","redesign")
+                            a.discript__sub(href="#page-13")=tr.page.step_5.redesign
+
+                        .shadow
+                    .grid-item
+                        .discript 
+                            .discript__head
+                                +static("image","terrain")
+                            a.discript__sub(href="#page-14")=tr.page.step_5.terrain
+                        .shadow
+            .block.section.contract(data-anchor=opPage("page"))
+                .article-block__head=tr.page.step_5.drill
+                .creation.slider_js
+                    button.btn.btn-blow
+                        span Далі
+                    .track
+                        .article-block-item
+                            .article-block-item-head=tr.page.repair.floor
+                            .article-block-item-discript.rolldown-list!=tr.page.repair.floar_list
+                        .article-block-item
+                            .article-block-item-head=tr.page.repair.gaps
+                            .article-block-item-discript.rolldown-list!=tr.page.repair.gaps_list
+                        .article-block-item
+                            .article-block-item-head=tr.page.repair.roof
+                            .article-block-item-discript.rolldown-list!=tr.page.repair.roof_list
+            .block.section.contract(data-anchor=opPage("page"))
+                .article-block__head=tr.page.step_5.drill
+                .creation.slider_js_2
+                    button.btn.btn-blow
+                        span Далі
+                    .track
+                        .article-block-item
+                            .article-block-item-head=tr.page.additional.creation
+                            .article-block-item-discript.rolldown-list!=tr.page.additional.creation_list
+                        .article-block-item
+                            .article-block-item-head=tr.page.additional.individual
+                            .article-block-item-discript.rolldown-list!=tr.page.additional.ind_list
+            .block.section.article-block(data-anchor=opPage("page"))
+                .article-block__head=tr.page.step_5.building
+                ul.article-block__discript.rolldown-list!=tr.page.building.list
+            .block.section.article-block(data-anchor=opPage("page"))
+                .article-block__head=tr.page.step_5.contract
+                ul.article-block__discript.rolldown-list!=tr.page.building.contract
+            .block.section.article-block(data-anchor=opPage("page"))
+                .article-block__head=tr.page.step_5.medicine
+                ul.article-block__discript.rolldown-list!=tr.page.building.medicine
+            .block.section.article-block(data-anchor=opPage("page"))
+                .article-block__head=tr.page.step_5.creativity
+                .article-block__discript need discript
+            .block.section.article-block(data-anchor=opPage("page"))
+                .article-block__head=tr.page.step_5.sketch
+                .article-block__discript need discript
+            .block.section.article-block(data-anchor=opPage("page"))
+                .article-block__head=tr.page.step_5.redesign
+                ul.article-block__discript.rolldown-list!=tr.page.redesign.list
+            .block.section.article-block(data-anchor=opPage("page"))
+                .article-block__head=tr.page.step_5.terrain
+                ul.article-block__discript.rolldown-list!=tr.page.terrain.list
+            .block.section.num-2-1(data-anchor="page 15")
+                #mapContainer(style="width: 100%; height: 25%")
+                link(href='https://fonts.googleapis.com/css?family=Lato' rel='stylesheet' type='text/css')
+                form#contact-form
+                    p Привіт,
+                    p
+                        label(for='your-name') Я
+                        input#your-name(type='text' name='your-name' minlength='3' placeholder="(ваше ім'я тут)" required='')
+                        | і
+                    p
+                        | моя 
+                        label(for='email') електронна адреса
+                        input#email(type='email' name='your-email' placeholder='електронна адреса тут' required='')
+                    p
+                        | Я маю 
+                        label(for='your-message') повідомлення 
+                        |  для вас,
+                    p
+                        textarea#your-message.expanding(name='your-message' placeholder='(ваше повідомлення)' required='')
+                    p
+                        button(type='submit')
+                        svg.send-icn(version='1.1' xmlns='http://www.w3.org/2000/svg' xmlns:xlink='http://www.w3.org/1999/xlink' x='0px' y='0px' width='100px' height='36px' viewbox='0 0 100 36' enable-background='new 0 0 100 36' xml:space='preserve')
+                            path(d='M100,0L100,0 M23.8,7.1L100,0L40.9,36l-4.7-7.5L22,34.8l-4-11L0,30.5L16.4,8.7l5.4,15L23,7L23.8,7.1z M16.8,20.4l-1.5-4.3\
+                            l-5.1,6.7L16.8,20.4z M34.4,25.4l-8.1-13.1L25,29.6L34.4,25.4z M35.2,13.2l8.1,13.1L70,9.9L35.2,13.2z')
+                        small send
+ 
+    

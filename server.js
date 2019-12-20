@@ -7,21 +7,22 @@ const url = require('url');
 const conf = require('./system/conf');
 
 module.exports = function startServer(pages, api, langs, session) {
-  // console.log(session);
+  
   let subTitlesConf = [];
   
   for (const key in conf) {
+
     if (key === "api") {
       continue;
     }
+
     if (conf.hasOwnProperty(key)) {
       const element = conf[key];
       subTitlesConf.push("b");
       subTitlesConf.push( key + ":" + JSON.stringify(element) );
     }
+
   }
-  
-  conf.log("c","cofig",subTitlesConf);
 
   return new Promise( res => {
 

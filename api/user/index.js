@@ -1,4 +1,4 @@
-const DB = require('../../system/db');
+const DB = require('../../src/back-end/db');
 
 module.exports = class User extends DB {
     constructor(){

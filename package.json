@@ -5,22 +5,31 @@
   "author": "Oleh Rohalskyi",
   "license": "MIT",
   "scripts": {
-    "start": "node start.js --env=dev --secret=abc --role=admin --db_mock=use",
-    "update": "node start.js --env=dev --role=admin --db_mock=use,update"
+    "prepare": "./prepare.sh",
+    "dev": "redis-server 2>&1 & gulp dev --dev",
+    "offline": "gulp --offline",
+    "prod": "gulp",
+    "update": "gulp update --update",
+    "install": "gulp --install"
   },
   "dependencies": {
     "csv-parse": "^4.4.6",
+    "gulp-concat": "^2.6.1",
+    "gulp-each": "^0.5.0",
+    "gulp-footer": "^2.0.2",
+    "gulp-header": "^2.0.9",
+    "indent-string": "^4.0.0",
     "jsoneditor": "^7.3.0",
     "jsonwebtoken": "^8.5.1",
-    "list-to-tree": "^2.2.3",
     "mysql": "^2.17.1",
-    "node-sass": "^4.12.0",
-    "node-watch": "^0.6.2",
-    "parse-error": "^0.2.0",
-    "pug": "^2.0.3",
     "redis": "^2.8.0",
     "redis-server": "^1.2.2",
-    "svg-captcha": "^1.4.0",
+    "svg-captcha": "^1.4.0"
+  },
+  "devDependencies": {
+    "gulp": "^4.0.2",
+    "gulp-cli": "^2.2.0",
+    "pug": "^2.0.3",
     "yargs": "^13.3.0"
   }
 }

@@ -1,4 +1,4 @@
-const DB = require('../../system/db');
+const DB = require('../../src/back-end/db');
 const cashResult = require('../../mocks/translation.json');
 const fs = require('fs');
 module.exports = class Translations extends DB {

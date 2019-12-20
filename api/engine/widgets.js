@@ -1,10 +1,10 @@
 module.exports = {
-    async get(req,db) {
+    async get(req,worker) {
         try { 
             let widgetsToGet = (req&&req.params)?req.params.widgets:[];
-            return await db.q.get.getByColumn("widgets","name",widgetsToGet);
-        } catch {
-
+            return await worker.getByColumn("widgets","name",widgetsToGet);
+        } catch(error) {
+            return error;
         }
     }
 }

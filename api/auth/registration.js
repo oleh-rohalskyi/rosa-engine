@@ -1,7 +1,6 @@
-let validation = require("../../shared_js/validation");
+let validation = require("../../src/shared/validation");
 
-module.exports = {
-    async post({ params, config, session }, help) {
+module.exports = async function post({ params, config, session }, help) {
 
         let itk = config.auth.id_type_key;
         let itkValue = params[itk];
@@ -51,4 +50,3 @@ module.exports = {
         else return await pr();
 
     }
-}
