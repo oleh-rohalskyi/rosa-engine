@@ -1,10 +1,10 @@
 
 const redis = require("redis");
 const {promisify} = require('util');
-
+const c = null;
 module.exports = function () {
     return new Promise(res=>{
-        const c = redis.createClient();
+        c = redis.createClient();
         const set = promisify(c.hset).bind(c);
         const del = promisify(c.hdel).bind(c);
         const get = promisify(c.hget).bind(c);

@@ -1,4 +1,4 @@
-const conf = require("./conf");
+const conf = require("../../conf/app.config");
 const pug = require('pug');
 
 const render = {
@@ -21,7 +21,7 @@ const render = {
       }
       return ids;
     }
-    console.log(fp(req.page.name));
+    console.log(fp(req));
     conf.api.translations.full.get(req.page.widgets,lang,fp(req.page.name)).then((result)=>{
       let tr = {};
         

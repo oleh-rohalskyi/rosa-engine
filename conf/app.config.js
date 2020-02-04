@@ -1,8 +1,10 @@
-//auth config
-
 const auth = require("./auth.json");
-let authConf;
+const langsConfig = require("./langs.json");
+const papaparse = require("papaparse");
+var fs = require('fs');
 
+//auth config
+let authConf;
 switch (auth.current) {
     case "BASIC":
         authConf = {
@@ -41,9 +43,34 @@ switch (auth.current) {
         }
 }
 
-//langs config
-const langsConfig = require("./langs.json");
-let langs;
+//Api config
+try {
+    var apiText = fs.readFileSync(__dirname + '/api.csv', 'utf8');
+} catch (e) {
+    console.log('Error:', e.stack);
+}
+
+let api = papaparse.parse(apiText, {
+    delimiter: "|",
+    comments: "#",
+    header: true,
+    skipEmptyLines: true
+});
+
+let apiMap = {};
+
+api.data.forEach((item, index) => {
+    let typeKey = Object.keys(item).filter((k) => k.trim() === "type")[0]
+    let scopeKey = item[typeKey].trim();
+    if (!apiMap[scopeKey]) {
+        apiMap[scopeKey] = [];
+    }
+    let itemMap = {};
+    for (const key in item) {
+        itemMap[key.trim()] = item[key].trim();
+    }
+    apiMap[scopeKey].push(itemMap)
+});
 
 module.exports = {
     db: {
@@ -52,6 +79,14 @@ module.exports = {
         password: "AneGNz69",
         database: "ha368730_db"
     },
+    db2: {
+        host: process.env.MYSQL_HOST || 'localhost',
+        user: process.env.MYSQL_USER,
+        password: process.env.MYSQL_PASSWORD,
+        database: process.env.MYSQL_DB
+    },
+    api: apiMap,
+    port: 3001,
     auth: authConf,
     langs: langsConfig
 }

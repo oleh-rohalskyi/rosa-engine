@@ -1,12 +1,11 @@
 const argv = require('yargs').argv;
 const Api = require('./api');
-const conf = require('./conf/app.config');
 const fs = require('fs').promises;
 
 const gulp = require('gulp');
 const concat = require('gulp-concat');
 const each = require('gulp-each');
-
+const server = require('./server');
 const builder = require("./builder");
 
 process.env.NODE_ENV = (argv.dev || argv.offline) ? "development" : "prodaction";
@@ -17,7 +16,6 @@ const env = process.env.NODE_ENV;
 const api = new Api(offline);
 
 let pages,widgets,modifiedPages,modifiedWidgets;
-let symbol =  Symbol();
 
 async function getMainData(cb) {
 
@@ -28,7 +26,6 @@ async function getMainData(cb) {
 
     pages = result[0];
     widgets = result[1];
-    console.log(result)
     modifiedWidgets = {};
 
     widgets.forEach((element,k) => {
@@ -56,6 +53,15 @@ async function writeMocks(cb) {
 
 }
 
+async function runServer(cb) {
+
+    server(modifiedPages).then(s=>{
+        console.log(server)
+    });
+    cb();
+
+}
+
 async function modifyPages(cb) {
     
     modifiedPages = await builder.modifyPages(pages);
@@ -63,7 +69,6 @@ async function modifyPages(cb) {
     let start = Date.now() / 1000;
    
     for (const key in modifiedPages) {
-        let deps = [];
         const element = modifiedPages[key]
         element.id = key.substr(1).split("/").join("__");
 
@@ -95,31 +100,26 @@ async function modifyPages(cb) {
         if (widgetDeps.length) {
             pumpises.push(gulp.src(requstToModify)
                 .pipe(each(function(content, file, callback) {
-
                    const widgetScript = file.path.split("/widgets/");
                    let newContent = content;
                    if (widgetScript[1]) {
-                    const key = file.path.split("/widgets/")[1].split("/").join("__");
                     newContent =   `rosa.widgets["${id}"] = (function() {\nreturn ${content}\n})();`;
                    }
                     callback(null, newContent);
-
                 }))
-                .pipe(concat('all.js'))
-                .pipe(gulp.dest('./dist'+path)) 
+                .pipe(concat(path.split("/").join("__")+'.js'))
+                .pipe(gulp.dest('./dist/'))
             );
         }
         
     }
-    await Promise.all(pumpises);
     
-    // console.log(1,widgets,modifiedWidgets)
-    console.log( ( Date.now()/1000-start  ).toFixed(4) );
-    console.log();
+    await Promise.all(pumpises);
+    console.log( ( Date.now()/1000-start  ).toFixed(4) + "s" );
 
 }
 
 exports.update = gulp.series(getMainData,writeMocks);
-exports.dev = gulp.series(getMainData,writeMocks,modifyPages);
+exports.dev = gulp.series(getMainData,writeMocks,modifyPages,runServer);
 
 exports.default = getMainData;

@@ -1,28 +1,14 @@
 
 
 const http = require("http");
-const render = require("./system/render");
-const getStaticText = require("./system/get-static-text");
+const render = require("./src/back-end/render");
+const getStaticText = require("./src/back-end/get-static-text");
 const url = require('url');
-const conf = require('./system/conf');
+const conf = require('./conf/app.config');
+const api = require('./api/');
 
-module.exports = function startServer(pages, api, langs, session) {
-  
-  let subTitlesConf = [];
-  
-  for (const key in conf) {
+module.exports = function startServer(pages) {
 
-    if (key === "api") {
-      continue;
-    }
-
-    if (conf.hasOwnProperty(key)) {
-      const element = conf[key];
-      subTitlesConf.push("b");
-      subTitlesConf.push( key + ":" + JSON.stringify(element) );
-    }
-
-  }
 
   return new Promise( res => {
 
@@ -57,33 +43,29 @@ module.exports = function startServer(pages, api, langs, session) {
       }
 
       let path1level = pathname.split("/")[1];
-      conf.langRouting = langs.route_type;
-      if (conf.langRouting === "pre_path") {
+
+      if (conf.langs.route_type === "pre_path") {
         const type = pathname.split("/")[1];
-        if (langs.scope.indexOf(type)>=0) {
+        if (conf.langs.scope.indexOf(type)>=0) {
           path1level = "page";
-          req.lang = langs.scope.filter(str => type === str)[0] || langs.common;
+          req.lang = conf.langs.scope.filter(str => type === str)[0] || conf.langs.common;
           pathname = pathname.replace(req.lang + "/", ""); 
         }
       } else {
         path1level = pathname.split("/")[0];
         console.log(123123,langs)
-        req.lang = langs.scope.filter(str => req.params.lang === str)[0] || langs.common;
+        req.lang = conf.langs.scope.filter(str => req.params.lang === str)[0] || conf.langs.common;
       }
       if (!req.lang) {
-        req.lang = langs.common;
+        req.lang = conf.langs.common;
       }
-      req.pages = pages;
-      req.role = conf.role || "guest";
+      
       req.pathname = pathname;
       req.fullRequest = request;
       
-      conf.log("c","request", ["b","path: "+req.pathname,"b","role: "+req.role,"b","lang: "+req.lang]);
-      
-
       if (path1level === "api") {
         req.session = session;
-        req.config = conf;
+        req.conf = conf;
         api.go(req)
           .then((data)=>{
             render.goApi(data,response)
@@ -114,7 +96,6 @@ module.exports = function startServer(pages, api, langs, session) {
         }
 
         if (page) {
-            conf.log("g","page '"+ page.name+"' founded",["b","redirect "+!!page.redirect]);
             req.page = page;
               //check what user role needed for a page or if it needed at all;
               if (!page.roles || !(page.roles && page.roles.length) ) {
@@ -132,7 +113,7 @@ module.exports = function startServer(pages, api, langs, session) {
       }
 
     })
-
+    console.log(conf)
     server.listen(conf.port, () => {
       res(server);
     });

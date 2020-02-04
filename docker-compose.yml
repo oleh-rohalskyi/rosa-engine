@@ -1,2 +1,26 @@
-my-test:
- image: hello-world
+version: '3'
+services:
+    db:
+        image: mysql
+        command: --default-authentication-plugin=mysql_native_password
+        restart: always
+        environment:
+            MYSQL_HOST: ha368730.mysql.tools
+            MYSQL_DB: ha368730_db
+            MYSQL_USER: ha368730_db
+            MYSQL_PASSWORD: AneGNz69
+        networks: 
+            - webnet
+    redis:
+        image: redis
+    web: 
+        image: rosa-engine
+        ports: 
+            - "8081:8081"
+        networks:
+            - webnet
+        environment:
+            DB_HOST: db
+            REDIS_HOST: redis
+networks: 
+    webnet:
