@@ -1,5 +1,9 @@
 const argv = require('yargs').argv;
-const Api = require('./api');
+process.env.NODE_ENV = (argv.dev || argv.offline) ? "development" : "prodaction";
+process.env.OFFLINE = argv.offline ? true : false;
+
+const api = require('./api');
+
 const fs = require('fs').promises;
 
 const gulp = require('gulp');
@@ -7,13 +11,10 @@ const concat = require('gulp-concat');
 const each = require('gulp-each');
 const server = require('./server');
 const builder = require("./builder");
-
-process.env.NODE_ENV = (argv.dev || argv.offline) ? "development" : "prodaction";
-process.env.OFFLINE = argv.offline ? true : false;
+const conf = require('./conf/app.config');
 
 const offline = process.env.OFFLINE;
 const env = process.env.NODE_ENV;
-const api = new Api(offline);
 
 let pages,widgets,modifiedPages,modifiedWidgets;
 
@@ -29,7 +30,6 @@ async function getMainData(cb) {
     modifiedWidgets = {};
 
     widgets.forEach((element,k) => {
-        
         let path = element.path;
         modifiedWidgets[path] = {
             deps: element.js_deps.split(","),
@@ -55,9 +55,14 @@ async function writeMocks(cb) {
 
 async function runServer(cb) {
 
-    server(modifiedPages).then(s=>{
-        console.log(server)
+    if (!modifiedPages && !modifiedWidgets) {
+        console.log("bad queue of tasks");
+    }
+    api.setWidgets(modifiedWidgets);
+    server(modifiedPages,modifiedWidgets).then(server=>{
+       
     });
+
     cb();
 
 }

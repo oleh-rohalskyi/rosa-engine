@@ -1,6 +1,8 @@
 const DB = require('../../src/back-end/db');
 const cashResult = require('../../mocks/translation.json');
 const fs = require('fs');
+const conf = require("../../conf/app.config");
+
 module.exports = class Translations extends DB {
     constructor() {
         super();
@@ -92,12 +94,11 @@ module.exports = class Translations extends DB {
                 return new Promise(async(res,rej)=>{
                         const con = this.cc();
                         let ids = [];
-                        
-                        this.conf.widgets.forEach(widget=>{
-                            if (names.indexOf(widget.name)>=0) {
-                                ids.push(widget.id);
+                        for (const key in this.widgets) {
+                            if (this.widgets.hasOwnProperty(key) && names.indexOf(key)>=0) {
+                                ids.push(this.widgets[key].id);
                             }
-                        })
+                        }
                         let query = `SELECT Tr.${lang},TrRe.table_name,TrRe.row_id `;
                             query+= `FROM translations_relations as TrRe `;
                             query+= `JOIN translations as Tr ON TrRe.translation_id=Tr.id `;
@@ -121,8 +122,8 @@ module.exports = class Translations extends DB {
                                 query=query.substr(0,query.length-1) + ")";
                             }
                             query += `)`;
-                            console.log("Aaaa",this.conf,cashResult)
-                        if (cashResult[query] && !this.conf.mock.update) {
+                            console.log("Aaaa",conf,cashResult);
+                        if (cashResult[query] && true) {
                             res(cashResult[query]);
                         }
                         con.connect((err) => {
@@ -136,19 +137,11 @@ module.exports = class Translations extends DB {
                                     res(false);
                                     return;
                                 }
+                                console.log(result);
                                 if(err) rej(err);
                                 if(!result) rej("hm...");
-                                if (!cashResult[query]&&!this.conf.mock.update) {
-                                    cashResult[query] = result;
-                                    fs.writeFile("./mocks/translation.json", JSON.stringify(cashResult), function(err) {
-                                        if (err) {
-                                          rej(err);
-                                        }
-                                        res(result);
-                                      })
-                                } else {
-                                    res(result);
-                                }
+                                res(result);
+            
                                 //con.destroy();
                             });
                         });

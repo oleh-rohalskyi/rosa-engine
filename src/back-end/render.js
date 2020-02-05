@@ -1,5 +1,6 @@
 const conf = require("../../conf/app.config");
 const pug = require('pug');
+const api = require("./../../api");
 
 const render = {
   
@@ -21,8 +22,8 @@ const render = {
       }
       return ids;
     }
-    console.log(fp(req));
-    conf.api.translations.full.get(req.page.widgets,lang,fp(req.page.name)).then((result)=>{
+
+    api.translations.full.get(req.page.widgets,lang,fp(req.page.name)).then((result)=>{
       let tr = {};
         
         let wn = (id,table) => {
@@ -48,7 +49,7 @@ const render = {
         }
         
       tr.page = tr.pages ? tr.pages[req.page.pageName] : {meta:{}};
-    
+      console.log(conf)
       let data = {
         lang,
         isAuth: conf.authConf.active,

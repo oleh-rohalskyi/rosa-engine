@@ -1,5 +1,3 @@
-
-
 const http = require("http");
 const render = require("./src/back-end/render");
 const getStaticText = require("./src/back-end/get-static-text");
@@ -7,11 +5,9 @@ const url = require('url');
 const conf = require('./conf/app.config');
 const api = require('./api/');
 
-module.exports = function startServer(pages) {
-
+module.exports = function startServer(pages,widgets) {
 
   return new Promise( res => {
-
     let server = http.createServer(async function (request, response) {
       
       let startTime = Date.now();
@@ -112,27 +108,13 @@ module.exports = function startServer(pages) {
         return;
       }
 
-    })
-    console.log(conf)
+    });
+
     server.listen(conf.port, () => {
       res(server);
     });
 
   });
-}
-
-function parseCookies(request) {
-
-  var list = {},
-  rc = request.headers.cookie;
-
-  rc && rc.split(';').forEach(function (cookie) {
-    var parts = cookie.split('=');
-    list[parts.shift().trim()] = decodeURI(parts.join('='));
-  });
-
-  return list;
-
 }
 
 

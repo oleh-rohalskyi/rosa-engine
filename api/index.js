@@ -1,5 +1,4 @@
 const DB = require('../src/back-end/db');
-
 const Engine = require("./engine");
 const Auth = require("./auth");
 const Translations = require("./translations");
@@ -7,14 +6,17 @@ const User = require("./user");
 
 class Api extends DB {
 
-    constructor(offline) {
+    constructor() {
         super();
-        this._offline = offline;
         this.engine = Engine;
-        this.auth = Auth;
-        this.translations = Translations;
-        this.user = User;
+        this.auth = new Auth();
+        this.user = new User();
+        this.translations = new Translations();
+    }
 
+    setWidgets(widgets) {
+        this.widgets = widgets;
+        this.translations.widgets = this.widgets;
     }
 
     async go(req) {
@@ -56,4 +58,4 @@ class Api extends DB {
     }
 }
 
-module.exports = Api;
+module.exports = new Api();

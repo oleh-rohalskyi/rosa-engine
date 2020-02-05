@@ -85,6 +85,7 @@ module.exports = {
         password: process.env.MYSQL_PASSWORD,
         database: process.env.MYSQL_DB
     },
+    
     api: apiMap,
     port: 3001,
     auth: authConf,
